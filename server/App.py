@@ -10,8 +10,10 @@ from flask import session
 from werkzeug.security import check_password_hash
 from werkzeug.security import generate_password_hash
 
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 api = Api(app)
 
 
@@ -40,38 +42,42 @@ Logout API : 현재 로그인 된 유저를 로그아웃합니다.
 # session을 위한 secret_key 설정
 app.config.from_mapping(SECRET_KEY='dev')
 
-parser.add_argument('id')
-parser.add_argument('fullname')
-parser.add_argument('email')
-parser.add_argument('password')
-
 # 회원가입
 @app.route('/auth/register', methods=['GET','POST'])
 def register():
-    args = parser.parse_args()
+    # POST 요청을 받았다면
     if request.method == 'POST':
-        sql = "SELECT `email` FROM `user` WHERE `email` = %s"
-        cursor.execute(sql, (args['email'], ))
-        user = cursor.fetchone()
+        # 아이디와 비밀번호를 폼에서 가져온다.
+        fullname = request.form['fullname']
+        email = request.form['email']
+        password = request.form['password']
         
         error = None
 
-        if not args['fullname']:
+        if not fullname:
             error = 'invalid fullname'
-        elif not args['email']:
+        elif not email:
             error = 'invalid email'
-        elif not args['password']:
+        elif not password:
             error = 'invalid password'
-        elif user:
-            error = 'This email({}) was already registered'.format(args['email'])
         
+        # 이미 등록된 계정이라면
+        sql = 'SELECT id FROM user WHERE email = %s'
+        cursor.execute(sql, (email,))
+        result = cursor.fetchone()
+
+        if result is not None:
+            error = '{} is already registered.'.format(email)
+        
+        # 에러가 발생하지 않았다면 회원가입 실행
         if error is None:
             sql = "INSERT INTO `user` (`fullname`, `email`, `password`) VALUES (%s, %s, %s)"
-            cursor.execute(sql, (args['fullname'], args['email'], generate_password_hash(args['password'])))
+            cursor.execute(sql, (fullname, email, generate_password_hash(password)))
             db.commit()
-            return jsonify(status = "success", result = {"fullname": args['fullname'], "email": args['email']})
+            return jsonify(status = "success", result = {"fullname": fullname, "email": email})
         else:
             return jsonify(status = "failure", result = {"message": error})
+    # GET 요청을 받았다면
     else:
         sql = "SELECT `email` FROM `user`"
         cursor.execute(sql)
@@ -81,35 +87,42 @@ def register():
 # 로그인
 @app.route('/auth/login', methods=['POST'])
 def login():
-    args = parser.parse_args()
+    # POST 요청을 받았다면
     if request.method == 'POST':
-        sql = "SELECT `password` FROM `user` WHERE `email` = %s"
-        cursor.execute(sql, (args['email'], ))
-        user = cursor.fetchone()
+        email = request.form['email']
+        password = request.form['password']
 
         error = None
 
+        sql = 'SELECT email, password FROM user WHERE email = %s'
+        cursor.execute(sql, (email,))
+        user = cursor.fetchone()
+
+        # 입력한 유저의 정보가 없을 때
         if user is None:
-            error = "This email({}) is not registered".format(args['email'])
-        elif not check_password_hash(user[0], args['password']):
+            error = "This email({}) is not registered".format(email)
+        
+        # 비밀번호가 틀렸을 때
+        # user는 tuple 타입으로 데이터 반환, user[0]은 email, user[1]은 password
+        elif not (user == None or check_password_hash(user[1], password)):
             error = 'Incorrect password'
         
+        # 정상적인 정보를 요청받았다면
         if error is None:
+            # 로그인을 위해 기존 session을 비운다.
             session.clear()
-            session['email'] = user['email']
-            
-            return jsonify(status = "success", result = "Login Success!")
+            # 지금 로그인한 유저의 정보로 session을 등록한다.
+            session['user_id'] = user[0]
+            return jsonify(status = "success", result = {"email": email, "session": session['user_id']})
 
-        return jsonify(status = "failure", result = {'message': error})
+        return jsonify(status = "failure", result = {'error': error})
 
 # 로그아웃
 @app.route('/auth/logout')
 def logout():
-    try:
-        session.clear()
-        return jsonify(status = "success", result = {'message': 'Logout!'})
-    except:
-        return jsonify(status = "failure", result = "You're not logged in")
+    # 현재 session을 비운다.
+    session.clear()
+    return jsonify(status = "success", result = {"msg": "logout!"})
 
 if __name__ == '__main__':                                                                                                                                                                                                                                                              
     app.run()
