@@ -35,6 +35,10 @@ export default function Control(props) {
                         } catch (error) {
                             console.log("error: ", error);
                         }
+                        if (window.sessionStorage['session']) {
+                            window.sessionStorage.clear();
+                        }
+                        props.onChangeMode("HOME");
                     }}
                 >
                         Logout
