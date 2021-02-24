@@ -1,24 +1,44 @@
+import axios from 'axios';
+import { Form, Button } from 'react-bootstrap';
+
 export default function Control(props) {
     return (
-        <ul>
-            <li>
-                <input
-                    type = "button"
-                    value = "login"
+            <Form>
+                <Button 
+                    variant="primary" 
+                    type="button"
                     onClick = {function() {
-                        props.onChangeMode("LOGIN");
-                    }}
-                />
-            </li>
-            <li>
-                <input
-                    type = "button"
-                    value = "register"
+                    props.onChangeMode('LOGIN')
+                    }}   
+                >
+                    Login
+                </Button>
+                <Button
+                    variant="primary"
+                    type="button"
                     onClick = {function() {
-                        props.onChangeMode("REGISTER");
+                    props.onChangeMode('REGISTER')
                     }}
-                />
-            </li>
-        </ul>
+                >
+                        Register
+                </Button>
+                <Button
+                    variant="primary"
+                    type="button"
+                    onClick = {async function(e) {
+                        e.preventDefault();
+                        try {
+                            await axios.get("http://localhost:5000/auth/logout")
+                                .then ( response => {
+                                    console.log('response: ', JSON.stringify(response));
+                                })
+                        } catch (error) {
+                            console.log("error: ", error);
+                        }
+                    }}
+                >
+                        Logout
+                </Button>
+            </Form>
     )
 }
