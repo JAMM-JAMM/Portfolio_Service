@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import Control from './components/Control';
 import Login from './components/Login';
 import Register from './components/Register';
