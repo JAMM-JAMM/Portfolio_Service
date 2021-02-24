@@ -1,5 +1,5 @@
 import pymysql
-from flask import Flask
+from flask import Flask, flash
 from flask_restful import reqparse, abort, Api, Resource
 
 # User API 구현을 위한 새로운 패키지 로드
@@ -123,6 +123,144 @@ def logout():
     # 현재 session을 비운다.
     session.clear()
     return jsonify(status = "success", result = {"msg": "logout!"})
+
+"""
+Portfolio APIs: 내 포트폴리오 보기, 수정, 업로드, 삭제
+
+Education API: 학교이름, 전공 정보, 학위를 입력받아 학력에 대한 정보
+"""
+
+@app.route('/education', methods = ['GET','POST','PUT','DELETE'])
+def education():
+    # POST 요청을 받았다면
+    if request.method == 'POST':
+        fullname = request.form['fullname']
+        university = request.form['university']
+        major = request.form['major']
+        degree = request.form['degree']
+
+        error = None
+
+        if not fullname:
+            error = "invalid fullname"
+        elif not university:
+            error = "invalid university"
+        elif not major:
+            error = "invalid major"
+        elif not degree:
+            error = "invalid error"
+
+        # 이미 등록된 정보라면
+        sql = 'SELECT `fullname` From education WHERE (`fullname` = %s) AND (`university` = %s) AND (`major` = %s) AND (`degree` = %s)'
+        cursor.execute(sql, (fullname, university, major, degree))
+        edu_info = cursor.fetchone()
+
+        if edu_info is not None:
+            error = '{} is already existed.'.format(fullname)
+
+        # 에러가 발생하지 않았다면, 학력 정보 등록 실행
+        if error is None:
+            sql = "INSERT INTO `user` (`fullname`, `university`, `major`, `degree`) VALUES (%s, %s, %s, %s)"
+            cursor.execute(sql, (fullname, university, major, degree))
+            db.commit()
+            return jsonify(
+                status = "success", 
+                result = {
+                    "fullname": fullname, 
+                    "university": university, 
+                    "major": major, 
+                    "degree": degree
+                }
+            )
+        else:
+            return jsonify(
+                status = "failure", 
+                result = {
+                    "message": error
+                }
+            )
+    
+    # GET 요청을 받았다면
+    elif request.method == "GET":
+        sql = "SELECT * FROM `education`"
+        cursor.execute(sql)
+        education_info = cursor.fetchall()
+        return jsonify(
+            status = "success", 
+            result = education_info
+        )
+    
+    # PUT 요청을 받았다면
+    elif request.method == "PUT":
+        edu_id = request.form['edu_id']
+        fullname = request.form['fullname']
+        university = request.form['university']
+        major = request.form['major']
+        degree = request.form['degree']
+
+        error = None
+
+        if not fullname:
+            error = "invalid fullname"
+        elif not university:
+            error = "invalid university"
+        elif not major:
+            error = "invalid major"
+        elif not degree:
+            error = "invalid error"
+
+        if error is None:
+            sql = "UPDATE `education` SET `fullname` = %s, `university` = %s, `major` = %s, `degree` = %s WHERE `id` = %s"
+            cursor.execute(sql, (fullname, university, major, degree, edu_id))
+            db.commit()
+            return jsonify(
+                status = "success",
+                result = {
+                    'fullname': fullname,
+                    'university': university,
+                    'major': major,
+                    'degree': degree
+                }
+            )
+        else:
+            return jsonify(
+                status = "failure", 
+                result = {
+                    "message": error
+                }
+            )
+    
+    # DELETE 요청을 받았다면
+    elif request.method == 'DELETE':
+        delete_id = request.form['delete_id']
+
+        error = None
+
+        # 요청받은 id가 존재하지 않으면
+        sql = 'SELECT `id` FROM education WHERE id = %s'
+        cursor.execute(sql, (delete_id,))
+        result = cursor.fetchone()
+
+        if result is None:
+                error = "{}'s education data is not existed.".format(delete_id)
+
+        # 에러가 발생하지 않았다면 삭제 실행
+        if error is None:
+            sql = "DELETE FROM `education` WHERE `id` = %s"
+            cursor.execute(sql, (delete_id,))
+            db.commit()
+            return jsonify(
+                status = 'success',
+                result = {
+                    'delete_id': delete_id
+                }
+            )
+        else:
+            return jsonify(
+                status = 'failure', result = {'message': error}
+            )
+
+
 
 if __name__ == '__main__':                                                                                                                                                                                                                                                              
     app.run()
