@@ -1,8 +1,10 @@
+import React, { useState } from 'react';
 import axios from 'axios';
 import { Form, Button, Container } from 'react-bootstrap';
 
 export default function Register(props) {
-    
+    var [password, setPassword] = useState(null);
+    var [confirmPassword, setConfirmPassword] = useState(null);
     return (
         <div>
             <Container>
@@ -13,7 +15,9 @@ export default function Register(props) {
                         let form = new FormData();
                         form.append('fullname', e.target.fullname.value);
                         form.append('email', e.target.email.value);
-                        form.append('password', e.target.password.value);
+                        if (password === confirmPassword) {
+                            form.append('password', confirmPassword);
+                        }
                         try {
                             await axios.post("http://localhost:5000/auth/register", form)
                                 .then( response => {
@@ -50,6 +54,9 @@ export default function Register(props) {
                             type="password"
                             placeholder="Enter password"
                             name="password"
+                            onChange = {function(e) {
+                                setPassword(e.target.value);
+                            }}
                         />
                     </Form.Group>
                     <Form.Group controlId="formBasicConfirmPassword">
@@ -58,6 +65,9 @@ export default function Register(props) {
                             type="password"
                             placeholder="Enter password"
                             name="confirm_password"
+                            onChange = {function(e) {
+                                setConfirmPassword(e.target.value);
+                            }}
                         />
                         <Form.Text className="text-muted">
                             Check your password.
