@@ -8,10 +8,16 @@ create table if not exists user(
 );
 create table if not exists education(
     id int not null AUTO_INCREMENT,
-    fullname varchar(32) not null,
-    university varchar(32),
-    major varchar(32),
-    degree varchar(32),
+    university varchar(32) not null,
+    major varchar(32) not null,
+    degree varchar(32) not null,
     create_date timestamp default NOW(),
     primary key(id)
 );
+create table if not exists awards(
+    id int not null AUTO_INCREMENT,
+    award_name varchar(32),
+    award_desc text,
+    create_date timestamp default NOW(),
+    primary key(id)
+)
