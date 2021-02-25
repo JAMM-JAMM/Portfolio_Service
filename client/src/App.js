@@ -4,7 +4,7 @@ import Control from './components/Control';
 import Login from './components/Login';
 import Register from './components/Register';
 import Portfolio from './components/Portfolio';
-import { Container } from 'react-bootstrap';
+import { Navbar } from 'react-bootstrap';
 
 function Home() {
     var [mode, setMode] = useState("HOME");
@@ -26,8 +26,8 @@ function Home() {
     }
     return (
         <>  
-            <Container>
-                <h3>Racer Portfolio Service</h3>
+            <Navbar className = "justify-content-between" bg = "light" variant = "lignt">
+                <Navbar.Brand>Racer Portfolio Service</Navbar.Brand>
                 <br/>
                 <Control 
                     onChangeMode = {function(_mode) {
@@ -35,8 +35,10 @@ function Home() {
                     }}
                 />
                 <br/>
+            </Navbar>
+                <br/>
                 {article}
-            </Container>
+            
         </>
     )
 }

@@ -3,27 +3,27 @@ import { Form, Button } from 'react-bootstrap';
 
 export default function Control(props) {
     return (
-            <Form>
+            <Form >
                 <Button 
-                    variant="primary" 
+                    variant="outline-primary" 
                     type="button"
                     onClick = {function() {
                     props.onChangeMode('LOGIN')
                     }}   
                 >
                     Login
-                </Button>
+                </Button>{' '}
                 <Button
-                    variant="primary"
+                    variant="outline-primary"
                     type="button"
                     onClick = {function() {
                     props.onChangeMode('REGISTER')
                     }}
                 >
                         Register
-                </Button>
+                </Button>{' '}
                 <Button
-                    variant="primary"
+                    variant="outline-primary"
                     type="button"
                     onClick = {async function(e) {
                         e.preventDefault();

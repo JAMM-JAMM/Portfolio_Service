@@ -3,8 +3,8 @@ import axios from 'axios';
 import { Form, Button, Container } from 'react-bootstrap';
 
 export default function Register(props) {
-    var [password, setPassword] = useState(null);
-    var [confirmPassword, setConfirmPassword] = useState(null);
+    const [password, setPassword] = useState(null);
+    const [confirmPassword, setConfirmPassword] = useState(null);
     return (
         <div>
             <Container>
