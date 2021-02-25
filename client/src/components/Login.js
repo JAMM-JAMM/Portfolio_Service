@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import axios from 'axios';
 import { Form, Button, Container } from 'react-bootstrap';
 
 
 export default function Login(props) {
-    var [sessionResult, setSessionResult] = useState({status: '', session: ''});
     return (
         <div>
             <Container>
@@ -19,22 +18,12 @@ export default function Login(props) {
                             await axios.post("http://localhost:5000/auth/login", form)
                                 .then( response => {
                                     console.log('response: ', JSON.stringify(response));
-                                    setSessionResult({
-                                        status: JSON.stringify(response.status),
-                                        session: JSON.stringify(response.data.result.session)
-                                    });
-                                    window.sessionStorage.setItem('session', sessionResult.session);
-                                    console.log(sessionResult.status, sessionResult.session);
+                                    sessionStorage.setItem('session', JSON.stringify(response.data.result.session));
                                 })
-                            if (sessionResult.status === "success") {
-                                props.onChangeMode("PORTFOLIO");
-                            } else if (sessionResult.status === "failure") {
-                                props.onChangeMode("LOGIN");
-                            }
-                            
                         } catch (error) {
                             console.log("error: ", error);
                         }
+                        props.onChangeMode("PORTFOLIO");
                         e.target.reset();
                     }}
                 >   

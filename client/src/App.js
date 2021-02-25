@@ -1,36 +1,10 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Control from './components/Control';
 import Login from './components/Login';
 import Register from './components/Register';
+import Portfolio from './components/Portfolio';
 import { Container } from 'react-bootstrap';
-
-function Education() {
-
-    var [eduData, setEduData] = useState([]);
-
-    const eduUrl = `http://localhost:5000/education`;
-
-    async function Fetcheducation() {
-        const response = await axios.get(eduUrl);
-        console.log(response);
-        setEduData(response.data);
-    };
-
-    return (
-        <>
-            <h4>학력</h4>
-            <div></div>
-        </>
-    );
-}
-
-function Portfolio() {
-    return (
-        <Education/>
-    );
-}
 
 function Home() {
     var [mode, setMode] = useState("HOME");
