@@ -26,6 +26,11 @@ export default function Login(props) {
                                     window.sessionStorage.setItem('session', sessionResult.session);
                                     console.log(sessionResult.status, sessionResult.session);
                                 })
+                            if (sessionResult.status === "success") {
+                                props.onChangeMode("PORTFOLIO");
+                            } else if (sessionResult.status === "failure") {
+                                props.onChangeMode("LOGIN");
+                            }
                             
                         } catch (error) {
                             console.log("error: ", error);
