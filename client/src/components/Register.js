@@ -27,6 +27,7 @@ export default function Register(props) {
                             console.log("error: ", error);
                         }
                         e.target.reset();
+                        props.onChangeMode("LOGIN")
                     }}
                     >   
                     <Form.Group controlId="formBasicFullname">
