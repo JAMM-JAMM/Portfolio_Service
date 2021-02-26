@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Form, Button, Container } from 'react-bootstrap';
-import makeRequestWithJWT from './Header';
 
 
 export default function Login(props) {
@@ -22,10 +21,10 @@ export default function Login(props) {
                     if (response.data.status === "success") {
                         props.onChangeMode("PORTFOLIO");
                         localStorage.setItem('access_token', response.data.result.access_token);
+                        localStorage.setItem('email', response.data.result.email);
                     } else {
                         props.onChangeMode("LOGIN");
                     }
-                    makeRequestWithJWT();
                 })
         } catch (error) {
             console.log("error: ", error);

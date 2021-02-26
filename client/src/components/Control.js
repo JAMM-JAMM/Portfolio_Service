@@ -27,6 +27,7 @@ export default function Control(props) {
                     onClick = {function(e) {
                         e.preventDefault();
                         localStorage.removeItem('access_token');
+                        localStorage.removeItem('email');
                         props.onChangeMode("HOME");
                     }}
                 >

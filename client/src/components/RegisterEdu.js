@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Container, Form, Button } from 'react-bootstrap';
+import { Container, Form, Button, Row, Col } from 'react-bootstrap';
 import axios from 'axios';
 
 export default function RegisterEdu(props) {
@@ -11,7 +11,10 @@ export default function RegisterEdu(props) {
 
     const registerEducation = async (e) => {
         e.preventDefault();
+        const email = localStorage.getItem('email');
+        console.log(email, university, major, degree);
         let eduData = new FormData();
+        eduData.append('user_email', email);
         eduData.append('university', university);
         eduData.append('major', major);
         eduData.append('degree', degree);
@@ -30,40 +33,73 @@ export default function RegisterEdu(props) {
     return (
         <>
             <Container>
-                <h4>학력</h4>
                 <Form
                     onSubmit = {registerEducation}
                 >
-                    <Form.Group controlId = "formBasicUniversity">
-                        <Form.Label>University</Form.Label>
-                        <Form.Control
-                            type = "text"
-                            placeholder = "Enter university"
-                            name = "university"
-                            onChange = {(e) => setUniversity(e.target.value)}
-                        />
+                    <Form.Group as={Row} controlId = "formBasicUniversity">
+                        <Form.Label column sm={2}>University</Form.Label>
+                        <Col sm={10}>
+                            <Form.Control
+                                type = "text"
+                                placeholder = "Enter university"
+                                name = "university"
+                                onChange = {(e) => setUniversity(e.target.value)}
+                            />
+                        </Col>
                     </Form.Group>
-                    <Form.Group controlId = "formBasicMajor">
-                        <Form.Label>Major</Form.Label>
-                        <Form.Control
-                            type = "text"
-                            placeholder = "Enter major"
-                            name = "major"
-                            onChange = {(e) => setMajor(e.target.value)}
-                        />
+                    <Form.Group as={Row} controlId = "formBasicMajor">
+                        <Form.Label column sm={2}>Major</Form.Label>
+                        <Col sm={10}>
+                            <Form.Control
+                                type = "text"
+                                placeholder = "Enter major"
+                                name = "major"
+                                onChange = {(e) => setMajor(e.target.value)}
+                            />
+                        </Col>
                     </Form.Group>
-                    <Form.Group controlId = "formBasicDegree">
-                        <Form.Label>Degree</Form.Label>
-                        <Form.Control
-                            type = "text"
-                            placeholder = "Enter degree"
+                    <fieldset>
+                    <Form.Group as={Row}>
+                        <Form.Label as='legend' column sm={2}>Degree</Form.Label>
+                        <Col sm={10}>
+                        <Form.Check
+                            type = "radio"
+                            label= "재학중"
                             name = "degree"
-                            onChange = {(e) => setDegree(e.target.value)}
+                            id = "1"
+                            onChange = {(e) => setDegree("재학중")}
                         />
+                        <Form.Check
+                            type = "radio"
+                            label= "학사 졸업"
+                            name = "degree"
+                            id = "2"
+                            onChange = {(e) => setDegree("학사 졸업")}
+                        />
+                        <Form.Check
+                            type = "radio"
+                            label= "석사 졸업"
+                            name = "degree"
+                            id = "3"
+                            onChange = {(e) => setDegree("석사 졸업")}
+                        />
+                        <Form.Check
+                            type = "radio"
+                            label= "박사 졸업"
+                            name = "degree"
+                            id = "4"
+                            onChange = {(e) => setDegree("박사 졸업")}
+                        />
+                        </Col>
                     </Form.Group>
-                    <Button variant = "primary" type = "submit">
-                        Register
-                    </Button>
+                    </fieldset>
+                    <Form.Group as={Row}>
+                        <Col sm={{ span: 10, offset: 2}}>
+                        <Button variant = "primary" type = "submit">
+                            Register
+                        </Button>
+                        </Col>
+                    </Form.Group>
                 </Form>
             </Container>
         </>
