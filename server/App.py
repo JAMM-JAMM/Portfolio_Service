@@ -5,7 +5,13 @@ from flask_restful import reqparse, abort, Api, Resource
 # User API 구현을 위한 새로운 패키지 로드
 from flask import jsonify
 from flask import request
-from flask import session
+
+# flask_jwt_extended를 사용하여 서버와 클라이언트 사이에서 토큰으로 인증
+from flask_jwt_extended import create_access_token
+from flask_jwt_extended import current_user
+from flask_jwt_extended import jwt_required
+from flask_jwt_extended import JWTManager
+from flask_jwt_extended import get_jwt_identity
 
 from werkzeug.security import check_password_hash
 from werkzeug.security import generate_password_hash
@@ -37,8 +43,9 @@ Login API : *email*, *password* 를 입력받아 특정 유저로 로그인합�
 Logout API : 현재 로그인 된 유저를 로그아웃합니다.
 """
 
-# session을 위한 secret_key 설정
-app.config.from_mapping(SECRET_KEY='dev')
+# flask_jwt_extended를 위한 secret_key 설정
+app.config["JWT_SECRET_KEY"] = "super-secret"
+jwt = JWTManager(app)
 
 # 회원가입
 @app.route('/auth/register', methods=['GET','POST'])
@@ -107,19 +114,14 @@ def login():
         
         # 정상적인 정보를 요청받았다면
         if error is None:
-            # 로그인을 위해 기존 session을 비운다.
-            session.clear()
-            # 지금 로그인한 유저의 정보로 session을 등록한다.
-            session['user_id'] = user[0]
-            return jsonify(status = "success", result = {"email": email, "session": session['user_id']})
+            access_token = create_access_token(identity=email)
+            return jsonify(status = "success", result = {"email": email, "access_token": access_token})
 
         return jsonify(status = "failure", result = {'error': error})
 
 # 로그아웃
 @app.route('/auth/logout')
 def logout():
-    # 현재 session을 비운다.
-    session.clear()
     return jsonify(status = "success", result = {"msg": "logout!"})
 
 """
@@ -127,6 +129,12 @@ Portfolio APIs: 내 포트폴리오 보기, 수정, 업로드, 삭제
 
 Education API: 학교이름, 전공 정보, 학위를 입력받아 학력에 대한 정보
 """
+
+@app.route('/protected', methods=['GET'])
+@jwt_required
+def protected():
+    current_user = get_jwt_identity()
+    return jsonify(logged_in_as=current_user)
 
 class Education(Resource):
     def post(self):

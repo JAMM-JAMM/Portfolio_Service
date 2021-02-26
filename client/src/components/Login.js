@@ -1,31 +1,43 @@
-import React from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { Form, Button, Container } from 'react-bootstrap';
+import makeRequestWithJWT from './Header';
 
 
 export default function Login(props) {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+    const authUrl = "http://localhost:5000";
+
+    const submitLogin = async (e) => {
+        e.preventDefault();
+        let form = new FormData();
+        form.append('email', email);
+        form.append('password', password);
+        try {
+            await axios.post(authUrl+"/auth/login", form)
+                .then( response => {
+                    console.log('response: ', JSON.stringify(response));
+                    if (response.data.status === "success") {
+                        props.onChangeMode("PORTFOLIO");
+                        localStorage.setItem('access_token', response.data.result.access_token);
+                    } else {
+                        props.onChangeMode("LOGIN");
+                    }
+                    makeRequestWithJWT();
+                })
+        } catch (error) {
+            console.log("error: ", error);
+        }
+        e.target.reset();
+    }
     return (
         <div>
             <Container>
                 <h4>Login</h4>
                 <Form
-                    onSubmit = {async function(e) {
-                        e.preventDefault();
-                        let form = new FormData();
-                        form.append('email', e.target.email.value);
-                        form.append('password', e.target.password.value);
-                        try {
-                            await axios.post("http://localhost:5000/auth/login", form)
-                                .then( response => {
-                                    console.log('response: ', JSON.stringify(response));
-                                    sessionStorage.setItem('session', JSON.stringify(response.data.result.session));
-                                })
-                        } catch (error) {
-                            console.log("error: ", error);
-                        }
-                        props.onChangeMode("PORTFOLIO");
-                        e.target.reset();
-                    }}
+                    onSubmit = {submitLogin}
                 >   
                     <Form.Group controlId="formBasicEmail">
                         <Form.Label>Email address</Form.Label>
@@ -33,6 +45,7 @@ export default function Login(props) {
                             type="email"
                             placeholder="Enter email"
                             name="email"
+                            onChange = {(e) => setEmail(e.target.value)}
                         />
                     </Form.Group>
                     <Form.Group controlId="formBasicPassword">
@@ -41,6 +54,7 @@ export default function Login(props) {
                             type="password"
                             placeholder="Enter password"
                             name="password"
+                            onChange = {(e) => setPassword(e.target.value)}
                         />
                     </Form.Group>
                     <Button variant="primary" type="submit">

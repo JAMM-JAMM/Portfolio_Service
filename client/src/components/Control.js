@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { Form, Button } from 'react-bootstrap';
 
 export default function Control(props) {
@@ -25,19 +24,9 @@ export default function Control(props) {
                 <Button
                     variant="outline-primary"
                     type="button"
-                    onClick = {async function(e) {
+                    onClick = {function(e) {
                         e.preventDefault();
-                        try {
-                            await axios.get("http://localhost:5000/auth/logout")
-                                .then ( response => {
-                                    console.log('response: ', JSON.stringify(response));
-                                })
-                        } catch (error) {
-                            console.log("error: ", error);
-                        }
-                        if (window.sessionStorage['session']) {
-                            window.sessionStorage.clear();
-                        }
+                        localStorage.removeItem('access_token');
                         props.onChangeMode("HOME");
                     }}
                 >
