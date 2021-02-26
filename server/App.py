@@ -130,18 +130,15 @@ Portfolio APIs: 내 포트폴리오 보기, 수정, 업로드, 삭제
 Education API: 학교이름, 전공 정보, 학위를 입력받아 학력에 대한 정보
 """
 
-@app.route('/protected', methods=['GET'])
-@jwt_required
-def protected():
-    current_user = get_jwt_identity()
-    return jsonify(logged_in_as=current_user)
-
 class Education(Resource):
+    # @jwt_required
     def post(self):
+        # current_user = get_jwt_identity()
+        user_email = request.form['user_email']
         university = request.form['university']
         major = request.form['major']
         degree = request.form['degree']
-
+        
         error = None
 
         if not university:
@@ -150,14 +147,17 @@ class Education(Resource):
             error = 'invalid major'
         elif not degree:
             error = 'invalid degree'
+        elif not user_email:
+            error = 'not logged in'
 
         if error is None:
-            sql = "INSERT INTO `education` (`university`, `major`, `degree`) VALUES (%s, %s, %s)"
-            cursor.execute(sql, (university, major, degree))
+            sql = "INSERT INTO `education` (`user_email`, `university`, `major`, `degree`) VALUES (%s, %s, %s, %s)"
+            cursor.execute(sql, (user_email, university, major, degree))
             db.commit()
             return jsonify(
                 status = "success", 
                 result = {
+                    'user_email': user_email,
                     'unviversity': university,
                     'major': major,
                     'degree': degree
@@ -166,14 +166,18 @@ class Education(Resource):
         else:
             return jsonify(status = "failure", result = {"message": error})
 
+    # @jwt_required
     def get(self):
-        sql = "SELECT * from `education`"
+        # current_user = get_jwt_identity()
+
+        sql = "SELECT * FROM `education`"
         cursor.execute(sql)
         result = cursor.fetchall()
         return jsonify(
             status = "success",
             result = result
-        )
+            )
+        
     def put(self):
         eduId = request.form['eduId']
         university = request.form['university']
