@@ -4,7 +4,7 @@ import ReadAward from './ReadAward';
 import RegisterAward from './RegisterAward';
 
 export default function Award() {
-    const [awardMode, setAwardMode] = useState("READAWARD");
+    const [awardMode, setAwardMode] = useState("");
     let awardArticle = null;
     if (awardMode === "READAWARD") {
         awardArticle = <ReadAward />
