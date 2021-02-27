@@ -225,18 +225,34 @@ class Education(Resource):
 
 class Awards(Resource):
     def post(self):
+        user_email = request.form['user_email']
         awardName = request.form['awardName']
         awardDesc = request.form['awardDesc']
-        sql = "INSERT INTO `awards` (`awardName`, `awardDesc`) VALUES (%s, %s)"
-        cursor.execute(sql, (awardName, awardDesc))
-        db.commit()
-        return jsonify(
-            status = "success",
-            result = {
-                'awardName': awardName,
-                'awardDesc': awardDesc
-            }
-        )
+
+        error = None
+
+        if not user_email:
+            error = 'invalid user_email'
+        elif not awardName:
+            error = 'invalid awardName'
+        elif not awardDesc:
+            error = 'invalid awardDesc'
+
+        if error is None:
+            sql = "INSERT INTO `awards` (`user_email`,`awardName`, `awardDesc`) VALUES (%s, %s, %s)"
+            cursor.execute(sql, (user_email, awardName, awardDesc))
+            db.commit()
+            return jsonify(
+                status = "success",
+                result = {
+                    'user_email': user_email,
+                    'awardName': awardName,
+                    'awardDesc': awardDesc
+                }
+            )
+        else:
+            return jsonify(status = "failure", result = {"message": error})
+
     def get(self):
         sql = "SELECT * FROM `awards`"
         cursor.execute(sql)

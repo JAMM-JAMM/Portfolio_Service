@@ -18,8 +18,8 @@ create table if not exists education(
 create table if not exists awards(
     id int not null AUTO_INCREMENT,
     user_email varchar(32) not null,
-    award_name varchar(32),
-    award_desc text,
+    awardName varchar(32) not null,
+    awardDesc text not null,
     create_date timestamp default NOW(),
     primary key(id)
 )

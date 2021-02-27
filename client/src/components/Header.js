@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export default async function makeRequestWithJWT() {
-    const url = "http://localhost:5000";
+    const serverUrl = '${window.location.origin}:5000/';
     const options = {
         method: 'POST',
         headers: {
