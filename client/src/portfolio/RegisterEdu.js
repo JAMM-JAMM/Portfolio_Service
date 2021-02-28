@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Container, Form, Button, Row, Col } from 'react-bootstrap';
+import { Container, Form, Button, Row, Col, Badge } from 'react-bootstrap';
 import axios from 'axios';
 
 export default function RegisterEdu(props) {
@@ -10,7 +10,6 @@ export default function RegisterEdu(props) {
     const eduUrl = "http://localhost:5000";
 
     const registerEducation = async (e) => {
-        e.preventDefault();
         const email = localStorage.getItem('email');
         console.log(email, university, major, degree);
         let eduData = new FormData();
@@ -21,13 +20,18 @@ export default function RegisterEdu(props) {
         try {
             await axios.post(eduUrl+'/portfolio/education', eduData)
                 .then( response => {
-                    console.log('response: ', JSON.stringify(response));
+                    if (response.data.status === "success") {
+                        console.log('response: ', JSON.stringify(response));
+                        alert("Success, register academic background info!");
+                        props.setEduMode("READEDU")
+                    } else {
+                        alert(response.data.result.error)
+                    }
                 })
         } catch (error) {
             console.log("error: ", error);
         }
         e.target.reset();
-        props.onChangeMode("READEDU");
     }
 
     return (
@@ -36,6 +40,9 @@ export default function RegisterEdu(props) {
                 <Form
                     onSubmit = {registerEducation}
                 >
+                    <h4>
+                        <Badge variant="secondary">Academic Background Register</Badge>
+                    </h4>
                     <Form.Group as={Row} controlId = "formBasicUniversity">
                         <Form.Label column sm={2}>University</Form.Label>
                         <Col sm={10}>
