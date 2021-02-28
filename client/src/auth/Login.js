@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import Portfolio from '../portfolio/Portfolio';
 import { Form, Row, Col, Button, Container, Badge } from 'react-bootstrap';
-import { BrowserRouter, Link, Switch, Route, useHistory } from 'react-router-dom';
+import { BrowserRouter as Router, Link, Switch, Route, useHistory } from 'react-router-dom';
 
 
 export default function Login() {
@@ -38,7 +38,7 @@ export default function Login() {
     }
 
     return (
-            <BrowserRouter>
+            <Router>
                 <Container className="vh-100" fluid>
                     <Row className="h-100">
                         <Col xs={12} className="login">
@@ -79,6 +79,6 @@ export default function Login() {
                         </Col>
                     </Row>
                 </Container>
-            </BrowserRouter>
+            </Router>
     )
 }
