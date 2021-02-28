@@ -14,6 +14,7 @@ export default function Register() {
     const history = useHistory();
 
     const submitRegister = async (e) => {
+        e.preventDefault();
         let form = new FormData();
         form.append('fullname', fullname);
         form.append('email', email);
@@ -27,7 +28,7 @@ export default function Register() {
                     if (response.data.status === "success") {
                         console.log(response);
                         alert("Register Success, Go to Login!");
-                        history.push("/auth/login");
+                        history.push("/login");
                     } else {
                         alert(response.data.result.error);
                     }

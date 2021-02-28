@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { Row, Col, Button, Container, Badge, ListGroup, ButtonGroup } from 'react-bootstrap';
 import RegisterEdu from './RegisterEdu';
+import ModifyEdu from './ModifyEdu';
 
 const eduUrl = 'http://localhost:5000';
 
@@ -33,8 +34,34 @@ export default function Education() {
             setEduMode("READEDU")
     }
 
+    const deleteEdu = async (e) => {
+        try {
+            await axios.delete(eduUrl+'/portfolio/education', {
+                params: {
+                    user_email: localStorage.getItem('email')
+                }
+            })
+            .then( response => {
+                setUniversity('');
+                setMajor('');
+                setDegree('');
+                alert("Delete Success!");
+                })
+        } catch (error) {
+            console.log("error: ", error);
+            alert("There is no acdemic background info");
+        }
+        setEduMode("READEDU")
+    }    
+
     if (eduMode === "REGISTEREDU") {
         eduArticle = <RegisterEdu
+                        onChangeMode = {function(_mode) {
+                            setEduMode(_mode)
+                        }}
+                    />
+    } else if (eduMode === "MODIFYEDU") {
+        eduArticle = <ModifyEdu 
                         onChangeMode = {function(_mode) {
                             setEduMode(_mode)
                         }}
@@ -75,6 +102,10 @@ export default function Education() {
                                 variant="outline-primary"
                                 size="sm"
                                 type="button"
+                                onClick={function(e) {
+                                    e.preventDefault();
+                                    setEduMode("MODIFYEDU");
+                                }}
                             >
                                 modify
                             </Button>
@@ -82,6 +113,7 @@ export default function Education() {
                                 variant="outline-primary"
                                 size="sm"
                                 type="button"
+                                onClick={deleteEdu}
                             >
                                 delete
                             </Button>
