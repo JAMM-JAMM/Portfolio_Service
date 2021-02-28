@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Container, Form, Button } from 'react-bootstrap';
+import { Container, Form, Button, Row, Col } from 'react-bootstrap';
 import axios from 'axios';
 
 export default function RegisterAward(props) {
@@ -10,7 +10,9 @@ export default function RegisterAward(props) {
 
     const registerAward = async (e) => {
         e.preventDefault();
+        const email = localStorage.getItem('email');
         let awardData = new FormData();
+        awardData.append('user_email', email);
         awardData.append('awardName', awardName);
         awardData.append('awardDesc', awardDesc);
         try {
@@ -27,31 +29,38 @@ export default function RegisterAward(props) {
     return (
         <>
             <Container>
-                <h4>수상 정보</h4>
                 <Form
                     onSubmit = {registerAward}
                 >
-                    <Form.Group controlId = "formBasicAwardName">
-                        <Form.Label>Award Name</Form.Label>
-                        <Form.Control
-                            type = "text"
-                            placeholder = "Enter award name"
-                            name = "awardName"
-                            onChange = {(e) => setAwardName(e.target.value)}
-                        />
+                    <Form.Group as={Row} controlId = "formBasicAwardName">
+                        <Form.Label column sm={2}>Award Name</Form.Label>
+                        <Col sm={10}>
+                            <Form.Control
+                                type = "text"
+                                placeholder = "Enter award name"
+                                name = "awardName"
+                                onChange = {(e) => setAwardName(e.target.value)}
+                            />
+                        </Col>
                     </Form.Group>
-                    <Form.Group controlId = "formBasicAwardDesc">
-                        <Form.Label>Award Desc</Form.Label>
-                        <Form.Control
-                            type = "text"
-                            placeholder = "Enter award description"
-                            name = "awardDesc"
-                            onChange = {(e) => setAwardDesc(e.target.value)}
-                        />
+                    <Form.Group as = {Row} controlId = "formBasicAwardDesc">
+                        <Form.Label column sm={2}>Award Desc</Form.Label>
+                        <Col sm={10}>
+                            <Form.Control
+                                type = "text"
+                                placeholder = "Enter award description"
+                                name = "awardDesc"
+                                onChange = {(e) => setAwardDesc(e.target.value)}
+                            />
+                        </Col>
                     </Form.Group>
-                    <Button variant = "primary" type = "submit">
-                        Register
-                    </Button>
+                    <Form.Group as={Row}>
+                        <Col sm={{ span: 10, offset: 2}}>
+                        <Button variant = "primary" type = "submit">
+                            Register
+                        </Button>
+                        </Col>
+                    </Form.Group>
                 </Form>
             </Container>
         </>

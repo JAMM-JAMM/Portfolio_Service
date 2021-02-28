@@ -1,44 +1,50 @@
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Control from './components/Control';
 import Login from './components/Login';
 import Register from './components/Register';
 import Portfolio from './components/Portfolio';
-import { Navbar } from 'react-bootstrap';
+import { Row, Container, Col, Nav, Navbar } from 'react-bootstrap';
+import {BrowserRouter, Link, Route, Switch} from 'react-router-dom';
 
 function Home() {
-    var [mode, setMode] = useState("HOME");
-    var article = null;
-    if (mode === "LOGIN") {
-        article = <Login 
-                    onChangeMode = {function(_mode) {
-                        setMode(_mode);
-                    }}
-                />
-    } else if (mode === "REGISTER") {
-        article = <Register 
-                    onChangeMode = {function(_mode) {
-                        setMode(_mode);
-                    }}
-                />
-    } else if (mode === "PORTFOLIO") {
-        article = <Portfolio />
-    }
     return (
         <>  
-            <Navbar className = "justify-content-between" bg = "light" variant = "lignt">
+            <BrowserRouter>
+            <Navbar className = "justify-content-center" bg = "light" variant = "lignt">
                 <Navbar.Brand>Racer Portfolio Service</Navbar.Brand>
-                <br/>
-                <Control 
-                    onChangeMode = {function(_mode) {
-                        setMode(_mode);
-                    }}
-                />
-                <br/>
+                <Nav className = "justify-content-end" >
+                    <Nav.Item>
+                        <Nav.Link to="/auth/login">
+                            Login
+                        </Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item>
+                        <Nav.Link to="/auth/register">
+                            Register
+                        </Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item>
+                        <Nav.Link as={Link} to="/auth/login"
+                            onClick = {function() {
+                                localStorage.removeItem('access_token');
+                                localStorage.removeItem('email');
+                            }}>
+                            Logout
+                        </Nav.Link>
+                    </Nav.Item>
+                </Nav>
             </Navbar>
-                <br/>
-                {article}
-            
+
+            <Route path="/auth/login">
+                <Container>
+                    <Row>
+                        <Col xs={6} md={4}>
+                            <Login />
+                        </Col>
+                    </Row>
+                </Container>
+            </Route>
+            </BrowserRouter>
         </>
     )
 }

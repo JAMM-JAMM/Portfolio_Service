@@ -4,7 +4,7 @@ import ReadEdu from './ReadEdu';
 import RegisterEdu from './RegisterEdu';
 
 export default function Education() {
-    const [eduMode, setEduMode] = useState("READEDU");
+    const [eduMode, setEduMode] = useState("");
     let eduArticle = null;
     if (eduMode === "READEDU") {
         eduArticle = <ReadEdu />

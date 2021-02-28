@@ -129,6 +129,8 @@ Portfolio APIs: 내 포트폴리오 보기, 수정, 업로드, 삭제
 
 Education API: 학교이름, 전공 정보, 학위를 입력받아 학력에 대한 정보
 """
+parser_edu = reqparse.RequestParser()
+parser_edu.add_argument('user_email')
 
 class Education(Resource):
     # @jwt_required
@@ -169,9 +171,9 @@ class Education(Resource):
     # @jwt_required
     def get(self):
         # current_user = get_jwt_identity()
-
-        sql = "SELECT * FROM `education`"
-        cursor.execute(sql)
+        args = parser_edu.parse_args()
+        sql = "SELECT `id`, `university`, `major`, `degree` FROM `education` WHERE `user_email` = %s"
+        cursor.execute(sql, (args['user_email'], ))
         result = cursor.fetchall()
         return jsonify(
             status = "success",
@@ -223,23 +225,43 @@ class Education(Resource):
             }
         )
 
+parser_award = reqparse.RequestParser()
+parser_award.add_argument('user_email')
+
 class Awards(Resource):
     def post(self):
+        user_email = request.form['user_email']
         awardName = request.form['awardName']
         awardDesc = request.form['awardDesc']
-        sql = "INSERT INTO `awards` (`awardName`, `awardDesc`) VALUES (%s, %s)"
-        cursor.execute(sql, (awardName, awardDesc))
-        db.commit()
-        return jsonify(
-            status = "success",
-            result = {
-                'awardName': awardName,
-                'awardDesc': awardDesc
-            }
-        )
+
+        error = None
+
+        if not user_email:
+            error = 'invalid user_email'
+        elif not awardName:
+            error = 'invalid awardName'
+        elif not awardDesc:
+            error = 'invalid awardDesc'
+
+        if error is None:
+            sql = "INSERT INTO `awards` (`user_email`,`awardName`, `awardDesc`) VALUES (%s, %s, %s)"
+            cursor.execute(sql, (user_email, awardName, awardDesc))
+            db.commit()
+            return jsonify(
+                status = "success",
+                result = {
+                    'user_email': user_email,
+                    'awardName': awardName,
+                    'awardDesc': awardDesc
+                }
+            )
+        else:
+            return jsonify(status = "failure", result = {"message": error})
+
     def get(self):
-        sql = "SELECT * FROM `awards`"
-        cursor.execute(sql)
+        args = parser_award.parse_args()
+        sql = "SELECT `id`, `awardName`, `awardDesc` FROM `awards` WHERE `user_email` = %s"
+        cursor.execute(sql, (args['user_email'], ))
         result = cursor.fetchall()
         return jsonify(
             status = "success",
