@@ -25,7 +25,7 @@ export default function ModifyEdu(props) {
                         console.log('response: ', JSON.stringify(response));
                         alert("Success, modify academic background info!");
                         props.setEduMode("READEDU");
-                    } else {
+                    } else if (response.data.status === "failure") {
                         alert(response.data.result.error);
                     }
                 })

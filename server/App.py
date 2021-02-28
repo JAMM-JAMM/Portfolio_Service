@@ -277,29 +277,29 @@ class Awards(Resource):
             result = result
         )
     def put(self):
-        awardId = request.form['awardId']
+        user_email = request.form['user_email']
         awardName = request.form['awardName']
         awardDesc = request.form['awardDesc']
-        sql = "UPDATE `awards` SET `awardName` = %s, `awardDesc` = %s WHERE `id` = %s"
-        cursor.execute(sql, (awardName, awardDesc, awardId))
+        sql = "UPDATE `awards` SET `awardName` = %s, `awardDesc` = %s WHERE `user_email` = %s"
+        cursor.execute(sql, (awardName, awardDesc, user_email))
         db.commit()
         return jsonify(
             statue = "success",
             result = {
-                'awardId': awardId,
+                'user_email': user_email,
                 'awardName': awardName,
                 'awardDesc': awardDesc
             }
         )
     def delete(self):
-        awardId = request.form['awardId']
-        sql = "DELETE FROM `awards` WHERE `id` = %s"
-        cursor.execute(sql, (awardId, ))
+        args = parser_award.parse_args()
+        sql = "DELETE FROM `awards` WHERE `user_email` = %s"
+        cursor.execute(sql, (args['user_email'], ))
         db.commit()
         return jsonify(
             status = "success",
             result = {
-                'awardId': awardId
+                'user_email': args['user_email']
             }
         )
         

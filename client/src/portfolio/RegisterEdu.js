@@ -10,6 +10,7 @@ export default function RegisterEdu(props) {
     const eduUrl = "http://localhost:5000";
 
     const registerEducation = async (e) => {
+        e.preventDefault();
         const email = localStorage.getItem('email');
         console.log(email, university, major, degree);
         let eduData = new FormData();
