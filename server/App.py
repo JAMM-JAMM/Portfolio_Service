@@ -152,6 +152,15 @@ class Education(Resource):
         elif not user_email:
             error = 'not logged in'
 
+        # 이미 등록된 정보라면
+        sql = 'SELECT * FROM `education` WHERE `user_email` = %s'
+        cursor.execute(sql, (user_email,))
+        result = cursor.fetchone()
+
+        if result is not None:
+            error = '{}\'s info is already registered.'.format(email)
+        
+
         if error is None:
             sql = "INSERT INTO `education` (`user_email`, `university`, `major`, `degree`) VALUES (%s, %s, %s, %s)"
             cursor.execute(sql, (user_email, university, major, degree))
@@ -181,7 +190,7 @@ class Education(Resource):
             )
         
     def put(self):
-        eduId = request.form['eduId']
+        user_email = request.form['user_email']
         university = request.form['university']
         major = request.form['major']
         degree = request.form['degree']
@@ -194,17 +203,17 @@ class Education(Resource):
             error = 'invalid major'
         elif not degree:
             error = 'invalid degree'
-        elif not eduId:
-            error = 'invalid eduId'
+        elif not user_email:
+            error = 'invalid user_email'
 
         if error is None:
-            sql = "UPDATE `education` SET `university` = %s, `major` = %s, `degree` = %s WHERE `id` = %s"
-            cursor.execute(sql, (university, major, degree, eduId))
+            sql = "UPDATE `education` SET `university` = %s, `major` = %s, `degree` = %s WHERE `user_email` = %s"
+            cursor.execute(sql, (university, major, degree, user_email))
             db.commit()
             return jsonify(
                 status = "success",
                 result = {
-                    'eduId': eduId,
+                    'user_email': user_email,
                     'university': university,
                     'major': major,
                     'degree': degree
@@ -214,14 +223,14 @@ class Education(Resource):
             return jsonify(status = "failure", result = {"message": error})
 
     def delete(self):
-        eduId = request.form['eduId']
-        sql = "DELETE FROM `education` WHERE `id` = %s"
-        cursor.execute(sql, (eduId, ))
+        args = parser_edu.parse_args()
+        sql = "DELETE FROM `education` WHERE `user_email` = %s"
+        cursor.execute(sql, (args['user_email'], ))
         db.commit()
         return jsonify(
             status = "success",
             result = {
-                'id': eduId
+                'user_email': args['user_email']
             }
         )
 

@@ -2,30 +2,31 @@ import React, { useState } from 'react';
 import { Container, Form, Button, Row, Col, Badge } from 'react-bootstrap';
 import axios from 'axios';
 
-export default function RegisterEdu(props) {
+
+export default function ModifyEdu(props) {
     const [university, setUniversity] = useState('');
     const [major, setMajor] = useState('');
     const [degree, setDegree] = useState('');
 
     const eduUrl = "http://localhost:5000";
 
-    const registerEducation = async (e) => {
+    const modifyEducation = async (e) => {
+        e.preventDefault();
         const email = localStorage.getItem('email');
-        console.log(email, university, major, degree);
         let eduData = new FormData();
         eduData.append('user_email', email);
         eduData.append('university', university);
         eduData.append('major', major);
         eduData.append('degree', degree);
         try {
-            await axios.post(eduUrl+'/portfolio/education', eduData)
+            await axios.put(eduUrl+'/portfolio/education', eduData)
                 .then( response => {
                     if (response.data.status === "success") {
                         console.log('response: ', JSON.stringify(response));
-                        alert("Success, register academic background info!");
-                        props.setEduMode("READEDU")
+                        alert("Success, modify academic background info!");
+                        props.setEduMode("READEDU");
                     } else {
-                        alert("Fail")
+                        alert(response.data.result.error);
                     }
                 })
         } catch (error) {
@@ -38,10 +39,10 @@ export default function RegisterEdu(props) {
         <>
             <Container>
                 <Form
-                    onSubmit = {registerEducation}
+                    onSubmit = {modifyEducation}
                 >
                     <h4>
-                        <Badge variant="secondary">Academic Background Register</Badge>
+                        <Badge variant="secondary">Academic Background Modify</Badge>
                     </h4>
                     <Form.Group as={Row} controlId = "formBasicUniversity">
                         <Form.Label column sm={2}>University</Form.Label>
@@ -103,7 +104,7 @@ export default function RegisterEdu(props) {
                     <Form.Group as={Row}>
                         <Col sm={{ span: 10, offset: 2}}>
                         <Button variant = "primary" type = "submit">
-                            Register
+                            Modify
                         </Button>
                         </Col>
                     </Form.Group>
