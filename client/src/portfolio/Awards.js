@@ -40,7 +40,7 @@ export default function Awards() {
                 }
             })
             .then( response => {
-                setAwardName('');
+                    setAwardName('');
                     setAwardDesc('');
                 alert("Delete Success!");
                 })

@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import Portfolio from '../portfolio/Portfolio';
 import { Form, Row, Col, Button, Container, Badge } from 'react-bootstrap';
-import { BrowserRouter as Router, Link, Switch, Route, useHistory } from 'react-router-dom';
+import { BrowserRouter as Router, useHistory } from 'react-router-dom';
 
 
 export default function Login() {

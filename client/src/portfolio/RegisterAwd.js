@@ -42,7 +42,7 @@ export default function RegisterAwd(props) {
                         <Badge variant="secondary">Awards Register</Badge>
                     </h4>
                     <Form.Group as={Row} controlId = "formBasicAwardName">
-                        <Form.Label column sm={2}>Name</Form.Label>
+                        <Form.Label column sm={4}>Name</Form.Label>
                         <Col sm={10}>
                             <Form.Control
                                 type = "text"
@@ -53,7 +53,7 @@ export default function RegisterAwd(props) {
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row} controlId = "formBasicAwardDesc">
-                        <Form.Label column sm={2}>Description</Form.Label>
+                        <Form.Label column sm={4}>Description</Form.Label>
                         <Col sm={10}>
                             <Form.Control
                                 type = "text"
