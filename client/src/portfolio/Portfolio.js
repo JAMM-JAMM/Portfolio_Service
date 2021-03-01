@@ -1,6 +1,7 @@
 import React from 'react';
 import Education from './Education';
 import Awards from './Awards';
+import Project from './Project';
 import { Container } from 'react-bootstrap';
 
 export default function Portfolio() {
@@ -8,6 +9,7 @@ export default function Portfolio() {
         <Container>
             <Education />
             <Awards />
+            <Project />
         </Container>
     )
 }
