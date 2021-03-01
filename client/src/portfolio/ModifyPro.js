@@ -6,11 +6,9 @@ import { ko } from "date-fns/esm/locale";
 import "react-datepicker/dist/react-datepicker.css";
 import * as moment from 'moment';
 
-
-
 const url = 'http://localhost:5000';
 
-export default function RegisterPro(props) {
+export default function ModifyPro(props) {
     const [projectName, setProjectName] = useState("");
     const [projectDesc, setProjectDesc] = useState("");
     const [projectStart, setProjectStart] = useState(new Date());
