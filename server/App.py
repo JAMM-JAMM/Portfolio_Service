@@ -459,7 +459,7 @@ class Certificate(Resource):
         result = cursor.fetchone()
 
         if result is not None:
-            error = '{}\'s info is already registered.'.format(email)
+            error = '{}\'s info is already registered.'.format(user_email)
 
         if error is None:
             sql = "INSERT INTO `certificate` (`user_email`, `certificateN`, `certificateP`, `certificateI`) VALUES (%s, %s, %s, %s)"
@@ -479,7 +479,7 @@ class Certificate(Resource):
     
     def get(self):
         args = parser_certificate.parse_args()
-        sql = "SELECT * FROM `certificate` WHERE `user_email` = %s"
+        sql = "SELECT `id`, `certificateN`, `certificateP`, `certificateI` FROM `certificate` WHERE `user_email` = %s"
         cursor.execute(sql, (args['user_email'], ))
         result = cursor.fetchall()
         return jsonify(
@@ -506,7 +506,7 @@ class Certificate(Resource):
             error = 'invalid certificate Issue Date'
 
         if error is None:
-            sql = "INSERT INTO `certificate` (`user_email`, `certificateN`, `certificateP`, `certificateI`) VALUES (%s, %s, %s, %s)"
+            sql = "UPDATE`certificate` SET `user_email` = %s, `certificateN` = %s, `certificateP` = %s, `certificateI` = %s"
             cursor.execute(sql, (user_email, certificateN, certificateP, certificateI))
             db.commit()
             return jsonify(
@@ -523,7 +523,7 @@ class Certificate(Resource):
     
     def delete(self):
         args = parser_certificate.parse_args()
-        sql = "DELETE FROM `project` WHERE `user_email` = %s"
+        sql = "DELETE FROM `certificate` WHERE `user_email` = %s"
         cursor.execute(sql, (args['user_email'], ))
         db.commit()
         return jsonify(
