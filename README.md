@@ -61,3 +61,39 @@
 - 가상환경 구축하기
 - requirements.txt를 install
 - mysql 설치; sudo apt-get install mysql
+
+## azure에서 nginx로 배포하기
+- cd web-project
+- cd client
+- sudo apt-get install nginx
+- npm run build
+- sudo vim /etc/nginx/sites-enabled/default
+    - 수정: i
+    - 저장하지 않고 종료: ESC + :q! + enter
+    - 저장하고 종료: ESC + :wq + enter
+- ```server {
+    listen 80;
+    root /home/azure/web-project/client/build
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+    location /api {
+        include proxy_params;
+        proxy_pass http://locatehost:5000;
+    }
+ }
+ ```
+ - sudo systemctl reload nginx: nginx 재시작
+ - sudo systemctl status nginx: nginx 상태
+ - 기존 url ~:5000/ + api/를 추가해준다.
+ - App.py의 api 주소 앞에 /api를 추가해준다.
+ - react 파일을 수정한 후에 nginx에 다시 배포해주기 위해서는 npm run build를 새로 해줘야 반영이 됨
+    - sudo systemctl stop nginx: nginx 배포 종료
+    - sudo systemctl start nginx: nginx 배포 시작
+ - App.py 를 수정해줬을 때, 변경사항을 반영해주기 위해서 gunicorn에 다시 배포해줘야 함
+    - ps aux | grep gunicorn: gunicorn에서 실행되는 파일을 모두 보여준다
+    - 실행중인 서버를 종료시키고 싶을 때, kill -9 'PID'를 입력
+    - ps gunicorn App:app -Db 0.0.0.0:5000: server 파일을 데모 버전으로 배포하고 싶을 때 사용하는 명령어
+    - gunicorn App:app -b 0.0.0.0:5000: 일시적으로 server를 열어주는 명령어 꼭 종료시켜줘야 함
