@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { Container, Form, Button, Row, Col, Badge } from 'react-bootstrap';
 import axios from 'axios';
 
-const awdUrl = 'http://localhost:5000';
-
 export default function ModifyAwd(props) {
     const [awardName, setAwardName] = useState("");
     const [awardDesc, setAwardDesc] = useState("");
+
+    const serverUrl = "http://elice-kdt-ai-track-vm-racer-31.koreacentral.cloudapp.azure.com:5000/api";
 
     const modifyAwd = async (e) => {
         e.preventDefault();
@@ -16,7 +16,7 @@ export default function ModifyAwd(props) {
         awdData.append('awardName', awardName);
         awdData.append('awardDesc', awardDesc);
         try {
-            await axios.put(awdUrl+'/portfolio/awards', awdData)
+            await axios.put(serverUrl+'/portfolio/awards', awdData)
                 .then( response => {
                     if (response.data.status === "success") {
                         console.log('response: ', JSON.stringify(response));
@@ -66,7 +66,7 @@ export default function ModifyAwd(props) {
                     <Form.Group as={Row}>
                         <Col sm={{ span: 10, offset: 2}}>
                         <Button variant = "primary" type = "submit">
-                            Register
+                            Modify
                         </Button>
                         </Col>
                     </Form.Group>

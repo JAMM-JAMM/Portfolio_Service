@@ -9,7 +9,7 @@ export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const authUrl = "http://localhost:5000";
+    const serverUrl = "http://elice-kdt-ai-track-vm-racer-31.koreacentral.cloudapp.azure.com/api";
     let history = useHistory();
 
     const submitLogin = async (e) => {
@@ -18,7 +18,7 @@ export default function Login() {
         form.append('email', email);
         form.append('password', password);
         try {
-            await axios.post(authUrl+"/auth/login", form)
+            await axios.post(serverUrl+"/auth/login", form)
                 .then( response => {
                     console.log('response: ', JSON.stringify(response));
                     if (response.data.status === "success") {

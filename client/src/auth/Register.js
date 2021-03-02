@@ -9,7 +9,7 @@ export default function Register() {
     const [password, setPassword] = useState(null);
     const [confirmPassword, setConfirmPassword] = useState(null);
 
-    const authUrl = "http://localhost:5000";
+    const serverUrl = "http://elice-kdt-ai-track-vm-racer-31.koreacentral.cloudapp.azure.com:5000/api";
 
     const history = useHistory();
 
@@ -22,7 +22,7 @@ export default function Register() {
             form.append('password', confirmPassword);
         }
         try {
-            await axios.post(authUrl+"/auth/register", form)
+            await axios.post(serverUrl+"/auth/register", form)
                 .then( response => {
                     console.log('response: ', JSON.stringify(response));
                     if (response.data.status === "success") {

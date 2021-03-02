@@ -2,24 +2,23 @@ import React, { useState } from 'react';
 import { Container, Form, Button, Row, Col, Badge } from 'react-bootstrap';
 import axios from 'axios';
 
+const serverUrl = "http://elice-kdt-ai-track-vm-racer-31.koreacentral.cloudapp.azure.com:5000/api";
+
 export default function RegisterEdu(props) {
     const [university, setUniversity] = useState('');
     const [major, setMajor] = useState('');
     const [degree, setDegree] = useState('');
 
-    const eduUrl = "http://localhost:5000";
-
     const registerEducation = async (e) => {
         e.preventDefault();
         const email = localStorage.getItem('email');
-        console.log(email, university, major, degree);
         let eduData = new FormData();
         eduData.append('user_email', email);
         eduData.append('university', university);
         eduData.append('major', major);
         eduData.append('degree', degree);
         try {
-            await axios.post(eduUrl+'/portfolio/education', eduData)
+            await axios.post(serverUrl+'/portfolio/education', eduData)
                 .then( response => {
                     if (response.data.status === "success") {
                         console.log('response: ', JSON.stringify(response));
@@ -45,7 +44,7 @@ export default function RegisterEdu(props) {
                         <Badge variant="secondary">Academic Background Register</Badge>
                     </h4>
                     <Form.Group as={Row} controlId = "formBasicUniversity">
-                        <Form.Label column sm={2}>University</Form.Label>
+                        <Form.Label column sm={4}>University</Form.Label>
                         <Col sm={10}>
                             <Form.Control
                                 type = "text"
@@ -56,7 +55,7 @@ export default function RegisterEdu(props) {
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row} controlId = "formBasicMajor">
-                        <Form.Label column sm={2}>Major</Form.Label>
+                        <Form.Label column sm={4}>Major</Form.Label>
                         <Col sm={10}>
                             <Form.Control
                                 type = "text"
@@ -68,35 +67,35 @@ export default function RegisterEdu(props) {
                     </Form.Group>
                     <fieldset>
                     <Form.Group as={Row}>
-                        <Form.Label as='legend' column sm={2}>Degree</Form.Label>
+                        <Form.Label as='legend' column sm={3}>Degree</Form.Label>
                         <Col sm={10}>
                         <Form.Check
                             type = "radio"
                             label= "재학중"
                             name = "degree"
                             id = "1"
-                            onChange = {(e) => setDegree("재학중")}
+                            onChange = {(e) => setDegree("attending university")}
                         />
                         <Form.Check
                             type = "radio"
                             label= "학사 졸업"
                             name = "degree"
                             id = "2"
-                            onChange = {(e) => setDegree("학사 졸업")}
+                            onChange = {(e) => setDegree("Bachelor's degree")}
                         />
                         <Form.Check
                             type = "radio"
                             label= "석사 졸업"
                             name = "degree"
                             id = "3"
-                            onChange = {(e) => setDegree("석사 졸업")}
+                            onChange = {(e) => setDegree("Master's degree")}
                         />
                         <Form.Check
                             type = "radio"
                             label= "박사 졸업"
                             name = "degree"
                             id = "4"
-                            onChange = {(e) => setDegree("박사 졸업")}
+                            onChange = {(e) => setDegree("Doctor's degree")}
                         />
                         </Col>
                     </Form.Group>

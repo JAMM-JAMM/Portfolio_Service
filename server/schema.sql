@@ -22,4 +22,23 @@ create table if not exists awards(
     awardDesc text not null,
     create_date timestamp default NOW(),
     primary key(id)
-)
+);
+create table if not exists project(
+    id int not null AUTO_INCREMENT,
+    user_email varchar(32) not null,
+    projectName varchar(32) not null,
+    projectDesc varchar(32) not null,
+    projectStart date not null,
+    projectEnd date not null,
+    create_date timestamp default NOW(),
+    primary key(id)
+);
+create table if not exists certificate(
+    id int not null AUTO_INCREMENT,
+    user_email varchar(32) not null,
+    certificateN varchar(32) not null,
+    certificateP varchar(32) not null,
+    certificateI date not null,
+    create_data timestamp default NOW(),
+    primary key(id)
+);

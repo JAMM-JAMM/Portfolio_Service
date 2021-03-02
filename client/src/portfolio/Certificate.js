@@ -1,68 +1,69 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Row, Col, Button, Container, Badge, ListGroup, ButtonGroup } from 'react-bootstrap';
-import RegisterEdu from './RegisterEdu';
-import ModifyEdu from './ModifyEdu';
+import RegisterCer from './RegisterCer';
+import ModifyCer from './ModifyCer';
+import * as moment from 'moment';
 
-export default function Education() {
-    const [eduMode, setEduMode] = useState('READEDU');
-    const [university, setUniversity] = useState('');
-    const [major, setMajor] = useState('');
-    const [degree, setDegree] = useState('');
+const url = "http://elice-kdt-ai-track-vm-racer-31.koreacentral.cloudapp.azure.com:5000/api";
 
-    const serverUrl = "http://elice-kdt-ai-track-vm-racer-31.koreacentral.cloudapp.azure.com:5000/api";
-    let eduArticle = null;
+export default function Certificate() {
+    const [cerMode, setCerMode] = useState("READCER");
+    const [certificateN, setCertificateN] = useState("");
+    const [certificateP, setCertificateP] = useState("");
+    const [certificateI, setCertificateI] = useState("");
 
-    const showEdu = async (e) => {
-            try {
-                await axios.get(serverUrl+'/portfolio/education', {
-                    params: {
-                        user_email: localStorage.getItem('email')
-                    }
-                })
-                .then( response => {
-                    setUniversity(response.data.result[0][1]);
-                    setMajor(response.data.result[0][2]);
-                    setDegree(response.data.result[0][3]);
-                    })
-        
-            } catch (error) {
-                console.log("error: ", error);
-                alert("Register Academic Background Info!")
-            }
-            setEduMode("READEDU")
-    }
+    let cerArticle = null;
 
-    const deleteEdu = async (e) => {
+    const showCer = async (e) => {
         try {
-            await axios.delete(serverUrl+'/portfolio/education', {
+            await axios.get(url+'/portfolio/certificate', {
                 params: {
                     user_email: localStorage.getItem('email')
                 }
             })
             .then( response => {
-                setUniversity('');
-                setMajor('');
-                setDegree('');
-                alert("Delete Success!");
-                })
+                setCertificateN(response.data.result[0][1]);
+                setCertificateP(response.data.result[0][2]);
+                setCertificateI(moment(response.data.result[0][3]).format("YYYY-MM-DD"));
+            })
         } catch (error) {
             console.log("error: ", error);
-            alert("There is no acdemic background info");
+            alert("Register Certificate Info!");
         }
-        setEduMode("READEDU")
-    }    
+        setCerMode("READCER");
+    }
 
-    if (eduMode === "REGISTEREDU") {
-        eduArticle = <RegisterEdu
+    const deleteCer = async (e) => {
+        try {
+            await axios.delete(url +'/portfolio/certificate', {
+                params: {
+                    user_email: localStorage.getItem('email')
+                }
+            })
+            .then( response => {
+                setCertificateN('');
+                setCertificateP('');
+                setCertificateI('');
+                alert("Delete Success!")
+            })
+        } catch (error) {
+            console.log("error: ", error);
+            alert("There is no certificate info");
+        }
+        setCerMode("READCER");
+    }
+
+    if (cerMode === "REGISTERCER") {
+        cerArticle = <RegisterCer 
                         onChangeMode = {function(_mode) {
-                            setEduMode(_mode)
+                            setCerMode(_mode)
                         }}
                     />
-    } else if (eduMode === "MODIFYEDU") {
-        eduArticle = <ModifyEdu 
+    } else if (cerMode === "MODIFYCER") {
+        cerArticle = <ModifyCer 
                         onChangeMode = {function(_mode) {
-                            setEduMode(_mode)
+                            setCerMode(_mode)
                         }}
                     />
     }
@@ -75,14 +76,14 @@ export default function Education() {
                     <Col>
                     <Col md={{ span: 4, offset: 4 }}>
                     <h4>
-                        <Badge variant="secondary">Academic Background</Badge>
+                        <Badge variant="secondary">Certificate</Badge>
                     </h4>
                         <ButtonGroup variant="light">
                             <Button
                                 variant="outline-primary"
                                 size="sm"
                                 type="button"
-                                onClick={showEdu}
+                                onClick={showCer}
                             >
                                 show
                             </Button>
@@ -92,7 +93,7 @@ export default function Education() {
                                 type="button"
                                 onClick={function(e) {
                                     e.preventDefault();
-                                    setEduMode("REGISTEREDU");
+                                    setCerMode("REGISTERCER");
                                 }}
                             >
                                 register
@@ -103,7 +104,7 @@ export default function Education() {
                                 type="button"
                                 onClick={function(e) {
                                     e.preventDefault();
-                                    setEduMode("MODIFYEDU");
+                                    setCerMode("MODIFYCER");
                                 }}
                             >
                                 modify
@@ -112,22 +113,22 @@ export default function Education() {
                                 variant="outline-primary"
                                 size="sm"
                                 type="button"
-                                onClick={deleteEdu}
+                                onClick={deleteCer}
                             >
                                 delete
                             </Button>
                         </ButtonGroup>
                         <ListGroup variant="flush">
-                            <ListGroup.Item>University: {university}</ListGroup.Item>
-                            <ListGroup.Item>Major: {major}</ListGroup.Item>
-                            <ListGroup.Item>Degree: {degree}</ListGroup.Item>
+                            <ListGroup.Item>Certificate: {certificateN}</ListGroup.Item>
+                            <ListGroup.Item>Certificate Provider:  {certificateP}</ListGroup.Item>
+                            <ListGroup.Item>Issue Date: {certificateI}</ListGroup.Item>
                         </ListGroup>
-                        {eduArticle}
+                        {cerArticle}
                     </Col>
                     </Col>
                 </Row>
                 </Col>
             </Row>
         </Container>
-    );
+    )
 }

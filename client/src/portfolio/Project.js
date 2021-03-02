@@ -1,68 +1,72 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Row, Col, Button, Container, Badge, ListGroup, ButtonGroup } from 'react-bootstrap';
-import RegisterEdu from './RegisterEdu';
-import ModifyEdu from './ModifyEdu';
+import RegisterPro from './RegisterPro';
+import ModifyPro from './ModifyPro';
+import * as moment from 'moment';
 
-export default function Education() {
-    const [eduMode, setEduMode] = useState('READEDU');
-    const [university, setUniversity] = useState('');
-    const [major, setMajor] = useState('');
-    const [degree, setDegree] = useState('');
+const url = "http://elice-kdt-ai-track-vm-racer-31.koreacentral.cloudapp.azure.com:5000/api";
 
-    const serverUrl = "http://elice-kdt-ai-track-vm-racer-31.koreacentral.cloudapp.azure.com:5000/api";
-    let eduArticle = null;
+export default function Project() {
+    const [proMode, setProMode] = useState("READPRO");
+    const [projectName, setProjectName] = useState("");
+    const [projectDesc, setProjectDesc] = useState("");
+    const [projectStart, setProjectStart] = useState("");
+    const [projectEnd, setProjectEnd] = useState("");
 
-    const showEdu = async (e) => {
-            try {
-                await axios.get(serverUrl+'/portfolio/education', {
-                    params: {
-                        user_email: localStorage.getItem('email')
-                    }
-                })
-                .then( response => {
-                    setUniversity(response.data.result[0][1]);
-                    setMajor(response.data.result[0][2]);
-                    setDegree(response.data.result[0][3]);
-                    })
-        
-            } catch (error) {
-                console.log("error: ", error);
-                alert("Register Academic Background Info!")
-            }
-            setEduMode("READEDU")
-    }
+    let proArticle = null;
 
-    const deleteEdu = async (e) => {
+    const showPro = async (e) => {
         try {
-            await axios.delete(serverUrl+'/portfolio/education', {
+            await axios.get(url+'/portfolio/project', {
                 params: {
                     user_email: localStorage.getItem('email')
                 }
             })
             .then( response => {
-                setUniversity('');
-                setMajor('');
-                setDegree('');
-                alert("Delete Success!");
-                })
+                setProjectName(response.data.result[0][1]);
+                setProjectDesc(response.data.result[0][2]);
+                setProjectStart(moment(response.data.result[0][3]).format("YYYY-MM-DD"));
+                setProjectEnd(moment(response.data.result[0][4]).format("YYYY-MM-DD"));
+            })
         } catch (error) {
             console.log("error: ", error);
-            alert("There is no acdemic background info");
+            alert("Register Project Info!");
         }
-        setEduMode("READEDU")
-    }    
+        setProMode("READPRO");
+    }
 
-    if (eduMode === "REGISTEREDU") {
-        eduArticle = <RegisterEdu
+    const deletePro = async (e) => {
+        try {
+            await axios.delete(url+'/portfolio/project', {
+                params: {
+                    user_email: localStorage.getItem('email')
+                }
+            })
+            .then( response => {
+                setProjectName('');
+                setProjectDesc('');
+                setProjectStart('');
+                setProjectEnd('');
+                alert('Delete Success!')
+            })
+        } catch (error) {
+            console.log("error: ", error);
+            alert("There is no project info");
+        }
+        setProMode("READPRO");
+    }
+
+    if (proMode === "REGISTERPRO") {
+        proArticle = <RegisterPro 
                         onChangeMode = {function(_mode) {
-                            setEduMode(_mode)
+                            setProMode(_mode)
                         }}
                     />
-    } else if (eduMode === "MODIFYEDU") {
-        eduArticle = <ModifyEdu 
+    } else if (proMode === "MODIFYPRO") {
+        proArticle = <ModifyPro 
                         onChangeMode = {function(_mode) {
-                            setEduMode(_mode)
+                            setProMode(_mode)
                         }}
                     />
     }
@@ -75,14 +79,14 @@ export default function Education() {
                     <Col>
                     <Col md={{ span: 4, offset: 4 }}>
                     <h4>
-                        <Badge variant="secondary">Academic Background</Badge>
+                        <Badge variant="secondary">Project</Badge>
                     </h4>
                         <ButtonGroup variant="light">
                             <Button
                                 variant="outline-primary"
                                 size="sm"
                                 type="button"
-                                onClick={showEdu}
+                                onClick={showPro}
                             >
                                 show
                             </Button>
@@ -92,7 +96,7 @@ export default function Education() {
                                 type="button"
                                 onClick={function(e) {
                                     e.preventDefault();
-                                    setEduMode("REGISTEREDU");
+                                    setProMode("REGISTERPRO");
                                 }}
                             >
                                 register
@@ -103,7 +107,7 @@ export default function Education() {
                                 type="button"
                                 onClick={function(e) {
                                     e.preventDefault();
-                                    setEduMode("MODIFYEDU");
+                                    setProMode("MODIFYPRO");
                                 }}
                             >
                                 modify
@@ -112,22 +116,22 @@ export default function Education() {
                                 variant="outline-primary"
                                 size="sm"
                                 type="button"
-                                onClick={deleteEdu}
+                                onClick={deletePro}
                             >
                                 delete
                             </Button>
                         </ButtonGroup>
                         <ListGroup variant="flush">
-                            <ListGroup.Item>University: {university}</ListGroup.Item>
-                            <ListGroup.Item>Major: {major}</ListGroup.Item>
-                            <ListGroup.Item>Degree: {degree}</ListGroup.Item>
+                            <ListGroup.Item>Project Name: {projectName}</ListGroup.Item>
+                            <ListGroup.Item>Project Description:  {projectDesc}</ListGroup.Item>
+                            <ListGroup.Item>Period: {projectStart} ~ {projectEnd}</ListGroup.Item>
                         </ListGroup>
-                        {eduArticle}
+                        {proArticle}
                     </Col>
                     </Col>
                 </Row>
                 </Col>
             </Row>
         </Container>
-    );
+    )
 }

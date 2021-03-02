@@ -4,18 +4,17 @@ import { Row, Col, Button, Container, Badge, ListGroup, ButtonGroup } from 'reac
 import RegisterAwd from './RegisterAwd';
 import ModifyAwd from './ModifyAwd';
 
-const awdUrl = 'http://localhost:5000';
-
 export default function Awards() {
     const [awdMode, setAwdMode] = useState("READAWD");
     const [awardName, setAwardName] = useState("");
     const [awardDesc, setAwardDesc] = useState("");
 
+    const serverUrl = "http://elice-kdt-ai-track-vm-racer-31.koreacentral.cloudapp.azure.com:5000/api";
     let awdArticle = null;
 
     const showAwd = async (e) => {
             try {
-                await axios.get(awdUrl+'/portfolio/awards', {
+                await axios.get(serverUrl+'/portfolio/awards', {
                     params: {
                         user_email: localStorage.getItem('email')
                     }
@@ -34,7 +33,7 @@ export default function Awards() {
 
     const deleteAwd = async (e) => {
         try {
-            await axios.delete(awdUrl+'/portfolio/awards', {
+            await axios.delete(serverUrl+'/portfolio/awards', {
                 params: {
                     user_email: localStorage.getItem('email')
                 }
@@ -48,7 +47,7 @@ export default function Awards() {
             console.log("error: ", error);
             alert("There is no award info");
         }
-        setAwdMode("READAWARD")
+        setAwdMode("READAWD")
     }    
 
     if (awdMode === "REGISTERAWD") {

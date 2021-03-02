@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Container, Form, Button, Row, Col, Badge } from 'react-bootstrap';
 import axios from 'axios';
 
-const awdUrl = 'http://localhost:5000';
+const serverUrl = "http://elice-kdt-ai-track-vm-racer-31.koreacentral.cloudapp.azure.com:5000/api";
 
 export default function RegisterAwd(props) {
     const [awardName, setAwardName] = useState("");
@@ -16,7 +16,7 @@ export default function RegisterAwd(props) {
         awdData.append('awardName', awardName);
         awdData.append('awardDesc', awardDesc);
         try {
-            await axios.post(awdUrl+'/portfolio/awards', awdData)
+            await axios.post(serverUrl+'/portfolio/awards', awdData)
                 .then( response => {
                     if (response.data.status === "success") {
                         console.log('response: ', JSON.stringify(response));
