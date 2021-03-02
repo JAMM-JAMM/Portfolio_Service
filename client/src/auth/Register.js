@@ -28,7 +28,7 @@ export default function Register() {
                     if (response.data.status === "success") {
                         console.log(response);
                         alert("Register Success, Go to Login!");
-                        history.push("/login");
+                        history.push("/auth/login");
                     } else {
                         alert(response.data.result.error);
                     }
