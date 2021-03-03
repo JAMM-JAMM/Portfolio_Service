@@ -28,7 +28,7 @@ export default function Register() {
                     if (response.data.status === "success") {
                         console.log(response);
                         alert("Register Success, Go to Login!");
-                        history.push("/auth/login");
+                        history.push("/login");
                     } else {
                         alert(response.data.result.error);
                     }
@@ -41,7 +41,7 @@ export default function Register() {
     
     return (
         <BrowserRouter>
-        <Container className="vh-100" fluid>
+        <Container className="vh-100">
             <Row className="h-100">
                 <Col xs={12} className="login">
                 <Row className="justify-content-center">

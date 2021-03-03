@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Row, Col, Button, Container, Badge, ListGroup, ButtonGroup } from 'react-bootstrap';
+import { Button, Badge, ListGroup, ButtonGroup } from 'react-bootstrap';
 import RegisterCer from './RegisterCer';
 import ModifyCer from './ModifyCer';
 import * as moment from 'moment';
@@ -69,66 +69,56 @@ export default function Certificate() {
     }
 
     return (
-        <Container className="vh-100" fluid>
-            <Row className="h-100">
-                <Col xs={12} className="login">
-                <Row className="justify-content-center">
-                    <Col>
-                    <Col md={{ span: 4, offset: 4 }}>
-                    <h4>
-                        <Badge variant="secondary">Certificate</Badge>
-                    </h4>
-                        <ButtonGroup variant="light">
-                            <Button
-                                variant="outline-primary"
-                                size="sm"
-                                type="button"
-                                onClick={showCer}
-                            >
-                                show
-                            </Button>
-                            <Button
-                                variant="outline-primary"
-                                size="sm"
-                                type="button"
-                                onClick={function(e) {
-                                    e.preventDefault();
-                                    setCerMode("REGISTERCER");
-                                }}
-                            >
-                                register
-                            </Button>
-                            <Button
-                                variant="outline-primary"
-                                size="sm"
-                                type="button"
-                                onClick={function(e) {
-                                    e.preventDefault();
-                                    setCerMode("MODIFYCER");
-                                }}
-                            >
-                                modify
-                            </Button>
-                            <Button
-                                variant="outline-primary"
-                                size="sm"
-                                type="button"
-                                onClick={deleteCer}
-                            >
-                                delete
-                            </Button>
-                        </ButtonGroup>
-                        <ListGroup variant="flush">
-                            <ListGroup.Item>Certificate: {certificateN}</ListGroup.Item>
-                            <ListGroup.Item>Certificate Provider:  {certificateP}</ListGroup.Item>
-                            <ListGroup.Item>Issue Date: {certificateI}</ListGroup.Item>
-                        </ListGroup>
-                        {cerArticle}
-                    </Col>
-                    </Col>
-                </Row>
-                </Col>
-            </Row>
-        </Container>
+            <div>
+                <h4>
+                    <Badge variant="secondary">Certificate</Badge>
+                </h4>
+                    <ButtonGroup variant="light">
+                        <Button
+                            variant="outline-primary"
+                            size="sm"
+                            type="button"
+                            onClick={showCer}
+                        >
+                            show
+                        </Button>
+                        <Button
+                            variant="outline-primary"
+                            size="sm"
+                            type="button"
+                            onClick={function(e) {
+                                e.preventDefault();
+                                setCerMode("REGISTERCER");
+                            }}
+                        >
+                            register
+                        </Button>
+                        <Button
+                            variant="outline-primary"
+                             size="sm"
+                            type="button"
+                            onClick={function(e) {
+                                e.preventDefault();
+                                 setCerMode("MODIFYCER");
+                            }}
+                        >
+                            modify
+                        </Button>
+                        <Button
+                            variant="outline-primary"
+                            size="sm"
+                            type="button"
+                            onClick={deleteCer}
+                        >
+                            delete
+                        </Button>
+                    </ButtonGroup>
+                    <ListGroup variant="flush">
+                        <ListGroup.Item>Certificate: {certificateN}</ListGroup.Item>
+                        <ListGroup.Item>Certificate Provider:  {certificateP}</ListGroup.Item>
+                        <ListGroup.Item>Issue Date: {certificateI}</ListGroup.Item>
+                    </ListGroup>
+                    {cerArticle}
+            </div>    
     )
 }

@@ -124,6 +124,14 @@ def login():
 def logout():
     return jsonify(status = "success", result = {"msg": "logout!"})
 
+# 로그인 검증
+# https://flask-jwt-extended.readthedocs.io/en/stable/basic_usage/
+@app.route('/protected')
+@jwt_required
+def protected():
+    current_user = get_jwt_identity()
+    return jsonify(logged_in_as=current_user)
+
 """
 Portfolio APIs: 내 포트폴리오 보기, 수정, 업로드, 삭제
 
@@ -132,9 +140,10 @@ Awards API: 수상내역이름, 수상내역 정보를 입력받아 수상경력
 """
 parser_edu = reqparse.RequestParser()
 parser_edu.add_argument('user_email')
+parser_edu.add_argument('data_id')
 
 class Education(Resource):
-    # @jwt_required
+    @jwt_required
     def post(self):
         # current_user = get_jwt_identity()
         user_email = request.form['user_email']
@@ -151,16 +160,7 @@ class Education(Resource):
         elif not degree:
             error = 'invalid degree'
         elif not user_email:
-            error = 'not logged in'
-
-        # 이미 등록된 정보라면
-        sql = 'SELECT * FROM `education` WHERE `user_email` = %s'
-        cursor.execute(sql, (user_email,))
-        result = cursor.fetchone()
-
-        if result is not None:
-            error = '{}\'s info is already registered.'.format(email)
-        
+            error = 'not logged in'        
 
         if error is None:
             sql = "INSERT INTO `education` (`user_email`, `university`, `major`, `degree`) VALUES (%s, %s, %s, %s)"
@@ -178,7 +178,7 @@ class Education(Resource):
         else:
             return jsonify(status = "failure", result = {"message": error})
 
-    # @jwt_required
+    @jwt_required
     def get(self):
         # current_user = get_jwt_identity()
         args = parser_edu.parse_args()
@@ -189,9 +189,10 @@ class Education(Resource):
             status = "success",
             result = result
             )
-        
+
+    @jwt_required 
     def put(self):
-        user_email = request.form['user_email']
+        args = parser_edu.parse_args()
         university = request.form['university']
         major = request.form['major']
         degree = request.form['degree']
@@ -204,17 +205,17 @@ class Education(Resource):
             error = 'invalid major'
         elif not degree:
             error = 'invalid degree'
-        elif not user_email:
-            error = 'invalid user_email'
+        elif not args['data_id']:
+            error = 'invalid data_id'
 
         if error is None:
-            sql = "UPDATE `education` SET `university` = %s, `major` = %s, `degree` = %s WHERE `user_email` = %s"
-            cursor.execute(sql, (university, major, degree, user_email))
+            sql = "UPDATE `education` SET `university` = %s, `major` = %s, `degree` = %s WHERE `id` = %s"
+            cursor.execute(sql, (university, major, degree, args['data_id']))
             db.commit()
             return jsonify(
                 status = "success",
                 result = {
-                    'user_email': user_email,
+                    'data_id': args['data_id'],
                     'university': university,
                     'major': major,
                     'degree': degree
@@ -223,15 +224,16 @@ class Education(Resource):
         else:
             return jsonify(status = "failure", result = {"message": error})
 
+    @jwt_required
     def delete(self):
         args = parser_edu.parse_args()
-        sql = "DELETE FROM `education` WHERE `user_email` = %s"
-        cursor.execute(sql, (args['user_email'], ))
+        sql = "DELETE FROM `education` WHERE `id` = %s"
+        cursor.execute(sql, (args['data_id'], ))
         db.commit()
         return jsonify(
             status = "success",
             result = {
-                'user_email': args['user_email']
+                'deleted_id': args['data_id']
             }
         )
 
