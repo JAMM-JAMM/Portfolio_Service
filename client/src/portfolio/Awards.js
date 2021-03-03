@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Row, Col, Button, Container, Badge, ListGroup, ButtonGroup } from 'react-bootstrap';
+import { Button, Badge, ListGroup, ButtonGroup } from 'react-bootstrap';
 import RegisterAwd from './RegisterAwd';
 import ModifyAwd from './ModifyAwd';
 
@@ -66,65 +66,55 @@ export default function Awards() {
     }
 
     return (
-        <Container className="vh-100" fluid>
-            <Row className="h-100">
-                <Col xs={12} className="login">
-                <Row className="justify-content-center">
-                    <Col>
-                    <Col md={{ span: 4, offset: 4 }}>
-                    <h4>
-                        <Badge variant="secondary">Awards</Badge>
-                    </h4>
-                        <ButtonGroup variant="light">
-                            <Button
-                                variant="outline-primary"
-                                size="sm"
-                                type="button"
-                                onClick={showAwd}
-                            >
-                                show
-                            </Button>
-                            <Button
-                                variant="outline-primary"
-                                size="sm"
-                                type="button"
-                                onClick={function(e) {
-                                    e.preventDefault();
-                                    setAwdMode("REGISTERAWD");
-                                }}
-                            >
-                                register
-                            </Button>
-                            <Button
-                                variant="outline-primary"
-                                size="sm"
-                                type="button"
-                                onClick={function(e) {
-                                    e.preventDefault();
-                                    setAwdMode("MODIFYAWD");
-                                }}
-                            >
-                                modify
-                            </Button>
-                            <Button
-                                variant="outline-primary"
-                                size="sm"
-                                type="button"
-                                onClick={deleteAwd}
-                            >
-                                delete
-                            </Button>
-                        </ButtonGroup>
-                        <ListGroup variant="flush">
-                            <ListGroup.Item>Award Name: {awardName}</ListGroup.Item>
-                            <ListGroup.Item>Award Description: {awardDesc}</ListGroup.Item>
-                        </ListGroup>
-                        {awdArticle}
-                    </Col>
-                    </Col>
-                </Row>
-                </Col>
-            </Row>
-        </Container>
+        <div>
+            <h4>
+                <Badge variant="secondary">Awards</Badge>
+            </h4>
+                <ButtonGroup variant="light">
+                    <Button
+                        variant="outline-primary"
+                        size="sm"
+                        type="button"
+                        onClick={showAwd}
+                    >
+                        show
+                    </Button>
+                    <Button
+                        variant="outline-primary"
+                        size="sm"
+                        type="button"
+                        onClick={function(e) {
+                            e.preventDefault();
+                            setAwdMode("REGISTERAWD");
+                        }}
+                    >
+                        register
+                    </Button>
+                    <Button
+                        variant="outline-primary"
+                        size="sm"
+                        type="button"
+                        onClick={function(e) {
+                            e.preventDefault();
+                            setAwdMode("MODIFYAWD");
+                        }}
+                    >
+                        modify
+                    </Button>
+                    <Button
+                        variant="outline-primary"
+                        size="sm"
+                        type="button"
+                        onClick={deleteAwd}
+                    >
+                        delete
+                    </Button>
+                </ButtonGroup>
+                <ListGroup variant="flush">
+                    <ListGroup.Item>Award Name: {awardName}</ListGroup.Item>
+                    <ListGroup.Item>Award Description: {awardDesc}</ListGroup.Item>
+                </ListGroup>
+                {awdArticle}
+        </div>            
     );
 }

@@ -124,6 +124,14 @@ def login():
 def logout():
     return jsonify(status = "success", result = {"msg": "logout!"})
 
+# 로그인 검증
+# https://flask-jwt-extended.readthedocs.io/en/stable/basic_usage/
+@app.route('/protected')
+@jwt_required
+def protected():
+    current_user = get_jwt_identity()
+    return jsonify(logged_in_as=current_user)
+
 """
 Portfolio APIs: 내 포트폴리오 보기, 수정, 업로드, 삭제
 
@@ -134,7 +142,7 @@ parser_edu = reqparse.RequestParser()
 parser_edu.add_argument('user_email')
 
 class Education(Resource):
-    # @jwt_required
+    @jwt_required
     def post(self):
         # current_user = get_jwt_identity()
         user_email = request.form['user_email']
@@ -178,7 +186,7 @@ class Education(Resource):
         else:
             return jsonify(status = "failure", result = {"message": error})
 
-    # @jwt_required
+    @jwt_required
     def get(self):
         # current_user = get_jwt_identity()
         args = parser_edu.parse_args()
@@ -189,7 +197,8 @@ class Education(Resource):
             status = "success",
             result = result
             )
-        
+
+    @jwt_required 
     def put(self):
         user_email = request.form['user_email']
         university = request.form['university']
@@ -223,6 +232,7 @@ class Education(Resource):
         else:
             return jsonify(status = "failure", result = {"message": error})
 
+    @jwt_required
     def delete(self):
         args = parser_edu.parse_args()
         sql = "DELETE FROM `education` WHERE `user_email` = %s"

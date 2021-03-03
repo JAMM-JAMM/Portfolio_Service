@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Row, Col, Button, Container, Badge, ListGroup, ButtonGroup } from 'react-bootstrap';
+import { Button, Badge, ListGroup, ButtonGroup } from 'react-bootstrap';
 import RegisterPro from './RegisterPro';
 import ModifyPro from './ModifyPro';
 import * as moment from 'moment';
@@ -72,66 +72,56 @@ export default function Project() {
     }
 
     return (
-        <Container className="vh-100" fluid>
-            <Row className="h-100">
-                <Col xs={12} className="login">
-                <Row className="justify-content-center">
-                    <Col>
-                    <Col md={{ span: 4, offset: 4 }}>
-                    <h4>
-                        <Badge variant="secondary">Project</Badge>
-                    </h4>
-                        <ButtonGroup variant="light">
-                            <Button
-                                variant="outline-primary"
-                                size="sm"
-                                type="button"
-                                onClick={showPro}
-                            >
-                                show
-                            </Button>
-                            <Button
-                                variant="outline-primary"
-                                size="sm"
-                                type="button"
-                                onClick={function(e) {
-                                    e.preventDefault();
-                                    setProMode("REGISTERPRO");
-                                }}
-                            >
-                                register
-                            </Button>
-                            <Button
-                                variant="outline-primary"
-                                size="sm"
-                                type="button"
-                                onClick={function(e) {
-                                    e.preventDefault();
-                                    setProMode("MODIFYPRO");
-                                }}
-                            >
-                                modify
-                            </Button>
-                            <Button
-                                variant="outline-primary"
-                                size="sm"
-                                type="button"
-                                onClick={deletePro}
-                            >
-                                delete
-                            </Button>
-                        </ButtonGroup>
-                        <ListGroup variant="flush">
-                            <ListGroup.Item>Project Name: {projectName}</ListGroup.Item>
-                            <ListGroup.Item>Project Description:  {projectDesc}</ListGroup.Item>
-                            <ListGroup.Item>Period: {projectStart} ~ {projectEnd}</ListGroup.Item>
-                        </ListGroup>
-                        {proArticle}
-                    </Col>
-                    </Col>
-                </Row>
-                </Col>
-            </Row>
-        </Container>
+        <div>
+            <h4>
+                <Badge variant="secondary">Project</Badge>
+            </h4>
+                <ButtonGroup variant="light">
+                <Button
+                        variant="outline-primary"
+                        size="sm"
+                        type="button"
+                        onClick={showPro}
+                    >
+                        show
+                    </Button>
+                    <Button
+                        variant="outline-primary"
+                        size="sm"
+                        type="button"
+                        onClick={function(e) {
+                            e.preventDefault();
+                            setProMode("REGISTERPRO");
+                        }}
+                    >
+                        register
+                    </Button>
+                    <Button
+                        variant="outline-primary"
+                        size="sm"
+                        type="button"
+                        onClick={function(e) {
+                            e.preventDefault();
+                            setProMode("MODIFYPRO");
+                        }}
+                    >
+                        modify
+                    </Button>
+                    <Button
+                        variant="outline-primary"
+                        size="sm"
+                        type="button"
+                        onClick={deletePro}
+                    >
+                        delete
+                    </Button>
+                </ButtonGroup>
+                <ListGroup variant="flush">
+                    <ListGroup.Item>Project Name: {projectName}</ListGroup.Item>
+                    <ListGroup.Item>Project Description:  {projectDesc}</ListGroup.Item>
+                    <ListGroup.Item>Period: {projectStart} ~ {projectEnd}</ListGroup.Item>
+                </ListGroup>
+                {proArticle}
+        </div>
     )
 }

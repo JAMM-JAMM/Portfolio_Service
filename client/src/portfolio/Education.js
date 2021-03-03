@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Row, Col, Button, Container, Badge, ListGroup, ButtonGroup } from 'react-bootstrap';
+import { Button, Badge, ListGroup, ButtonGroup } from 'react-bootstrap';
 import RegisterEdu from './RegisterEdu';
 import ModifyEdu from './ModifyEdu';
 
@@ -69,66 +69,56 @@ export default function Education() {
     }
 
     return (
-        <Container className="vh-100" fluid>
-            <Row className="h-100">
-                <Col xs={12} className="login">
-                <Row className="justify-content-center">
-                    <Col>
-                    <Col md={{ span: 4, offset: 4 }}>
-                    <h4>
-                        <Badge variant="secondary">Academic Background</Badge>
-                    </h4>
-                        <ButtonGroup variant="light">
-                            <Button
-                                variant="outline-primary"
-                                size="sm"
-                                type="button"
-                                onClick={showEdu}
-                            >
-                                show
-                            </Button>
-                            <Button
-                                variant="outline-primary"
-                                size="sm"
-                                type="button"
-                                onClick={function(e) {
-                                    e.preventDefault();
-                                    setEduMode("REGISTEREDU");
-                                }}
-                            >
-                                register
-                            </Button>
-                            <Button
-                                variant="outline-primary"
-                                size="sm"
-                                type="button"
-                                onClick={function(e) {
-                                    e.preventDefault();
-                                    setEduMode("MODIFYEDU");
-                                }}
-                            >
-                                modify
-                            </Button>
-                            <Button
-                                variant="outline-primary"
-                                size="sm"
-                                type="button"
-                                onClick={deleteEdu}
-                            >
-                                delete
-                            </Button>
-                        </ButtonGroup>
-                        <ListGroup variant="flush">
-                            <ListGroup.Item>University: {university}</ListGroup.Item>
-                            <ListGroup.Item>Major: {major}</ListGroup.Item>
-                            <ListGroup.Item>Degree: {degree}</ListGroup.Item>
-                        </ListGroup>
-                        {eduArticle}
-                    </Col>
-                    </Col>
-                </Row>
-                </Col>
-            </Row>
-        </Container>
+            <div>
+                <h4>
+                   <Badge variant="secondary">Academic Background</Badge>
+                </h4>
+                    <ButtonGroup variant="light">
+                        <Button
+                            variant="outline-primary"
+                            size="sm"
+                            type="button"
+                            onClick={showEdu}
+                        >
+                            show
+                        </Button>
+                        <Button
+                            variant="outline-primary"
+                            size="sm"
+                            type="button"
+                            onClick={function(e) {
+                                e.preventDefault();
+                                setEduMode("REGISTEREDU");
+                            }}
+                        >
+                            register
+                        </Button>
+                        <Button
+                            variant="outline-primary"
+                            size="sm"
+                            type="button"
+                            onClick={function(e) {
+                                e.preventDefault();
+                                setEduMode("MODIFYEDU");
+                            }}
+                        >
+                            modify
+                        </Button>
+                        <Button
+                            variant="outline-primary"
+                            size="sm"
+                            type="button"
+                            onClick={deleteEdu}
+                        >
+                            delete
+                        </Button>
+                    </ButtonGroup>
+                    <ListGroup variant="flush">
+                        <ListGroup.Item>University: {university}</ListGroup.Item>
+                        <ListGroup.Item>Major: {major}</ListGroup.Item>
+                        <ListGroup.Item>Degree: {degree}</ListGroup.Item>
+                    </ListGroup>
+                    {eduArticle}
+            </div>  
     );
 }

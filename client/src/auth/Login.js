@@ -21,11 +21,13 @@ export default function Login() {
                 .then( response => {
                     console.log('response: ', JSON.stringify(response));
                     if (response.data.status === "success") {
+                        const access_token = response.data.result.access_token;
                         console.log(response);
                         alert("Login Success, Welcome Racer Portfolio Service!");
                         localStorage.setItem('access_token', response.data.result.access_token);
                         localStorage.setItem('email', response.data.result.email);
-                        history.push('/portfolio')
+                        axios.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
+                        history.push('/')
                     } else {
                         alert(response.data.result.error);
                     }
@@ -38,9 +40,9 @@ export default function Login() {
 
     return (
             <Router>
-                <Container className="vh-100" fluid>
-                    <Row className="h-100">
-                        <Col xs={12} className="login">
+                <Container>
+                    <Row>
+                        <Col xs={12}>
                         <Row className="justify-content-center">
                             <Col>
                             <Col md={{ span: 4, offset: 4 }}>
