@@ -10,10 +10,9 @@ import axios from 'axios';
 export default function Portfolio() {
     const [userEmail, setUserEmail] = useState('');
     const [isLogin, setIsLogin] = useState(false);
-
-    const access_token = localStorage.getItem("access_token");
    
     useEffect(() => {
+        const access_token = localStorage.getItem("access_token");
         axios.get('http://localhost:5000/protected', {
             headers: {
                 Authorization: `Bearer ${access_token}`
