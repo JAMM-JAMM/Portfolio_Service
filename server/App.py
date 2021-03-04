@@ -497,7 +497,7 @@ class Certificate(Resource):
 
         if error is None:
             sql = "UPDATE`certificate` SET `certificateN` = %s, `certificateP` = %s, `certificateI` = %s WHERE `id` = %s"
-            cursor.execute(sql, (user_email, certificateN, certificateP, certificateI, args['data_id']))
+            cursor.execute(sql, (certificateN, certificateP, certificateI, args['data_id']))
             db.commit()
             return jsonify(
                 status = "success",
