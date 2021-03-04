@@ -15,22 +15,22 @@ function ProjectList(props) {
     const data_id = data[0]
 
     const deleteProject = () => {
-        try {
-            axios.delete(url+'/portfolio/project', {
-                headers: {
-                    Authorization: `Bearer ${access_token}`
-                },
-                params: {
-                    data_id: data_id
-                }  
-            }).then( response => {
-                console.log(response);
-                alert("Delete Success!");
-            })
-        } catch (error) {
+        axios.delete(url+'/portfolio/project', {
+            headers: {
+                Authorization: `Bearer ${access_token}`
+            },
+            params: {
+                data_id: data_id
+            }
+        })
+        .then( response => {
+            console.log(response);
+            alert("Delete Success!");
+        })
+        .catch( error => {
             console.log("error: ", error);
-            alert("There is no project info");
-        }
+            alert("There is no project info!")
+        })
     }
 
     return (
@@ -80,23 +80,23 @@ function EditProjectList(props) {
         putProjectData.append('projectDesc', projectDesc);
         putProjectData.append('projectStart', moment(projectStart).format("YYYY-MM-DD"));
         putProjectData.append('projectEnd', moment(projectEnd).format("YYYY-MM-DD"));
-        try {
-            axios.put(url+'/portfolio/project', putProjectData, {
-                headers: {
-                    Authorization: `Bearer ${access_token}`
-                }
-            }).then( response => {
-                if (response.data.status === "success") {
-                    console.log('response: ', JSON.stringify(response))
-                    alert("Success modification for project info!");
-                    props.onChangeEdit(false);
-                } else {
-                        alert(response.data.result.message)
-                    }
-            })
-        } catch (error) {
+        axios.put(url+'/portfolio/project', putProjectData, {
+            headers: {
+                Authorization: `Bearer ${access_token}`
+            }
+        })
+        .then( response => {
+            if (response.data.status === "success") {
+                console.log(response);
+                alert("Success modification for academic background info!");
+                props.onChangeEdit(false);
+            } else {
+                alert(response.data.result.message);
+            }
+        })
+        .catch( error => {
             console.log("error: ", error);
-        }
+        })
     }
 
     return (
@@ -171,23 +171,23 @@ function RegisterProjectList(props) {
         postProjectData.append('projectDesc', projectDesc);
         postProjectData.append('projectStart', moment(projectStart).format("YYYY-MM-DD"));
         postProjectData.append('projectEnd', moment(projectEnd).format("YYYY-MM-DD"));
-        try {
-            axios.post(url+'/portfolio/project', postProjectData, {
-                headers: {
-                    Authorization: `Bearer ${access_token}`
-                }
-            }).then( response => {
-                if (response.data.status === "success") {
-                    console.log('response: ', JSON.stringify(response));
-                    alert("Success registeration for project info!");
-                    props.onChangeRegister(false)
-                } else if (response.data.status === 'failure') {
-                    alert(response.data.result.message);
-                }
-            })
-        } catch (error) {
+        axios.post(url+'/portfolio/project', postProjectData, {
+            headers: {
+                Authorization: `Bearer ${access_token}`
+            }
+        })
+        .then( response => {
+            if (response.data.status === "success") {
+                console.log(response);
+                alert("Success registragion for project info!");
+                props.onChangeRegister(false);
+            } else {
+                alert(response.data.result.message);
+            }
+        })
+        .catch( error => {
             console.log("error: ", error);
-        }
+        })
     }
 
     return (
@@ -256,22 +256,23 @@ export default function Project() {
     const [dataId, setDataId] = useState();
 
     const showProject = () => {
-        try {
-            axios.get(url+'/portfolio/project', {
-                headers: {
-                    Authorization: `Bearer ${access_token}`
-                },
-                params: {
-                    user_email: email
-                }
-            }).then( (response) => {
+        axios.get(url+'/portfolio/project', {
+            headers: {
+                Authorization: `Bearer ${access_token}`
+            },
+            params: {
+                user_email: email
+            }
+        })
+        .then( response => {
+            if (response.data.status === "success") {
                 console.log(response);
-                setProjectData(response.data.result)
-            })
-        } catch (error) {
+                setProjectData(response.data.result);
+            }
+        })
+        .catch( error => {
             console.log("error: ", error);
-            alert("Register Project Info!")
-        }
+        })
         setEdit(false)
         setRegister(false)
     }

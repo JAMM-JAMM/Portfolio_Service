@@ -15,22 +15,22 @@ function CertificateList(props) {
     const data_id = data[0];
 
     const deleteCertificate = () => {
-        try {
-            axios.delete(url+'/portfolio/certificate', {
-                headers: {
-                    Authorization: `Bearer ${access_token}`
-                },
-                params: {
-                    data_id: data_id
-                }  
-            }).then( response => {
-                console.log(response);
-                alert("Delete Success");
-            })
-        } catch (error) {
+        axios.delete(url+'/portfolio/certificate', {
+            headers: {
+                Authorization: `Bearer ${access_token}`
+            },
+            params: {
+                data_id: data_id
+            }
+        })
+        .then( response => {
+            console.log(response);
+            alert("Delete Success!");
+        })
+        .catch( error => {
             console.log("error: ", error);
-            alert("There is no certificate info");
-        }
+            alert("There is no certificate info!")
+        })
     }
 
     return (
@@ -78,23 +78,23 @@ function EditCertificateList(props) {
         putCertificateData.append('certificateN', certificateN);
         putCertificateData.append('certificateP', certificateP);
         putCertificateData.append('certificateI', moment(certificateI).format("YYYY-MM-DD"));
-        try {
-            axios.put(url+'/portfolio/certificate', putCertificateData, {
-                headers: {
-                    Authorization: `Bearer ${access_token}`
-                }
-            }).then( response => {
-                if (response.data.status === "success") {
-                    console.log('response: ', JSON.stringify(response))
-                    alert("Success modification for certificate info!");
-                    props.onChangeEdit(false);
-                } else {
-                        alert(response.data.result.message)
-                    }
-            })
-        } catch (error) {
+        axios.put(url+'/portfolio/certificate', putCertificateData, {
+            headers: {
+                Authorization: `Bearer ${access_token}`
+            }
+        })
+        .then( response => {
+            if (response.data.status === "success") {
+                console.log(response);
+                alert("Success modification for certificate info!");
+                props.onChangeEdit(false);
+            } else {
+                alert(response.data.result.message);
+            }
+        })
+        .catch( error => {
             console.log("error: ", error);
-        }
+        })
     }
 
     return (
@@ -160,23 +160,23 @@ function RegisterCertificateList(props) {
         postCertificateData.append('certificateN', certificateN);
         postCertificateData.append('certificateP', certificateP);
         postCertificateData.append('certificateI', moment(certificateI).format("YYYY-MM-DD"));
-        try {
-            axios.post(url+'/portfolio/certificate', postCertificateData, {
-                headers: {
-                    Authorization: `Bearer ${access_token}`
-                }
-            }).then( response => {
-                if (response.data.status === "success") {
-                    console.log('response: ', JSON.stringify(response));
-                    alert("Success registeration for certificate info!");
-                    props.onChangeRegister(false)
-                } else if (response.data.status === 'failure') {
-                    alert(response.data.result.message);
-                }
-            })
-        } catch (error) {
+        axios.post(url+'/portfolio/certificate', postCertificateData, {
+            headers: {
+                Authorization: `Bearer ${access_token}`
+            }
+        })
+        .then( response => {
+            if (response.data.status === "success") {
+                console.log(response);
+                alert("Success registragion for certificate info!");
+                props.onChangeRegister(false);
+            } else {
+                alert(response.data.result.message);
+            }
+        })
+        .catch( error => {
             console.log("error: ", error);
-        }
+        })
     }
 
     return (
@@ -238,22 +238,23 @@ export default function Certificate() {
     const [dataId, setDataId] = useState();
 
     const showCertificate = () => {
-        try {
-            axios.get(url+'/portfolio/certificate', {
-                headers: {
-                    Authorization: `Bearer ${access_token}`
-                },
-                params: {
-                    user_email: email
-                }
-            }).then( response => {
+        axios.get(url+'/portfolio/certificate', {
+            headers: {
+                Authorization: `Bearer ${access_token}`
+            },
+            params: {
+                user_email: email
+            }
+        })
+        .then( response => {
+            if (response.data.status === "success") {
                 console.log(response);
-                setCertificateData(response.data.result)
-            })
-        } catch (error) {
+                setCertificateData(response.data.result);
+            }
+        })
+        .catch( error => {
             console.log("error: ", error);
-            alert("Register Certificate Info!")
-        }
+        })
         setEdit(false)
         setRegister(false)
     }

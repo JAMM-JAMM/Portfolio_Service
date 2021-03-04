@@ -11,23 +11,22 @@ function EduList(props) {
     const data_id = data[0]
     
     const deleteEdu = () => {
-        try {
-            axios.delete(eduUrl+'/portfolio/education', {
-                headers: {
-                    Authorization: `Bearer ${access_token}`
-                },
-                params: {
-                    data_id: data_id
-                }
-            })
-            .then( response => {
-                console.log(response);
-                alert("Delete Success!");
-                })
-        } catch (error) {
+        axios.delete(eduUrl+'/portfolio/education', {
+            headers: {
+                Authorization: `Bearer ${access_token}`
+            },
+            params: {
+                data_id: data_id
+            }
+        })
+        .then( response => {
+            console.log(response);
+            alert("Delete Success!");
+        })
+        .catch( error => {
             console.log("error: ", error);
-            alert("There is no academic background info");
-        }
+            alert("There is no education info!")
+        })
     }
     return (
         <>
@@ -74,23 +73,23 @@ function EditEduList(props) {
         putEduData.append('university', university);
         putEduData.append('major', major);
         putEduData.append('degree', degree);
-        try {
-            axios.put(eduUrl+'/portfolio/education', putEduData, {
-                headers: {
-                    Authorization: `Bearer ${access_token}`
-                }
-            }).then( response => {
-                if (response.data.status === "success") {
-                    console.log('response: ', JSON.stringify(response));
-                    alert("Success modification for academic background info! ")
-                    props.onChangeEdit(false);
-                } else if (response.data.status === 'failure') {
-                    alert(response.data.result.message);
-                }
-            })
-        } catch (error) {
+        axios.put(eduUrl+'/portfolio/education', putEduData, {
+            headers: {
+                Authorization: `Bearer ${access_token}`
+            }
+        })
+        .then( response => {
+            if (response.data.status === "success") {
+                console.log(response);
+                alert("Success modification for academic background info!");
+                props.onChangeEdit(false);
+            } else {
+                alert(response.data.result.message);
+            }
+        })
+        .catch( error => {
             console.log("error: ", error);
-        }
+        })
     }
     return (
         <>
@@ -183,23 +182,23 @@ function RegisterEduList(props) {
         postEduData.append('university', university);
         postEduData.append('major', major);
         postEduData.append('degree', degree);
-        try {
-            axios.post(eduUrl+'/portfolio/education', postEduData, {
-                headers: {
-                    Authorization: `Bearer ${access_token}`
-                }
-            }).then( response => {
-                if (response.data.status === "success") {
-                    console.log('response: ', JSON.stringify(response));
-                    alert("Success registeration for academic background info!");
-                    props.onChangeRegister(false)
-                } else if (response.data.status === 'failure') {
-                    alert(response.data.result.message);
-                }
-            })
-        } catch (error) {
+        axios.post(eduUrl+'/portfolio/education', postEduData, {
+            headers: {
+                Authorization: `Bearer ${access_token}`
+            }
+        })
+        .then( response => {
+            if (response.data.status === "success") {
+                console.log(response);
+                alert("Success registragion for academic background info!");
+                props.onChangeRegister(false);
+            } else {
+                alert(response.data.result.message);
+            }
+        })
+        .catch( error => {
             console.log("error: ", error);
-        }
+        })
     }
 
     return (
@@ -286,24 +285,23 @@ export default function Education() {
     const [dataId, setDataId] = useState();
 
     const showEdu = () => {
-            try {
-                axios.get(eduUrl+'/portfolio/education', {
-                    headers: {
-                        Authorization: `Bearer ${access_token}`
-                    },
-                    params: {
-                        user_email: email
-                    }
-                })
-                .then( response => {
-                    console.log(response);
-                    setEduData(response.data.result)
-                    })
-        
-            } catch (error) {
-                console.log("error: ", error);
-                alert("Register Academic Background Info!")
+        axios.get(eduUrl+'/portfolio/education', {
+            headers: {
+                Authorization: `Bearer ${access_token}`
+            },
+            params: {
+                user_email: email
             }
+        })
+        .then( response => {
+            if (response.data.status === "success") {
+                console.log(response);
+                setEduData(response.data.result);
+            }
+        })
+        .catch( error => {
+            console.log("error: ", error);  
+        })
         setEdit(false);
         setRegister(false);
     }

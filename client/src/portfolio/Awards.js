@@ -11,23 +11,22 @@ function AwardList(props) {
     const data_id = data[0];
 
     const deleteAward = () => {
-        try {
-            axios.delete(url+'/portfolio/awards', {
-                headers: {
-                    Authorization: `Bearer ${access_token}`
-                },
-                params: {
-                    data_id: data_id
-                }
-            })
-            .then( response => {
-                console.log(response);
-                alert("Delete Success!")
-            })
-        } catch (error) {
+        axios.delete(url+'/portfolio/awards', {
+            headers: {
+                Authorization: `Bearer ${access_token}`
+            },
+            params: {
+                data_id: data_id
+            } 
+        })
+        .then( response => {
+            console.log(response);
+            alert("Delete Success!");
+        })
+        .catch( error => {
             console.log("error: ", error);
-            alert("There is no award info")
-        }
+            alert("There is no education info!")
+        })
     }
 
     return (
@@ -72,23 +71,23 @@ function EditAwardList(props) {
         putAwardData.append('data_id', dataId);
         putAwardData.append('awardName', awardName);
         putAwardData.append('awardDesc', awardDesc);
-        try {
-            axios.put(url+'/portfolio/awards', putAwardData, {
-                headers: {
-                    Authorization: `Bearer ${access_token}`
-                }
-            }).then( response => {
-                if (response.data.status === "success") {
-                    console.log('response: ', JSON.stringify(response))
-                    alert("Success modification for awards info!")
-                    props.onChangeEdit(false);
-                } else if (response.data.status === 'failure') {
-                    alert(response.data.result.message);
-                }
-            })
-        } catch (error) {
+        axios.put(url+'/portfolio/awards', putAwardData, {
+            headers: {
+                Authorization: `Bearer ${access_token}`
+            }
+        })
+        .then( response => {
+            if (response.data.status === "success") {
+                console.log(response);
+                alert("Success modification for awards info!");
+                props.onChangeEdit(false);
+            } else {
+                alert(response.data.result.message);
+            }
+        })
+        .catch( error => {
             console.log("error: ", error);
-        }
+        })
     }
     return (
         <>
@@ -144,23 +143,23 @@ function RegisterAwardList(props) {
         postAwardData.append('user_email', email);
         postAwardData.append('awardName', awardName);
         postAwardData.append('awardDesc', awardDesc);
-        try {
-            axios.post(url+'/portfolio/awards', postAwardData, {
-                headers: {
-                    Authorization: `Bearer ${access_token}`
-                }
-            }).then( response => {
-                if (response.data.status === "success") {
-                    console.log('response: ', JSON.stringify(response));
-                    alert("Success registeration for awards info!");
-                    props.onChangeRegister(false);
-                } else if (response.data.status === 'failure') {
-                    alert(response.data.result.message);
-                }
-            })
-        } catch (error) {
+        axios.post(url+'/portfolio/awards', postAwardData, {
+            headers: {
+                Authorization: `Bearer ${access_token}`
+            }
+        })
+        .then( response => {
+            if (response.data.status === "success") {
+                console.log(response);
+                alert("Success registragion for awards info!");
+                props.onChangeRegister(false);
+            } else {
+                alert(response.data.result.message);
+            }
+        })
+        .catch( error => {
             console.log("error: ", error);
-        }
+        })
     }
 
     return (
@@ -215,22 +214,23 @@ export default function Awards() {
     const [dataId, setDataId] = useState();
 
     const showAward = () => {
-        try {
-            axios.get(url+'/portfolio/awards', {
-                headers: {
-                    Authorization: `Bearer ${access_token}`
-                },
-                params: {
-                    user_email: email
-                }
-            }).then( response => {
+        axios.get(url+'/portfolio/awards', {
+            headers: {
+                Authorizatioin: `Bearer ${access_token}`
+            },
+            params: {
+                user_email: email
+            }
+        })
+        .then( response => {
+            if (response.data.status === "success") {
                 console.log(response);
                 setAwardData(response.data.result);
-            })
-        } catch (error) {
+            }
+        })
+        .catch( error => {
             console.log("error: ", error);
-            alert("Register Award Info!")
-        }
+        })
         setEdit(false);
         setRegister(false);
     }

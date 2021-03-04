@@ -184,10 +184,20 @@ class Education(Resource):
         sql = "SELECT `id`, `university`, `major`, `degree` FROM `education` WHERE `user_email` = %s"
         cursor.execute(sql, (args['user_email'], ))
         result = cursor.fetchall()
-        return jsonify(
-            status = "success",
-            result = result
-            )
+
+        error = None
+
+        # 입력한 유저의 정보가 없을 때
+        if result is None:
+            error = "This email({}) is not registered".format(args['user_email'])
+
+        # 입력한 유저의 정보가 있을 때
+        if error is None:
+            return jsonify(status = "success", result = result)
+        
+        return jsonify(status = "failure", message = {'error': error})
+
+        
 
     @jwt_required 
     def put(self):
@@ -270,16 +280,26 @@ class Awards(Resource):
             )
         else:
             return jsonify(status = "failure", result = {"message": error})
+    
     @jwt_required
     def get(self):
         args = parser_award.parse_args()
         sql = "SELECT `id`, `awardName`, `awardDesc` FROM `awards` WHERE `user_email` = %s"
         cursor.execute(sql, (args['user_email'], ))
         result = cursor.fetchall()
-        return jsonify(
-            status = "success",
-            result = result
-        )
+        
+        error = None
+
+        # 입력한 유저의 정보가 없을 때
+        if result is None:
+            error = "This email({}) is not registered".format(args['user_email'])
+
+        # 입력한 유저의 정보가 있을 때
+        if error is None:
+            return jsonify(status = "success", result = result)
+        
+        return jsonify(status = "failure", message = {'error': error})
+    
     @jwt_required  
     def put(self):
         args = parser_award.parse_args()
@@ -372,11 +392,18 @@ class Project(Resource):
         sql = "SELECT `id`, `projectName`, `projectDesc`, `projectStart`, `projectEnd` FROM `project` WHERE `user_email` = %s"
         cursor.execute(sql, (args['user_email'], ))
         result = cursor.fetchall()
-        return jsonify(
-            status = "success",
-            result = result
-        )
-        return jsonify()
+        
+        error = None
+
+        # 입력한 유저의 정보가 없을 때
+        if result is None:
+            error = "This email({}) is not registered".format(args['user_email'])
+
+        # 입력한 유저의 정보가 있을 때
+        if error is None:
+            return jsonify(status = "success", result = result)
+        
+        return jsonify(status = "failure", message = {'error': error})
     
     @jwt_required
     def put(self):
@@ -472,11 +499,18 @@ class Certificate(Resource):
         sql = "SELECT `id`, `certificateN`, `certificateP`, `certificateI` FROM `certificate` WHERE `user_email` = %s"
         cursor.execute(sql, (args['user_email'], ))
         result = cursor.fetchall()
-        return jsonify(
-            status = "success",
-            result = result
-        )
-        return jsonify()
+        
+        error = None
+
+        # 입력한 유저의 정보가 없을 때
+        if result is None:
+            error = "This email({}) is not registered".format(args['user_email'])
+
+        # 입력한 유저의 정보가 있을 때
+        if error is None:
+            return jsonify(status = "success", result = result)
+        
+        return jsonify(status = "failure", message = {'error': error})
 
     def put(self):
         args = parser_certificate.parse_args()
