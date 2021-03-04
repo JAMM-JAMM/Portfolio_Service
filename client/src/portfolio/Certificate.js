@@ -1,16 +1,25 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Container, Form, Button, Row, Col, Badge, ListGroup, ButtonGroup } from 'react-bootstrap';
+import { Container, Form, Button, Row, Col, Badge, ButtonGroup } from 'react-bootstrap';
 import DatePicker from "react-datepicker";
 import { ko } from "date-fns/esm/locale";
 import "react-datepicker/dist/react-datepicker.css";
 import * as moment from 'moment';
+import { Paper, Typography } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles((theme) => ({
+    paper: {
+      padding: theme.spacing(2),
+    },
+  }))
 
 const url = 'http://localhost:5000';
 const access_token = localStorage.getItem("access_token");
 const email = localStorage.getItem('email');
 
 function CertificateList(props) {
+    const classes = useStyles()
     const data = props.data;
     const data_id = data[0];
 
@@ -35,13 +44,24 @@ function CertificateList(props) {
 
     return (
         <>
-            <ListGroup variant="flush">
-                <ListGroup.Item>Certificate Name: {data[1]}</ListGroup.Item>
-                <ListGroup.Item>Certificate Provider: {data[2]}</ListGroup.Item>
-                <ListGroup.Item>Issue Date: {moment(data[3]).format("YYYY-MM-DD")}</ListGroup.Item>
-            </ListGroup>
+            <br/>
+            <Paper elevation={3} className={classes.paper}>
+                <Typography variant="h6" gutterBottom>
+                    Certificate Name
+                </Typography>
+                <Typography variant="body1">{data[1]}</Typography>
+                <Typography variant="h6" gutterBottom>
+                    Certificate Provider
+                </Typography>
+                <Typography variant="body1">{data[2]}</Typography>
+                <Typography variant="h6" gutterBottom>
+                    Certificate Issue Date
+                </Typography>
+                <Typography variant="body1">{moment(data[3]).format("YYYY-MM-DD")}</Typography>
+            </Paper>
+            <br/>
             <Button
-                variant="outline-primary"
+                variant="outline-secondary"
                 size="sm"
                 type="button"
                 onClick={function(e) {
@@ -53,7 +73,7 @@ function CertificateList(props) {
                 modify
             </Button>
             <Button
-                variant="outline-primary"
+                variant="outline-secondary"
                 size="sm"
                 type="button"
                 onClick={deleteCertificate}
@@ -102,9 +122,7 @@ function EditCertificateList(props) {
                 <Form
                     onSubmit = {modifyCertificate}
                 >
-                    <h4>
-                        <Badge variant="secondary">Certificate Modify</Badge>
-                    </h4>
+                    <Badge variant="secondary">Certificate Modify</Badge>
                     <Form.Group as={Row} controlId = "formBasiccertificateNameame">
                         <Form.Label column sm={4}>Name</Form.Label>
                         <Col sm={10}>
@@ -127,7 +145,9 @@ function EditCertificateList(props) {
                             />
                         </Col>
                     </Form.Group>
-                    <Form.Group>
+                    <Form.Group as={Row} controlId = "formBasicCertificateIssueDate">
+                        <Form.Label column sm={4}>Certificate Issue Date</Form.Label>
+                        <Col>
                         <DatePicker 
                             locale={ko}
                             placeholderText="Issue date"
@@ -135,11 +155,17 @@ function EditCertificateList(props) {
                             onChange={date => setcertificateIssueDate(date)}
                             dateFormat="yyyy-MM-dd"
                         />
+                        </Col>
                     </Form.Group>
                     <Form.Group as={Row}>
                         <Col sm={{ span: 10, offset: 2}}>
-                        <Button variant = "primary" type = "submit">
+                        <Button variant = "secondary" type = "submit">
                             Modify
+                        </Button>{'  '}
+                        <Button variant = "secondary" onClick={function(e) {
+                            props.onChangeEdit(false)
+                        }}>
+                            Cancel
                         </Button>
                         </Col>
                     </Form.Group>
@@ -184,9 +210,7 @@ function RegisterCertificateList(props) {
                 <Form
                     onSubmit = {registerCertificate}
                 >
-                    <h4>
-                        <Badge variant="secondary">Certificate Register</Badge>
-                    </h4>
+                    <Badge variant="secondary">Certificate Register</Badge>
                     <Form.Group as={Row} controlId = "formBasicCertificatetName">
                         <Form.Label column sm={4}>Name</Form.Label>
                         <Col sm={10}>
@@ -209,7 +233,9 @@ function RegisterCertificateList(props) {
                             />
                         </Col>
                     </Form.Group>
-                    <Form.Group>
+                    <Form.Group as={Row} controlId = "formBasicCertificateIssueDate">
+                        <Form.Label column sm={4}>Certificate Issue Date</Form.Label>
+                        <Col>
                         <DatePicker 
                             locale={ko}
                             placeholderText="Issue date"
@@ -217,10 +243,11 @@ function RegisterCertificateList(props) {
                             onChange={date => setcertificateIssueDate(date)}
                             dateFormat="yyyy-MM-dd"
                         />
+                        </Col>
                     </Form.Group>
                     <Form.Group as={Row}>
                         <Col sm={{ span: 10, offset: 2}}>
-                        <Button variant = "primary" type = "submit">
+                        <Button variant = "secondary" type = "submit">
                             Register
                         </Button>
                         </Col>
@@ -266,7 +293,7 @@ export default function Certificate() {
             </h4>
                 <ButtonGroup variant="light">
                     <Button
-                        variant="outline-primary"
+                        variant="outline-secondary"
                         size="sm"
                         type="button"
                         onClick={showCertificate}
@@ -274,17 +301,24 @@ export default function Certificate() {
                         show
                     </Button>
                     <Button
-                        variant="outline-primary"
+                        variant="outline-secondary"
                         size="sm"
                         type="button"
                         onClick={function(e) {
                         e.preventDefault();
-                            setRegister(true);
+                            setRegister(!register);
                         }}
                     >
                         register
                     </Button>
                 </ButtonGroup>
+                { register ?
+                    <RegisterCertificateList 
+                        onChangeRegister={function(_mode) {
+                            setRegister(_mode)
+                        }}
+                    />
+                : null }
                 {
                     certificateData.map((data) => (
                         <ol key={data.toString()}>
@@ -305,13 +339,6 @@ export default function Certificate() {
                         dataId={dataId}
                         onChangeEdit={function(_mode) {
                             setEdit(_mode);
-                        }}
-                    />
-                : null }
-                { register ?
-                    <RegisterCertificateList 
-                        onChangeRegister={function(_mode) {
-                            setRegister(_mode)
                         }}
                     />
                 : null }

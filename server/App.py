@@ -236,8 +236,9 @@ class Education(Resource):
     @jwt_required
     def delete(self):
         args = parser_edu.parse_args()
+        email = get_jwt_identity()
         sql = "DELETE FROM `education` WHERE `id` = %s"
-        cursor.execute(sql, (args['data_id'], ))
+        cursor.execute(sql, (args['data_id'],))
         db.commit()
         return jsonify(
             status = "success",

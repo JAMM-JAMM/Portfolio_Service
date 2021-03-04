@@ -1,12 +1,21 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Container, Form, Button, Row, Col, Badge, ListGroup, ButtonGroup } from 'react-bootstrap';
+import { Container, Form, Button, Row, Col, Badge, ButtonGroup } from 'react-bootstrap';
+import { Paper, Typography } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles((theme) => ({
+    paper: {
+      padding: theme.spacing(2),
+    },
+  }))
 
 const url = 'http://localhost:5000';
 const access_token = localStorage.getItem("access_token");
 const email = localStorage.getItem('email');
 
 function AwardList(props) {
+    const classes = useStyles()
     const data = props.data;
     const data_id = data[0];
 
@@ -31,12 +40,20 @@ function AwardList(props) {
 
     return (
         <>
-            <ListGroup variant="flush">
-                <ListGroup.Item>Awards Name: {data[1]}</ListGroup.Item>
-                <ListGroup.Item>Award Description: {data[2]}</ListGroup.Item>
-            </ListGroup>
+            <br/>
+            <Paper elevation={3} className={classes.paper}>
+                <Typography variant="h6" fontWeight="fontWeightBold" gutterBottom>
+                    Award Name
+                </Typography>
+                <Typography variant="body1">{data[1]}</Typography>
+                <Typography variant="h6" fontWeight="fontWeightBold" gutterBottom>
+                    Award Description
+                </Typography>
+                <Typography variant="body1">{data[2]}</Typography>
+            </Paper>
+            <br/>
             <Button
-                variant="outline-primary"
+                variant="outline-secondary"
                 size="sm"
                 type="button"
                 onClick={function(e) {
@@ -48,7 +65,7 @@ function AwardList(props) {
                 modify
             </Button>
             <Button
-                variant="outline-primary"
+                variant="outline-secondary"
                 size="sm"
                 type="button"
                 onClick={deleteAward}
@@ -95,9 +112,7 @@ function EditAwardList(props) {
                 <Form
                     onSubmit = {modifyAward}
                 >
-                    <h4>
-                        <Badge variant="secondary">Awards Modify</Badge>
-                    </h4>
+                    <Badge variant="secondary">Awards Modify</Badge>
                     <Form.Group as={Row} controlId = "formBasicAwardName">
                         <Form.Label column sm={2}>Award Name</Form.Label>
                         <Col sm={10}>
@@ -122,8 +137,13 @@ function EditAwardList(props) {
                     </Form.Group>
                     <Form.Group as={Row}>
                         <Col sm={{ span: 10, offset: 2}}>
-                        <Button variant = "primary" type = "submit">
+                        <Button variant = "secondary" type = "submit">
                             Modify
+                        </Button>{'  '}
+                        <Button variant = "secondary" onClick={function(e) {
+                            props.onChangeEdit(false)
+                        }}>
+                            Cancel
                         </Button>
                         </Col>
                     </Form.Group>
@@ -168,9 +188,7 @@ function RegisterAwardList(props) {
                 <Form
                     onSubmit = {registerAward}
                 >
-                    <h4>
-                        <Badge variant="secondary">Awards Register</Badge>
-                    </h4>
+                    <Badge variant="secondary">Awards Register</Badge>
                     <Form.Group as={Row} controlId = "formBasicAwardName">
                         <Form.Label column sm={4}>Award Name</Form.Label>
                         <Col sm={10}>
@@ -195,7 +213,7 @@ function RegisterAwardList(props) {
                     </Form.Group>
                     <Form.Group as={Row}>
                         <Col sm={{ span: 10, offset: 2}}>
-                        <Button variant = "primary" type = "submit">
+                        <Button variant = "secondary" type = "submit">
                             Register
                         </Button>
                         </Col>
@@ -216,7 +234,7 @@ export default function Awards() {
     const showAward = () => {
         axios.get(url+'/portfolio/awards', {
             headers: {
-                Authorizatioin: `Bearer ${access_token}`
+                Authorization: `Bearer ${access_token}`
             },
             params: {
                 user_email: email
@@ -242,7 +260,7 @@ export default function Awards() {
             </h4>
                 <ButtonGroup variant="lignt">
                     <Button
-                        variant="outline-primary"
+                        variant="outline-secondary"
                         size="sm"
                         type="button"
                         onClick={showAward}
@@ -250,17 +268,24 @@ export default function Awards() {
                         show
                     </Button>
                     <Button
-                        variant="outline-primary"
+                        variant="outline-secondary"
                         size="sm"
                         type="button"
                         onClick={function(e) {
                             e.preventDefault();
-                            setRegister(true);
+                            setRegister(!register);
                         }}
                     >
                         register
                     </Button>
                 </ButtonGroup>
+                { register ?
+                    <RegisterAwardList 
+                        onChangeRegister={function(_mode) {
+                            setRegister(_mode);
+                        }}
+                    />
+                : null}
                 {
                     awardData.map((data) => (
                         <ol key={data.toString()}>
@@ -284,13 +309,6 @@ export default function Awards() {
                         }}
                     />
                 : null }
-                { register ?
-                    <RegisterAwardList 
-                        onChangeRegister={function(_mode) {
-                            setRegister(_mode);
-                        }}
-                    />
-                : null}
         </div>
     )
 }
