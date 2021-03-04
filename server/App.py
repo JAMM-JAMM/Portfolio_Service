@@ -325,8 +325,10 @@ class Awards(Resource):
 
 parser_project = reqparse.RequestParser()
 parser_project.add_argument('user_email')
+parser_project.add_argument('data_id')
 
 class Project(Resource):
+    @jwt_required
     def post(self):
         user_email = request.form['user_email']
         projectName = request.form['projectName']
@@ -346,14 +348,6 @@ class Project(Resource):
             error = 'invalid projectStart'
         elif not projectEnd:
             error = 'invalid projectEnd'
-        
-        # 이미 등록된 정보라면
-        sql = 'SELECT * FROM `project` WHERE `user_email` = %s'
-        cursor.execute(sql, (user_email, ))
-        result = cursor.fetchone()
-
-        if result is not None:
-            error = '{}\'s info is already registered.'.format(user_email)
         
         if error is None:
             sql = "INSERT INTO `project` (`user_email`, `projectName`, `projectDesc`, `projectStart`, `projectEnd`) VALUES (%s, %s, %s, %s, %s)"
@@ -372,6 +366,7 @@ class Project(Resource):
         else:
             return jsonify(status = "failure", result = {"message": error})
 
+    @jwt_required
     def get(self):
         args = parser_project.parse_args()
         sql = "SELECT `id`, `projectName`, `projectDesc`, `projectStart`, `projectEnd` FROM `project` WHERE `user_email` = %s"
@@ -382,8 +377,10 @@ class Project(Resource):
             result = result
         )
         return jsonify()
+    
+    @jwt_required
     def put(self):
-        user_email = request.form['user_email']
+        args = parser_project.parse_args()
         projectName = request.form['projectName']
         projectDesc = request.form['projectDesc']
         projectStart = request.form['projectStart']
@@ -391,8 +388,8 @@ class Project(Resource):
 
         error = None
 
-        if not user_email:
-            error = 'not logged in'
+        if not args['data_id']:
+            error = 'invalid data_id'
         elif not projectName:
             error = 'invaild projectName'
         elif not projectDesc:
@@ -403,13 +400,13 @@ class Project(Resource):
             error = 'invalid projectEnd'
         
         if error is None:
-            sql = "UPDATE `project` SET `projectName` = %s, `projectDesc` = %s, `projectStart` = %s, `projectEnd` = %s WHERE `user_email` = %s"
-            cursor.execute(sql, (projectName, projectDesc, projectStart, projectEnd, user_email))
+            sql = "UPDATE `project` SET `projectName` = %s, `projectDesc` = %s, `projectStart` = %s, `projectEnd` = %s WHERE `id` = %s"
+            cursor.execute(sql, (projectName, projectDesc, projectStart, projectEnd, args['data_id']))
             db.commit()
             return jsonify(
                 status = "success",
                 result = {
-                    'user_email': user_email,
+                    'data_id': args['data_id'],
                     'projectName': projectName,
                     'projectDesc': projectDesc,
                     'projectStart': projectStart,
@@ -418,20 +415,23 @@ class Project(Resource):
                 )
         else:
             return jsonify(status = "failure", result = {"message": error})
+    
+    @jwt_required
     def delete(self):
         args = parser_project.parse_args()
-        sql = "DELETE FROM `project` WHERE `user_email` = %s"
-        cursor.execute(sql, (args['user_email'], ))
+        sql = "DELETE FROM `project` WHERE `id` = %s"
+        cursor.execute(sql, (args['data_id'], ))
         db.commit()
         return jsonify(
             status = "success",
             result = {
-                'user_email': args['user_email']
+                'data_id': args['data_id']
             }
         )
 
 parser_certificate = reqparse.RequestParser()
 parser_certificate.add_argument('user_email');
+parser_certificate.add_argument('data_id')
 
 class Certificate(Resource):
     def post(self):
@@ -443,21 +443,13 @@ class Certificate(Resource):
         error = None
 
         if not user_email:
-            error = 'invalid user_email'
+            error = 'not logged in'
         elif not certificateN:
             error = 'invalid certificate Name'
         elif not certificateP:
             error = 'invalid certificate Provider'
         elif not certificateI:
             error = 'invalid certificate Issue Date'
-
-        # 이미 등록된 정보라면
-        sql = 'SELECT * FROM `certificate` WHERE `user_email` = %s'
-        cursor.execute(sql, (user_email,))
-        result = cursor.fetchone()
-
-        if result is not None:
-            error = '{}\'s info is already registered.'.format(user_email)
 
         if error is None:
             sql = "INSERT INTO `certificate` (`user_email`, `certificateN`, `certificateP`, `certificateI`) VALUES (%s, %s, %s, %s)"
@@ -487,15 +479,15 @@ class Certificate(Resource):
         return jsonify()
 
     def put(self):
-        user_email = request.form['user_email']
+        args = parser_certificate.parse_args()
         certificateN = request.form['certificateN']
         certificateP = request.form['certificateP']
         certificateI = request.form['certificateI']
 
         error = None
 
-        if not user_email:
-            error = 'invalid user_email'
+        if not args['data_id']:
+            error = 'invalid data_id'
         elif not certificateN:
             error = 'invalid certificate Name'
         elif not certificateP:
@@ -504,13 +496,13 @@ class Certificate(Resource):
             error = 'invalid certificate Issue Date'
 
         if error is None:
-            sql = "UPDATE`certificate` SET `user_email` = %s, `certificateN` = %s, `certificateP` = %s, `certificateI` = %s"
-            cursor.execute(sql, (user_email, certificateN, certificateP, certificateI))
+            sql = "UPDATE`certificate` SET `certificateN` = %s, `certificateP` = %s, `certificateI` = %s WHERE `id` = %s"
+            cursor.execute(sql, (user_email, certificateN, certificateP, certificateI, args['data_id']))
             db.commit()
             return jsonify(
                 status = "success",
                 result = {
-                    'user_email': user_email,
+                    'data_id': args['data_id'],
                     'certificateN': certificateN,
                     'certificateP': certificateP,
                     'certificateI': certificateI
@@ -521,13 +513,13 @@ class Certificate(Resource):
     
     def delete(self):
         args = parser_certificate.parse_args()
-        sql = "DELETE FROM `certificate` WHERE `user_email` = %s"
-        cursor.execute(sql, (args['user_email'], ))
+        sql = "DELETE FROM `certificate` WHERE `id` = %s"
+        cursor.execute(sql, (args['data_id'], ))
         db.commit()
         return jsonify(
             status = "success",
             result = {
-                'user_email': args['user_email']
+                'data_id': args['data_id']
             }
         )
 

@@ -292,7 +292,7 @@ export default function Education() {
                         Authorization: `Bearer ${access_token}`
                     },
                     params: {
-                        user_email: localStorage.getItem('email')
+                        user_email: email
                     }
                 })
                 .then( response => {
@@ -304,6 +304,8 @@ export default function Education() {
                 console.log("error: ", error);
                 alert("Register Academic Background Info!")
             }
+        setEdit(false);
+        setRegister(false);
     }
 
     return (

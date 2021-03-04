@@ -231,6 +231,8 @@ export default function Awards() {
             console.log("error: ", error);
             alert("Register Award Info!")
         }
+        setEdit(false);
+        setRegister(false);
     }
 
     return (
