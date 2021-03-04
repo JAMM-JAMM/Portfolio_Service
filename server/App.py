@@ -180,7 +180,6 @@ class Education(Resource):
 
     @jwt_required
     def get(self):
-        # current_user = get_jwt_identity()
         args = parser_edu.parse_args()
         sql = "SELECT `id`, `university`, `major`, `degree` FROM `education` WHERE `user_email` = %s"
         cursor.execute(sql, (args['user_email'], ))
@@ -239,8 +238,10 @@ class Education(Resource):
 
 parser_award = reqparse.RequestParser()
 parser_award.add_argument('user_email')
+parser_award.add_argument('data_id');
 
 class Awards(Resource):
+    @jwt_required
     def post(self):
         user_email = request.form['user_email']
         awardName = request.form['awardName']
@@ -255,14 +256,6 @@ class Awards(Resource):
         elif not awardDesc:
             error = 'invalid awardDesc'
 
-        # 이미 등록된 정보라면
-        sql = 'SELECT * FROM `awards` WHERE `user_email` = %s'
-        cursor.execute(sql, (user_email,))
-        result = cursor.fetchone()
-
-        if result is not None:
-            error = '{}\'s info is already registered.'.format(email)
-
         if error is None:
             sql = "INSERT INTO `awards` (`user_email`,`awardName`, `awardDesc`) VALUES (%s, %s, %s)"
             cursor.execute(sql, (user_email, awardName, awardDesc))
@@ -277,7 +270,7 @@ class Awards(Resource):
             )
         else:
             return jsonify(status = "failure", result = {"message": error})
-
+    @jwt_required
     def get(self):
         args = parser_award.parse_args()
         sql = "SELECT `id`, `awardName`, `awardDesc` FROM `awards` WHERE `user_email` = %s"
@@ -287,43 +280,46 @@ class Awards(Resource):
             status = "success",
             result = result
         )
+    @jwt_required  
     def put(self):
-        user_email = request.form['user_email']
+        args = parser_award.parse_args()
         awardName = request.form['awardName']
         awardDesc = request.form['awardDesc']
 
         error = None
 
-        if not user_email:
-            error = 'invalid user_email'
+        if not args['data_id']:
+            error = 'invalid data_id'
         elif not awardName:
             error = 'invalid awardName'
         elif not awardDesc:
             error = 'invalid awardDesc'
 
         if error is None:
-            sql = "INSERT INTO `awards` (`user_email`,`awardName`, `awardDesc`) VALUES (%s, %s, %s)"
-            cursor.execute(sql, (user_email, awardName, awardDesc))
+            sql = "UPDATE `awards` SET `awardName` = %s, `awardDesc` = %s WHERE `id` = %s"
+            cursor.execute(sql, (awardName, awardDesc, args['data_id']))
             db.commit()
             return jsonify(
                 status = "success",
                 result = {
-                    'user_email': user_email,
+                    'data_id': args['data_id'],
                     'awardName': awardName,
                     'awardDesc': awardDesc
                 }
             )
         else:
             return jsonify(status = "failure", result = {"message": error})
+
+    @jwt_required
     def delete(self):
         args = parser_award.parse_args()
-        sql = "DELETE FROM `awards` WHERE `user_email` = %s"
-        cursor.execute(sql, (args['user_email'], ))
+        sql = "DELETE FROM `awards` WHERE `id` = %s"
+        cursor.execute(sql, (args['data_id'], ))
         db.commit()
         return jsonify(
             status = "success",
             result = {
-                'user_email': args['user_email']
+                'delete_id': args['data_id']
             }
         )
 

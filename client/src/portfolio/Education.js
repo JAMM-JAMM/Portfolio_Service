@@ -26,7 +26,7 @@ function EduList(props) {
                 })
         } catch (error) {
             console.log("error: ", error);
-            alert("There is no acdemic background info");
+            alert("There is no academic background info");
         }
     }
     return (
@@ -208,7 +208,7 @@ function RegisterEduList(props) {
                     onSubmit = {registerEducation}
                 >
                     <h4>
-                        <Badge variant="secondary">Academic Background Register</Badge>
+                        <Badge variant="secondasry">Academic Background Register</Badge>
                     </h4>
                     <Form.Group as={Row} controlId = "formBasicUniversity">
                         <Form.Label column sm={2}>University</Form.Label>
@@ -336,13 +336,13 @@ export default function Education() {
                         eduData.map((data) => (
                             <ol key={data.toString()}>
                                 <EduList 
-                                data = {data}
-                                onChangeEdit={function(_mode) {
-                                    setEdit(_mode);
-                                }}
-                                onChangeEditId={function(_editId) {
-                                    setDataId(_editId);
-                                }}
+                                    data = {data}
+                                    onChangeEdit={function(_mode) {
+                                        setEdit(_mode);
+                                    }}
+                                    onChangeEditId={function(_editId) {
+                                        setDataId(_editId);
+                                    }}
                                 />
                             </ol>
                         ))
