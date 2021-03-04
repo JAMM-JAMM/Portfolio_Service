@@ -463,32 +463,32 @@ parser_certificate.add_argument('data_id')
 class Certificate(Resource):
     def post(self):
         user_email = request.form['user_email']
-        certificateN = request.form['certificateN']
-        certificateP = request.form['certificateP']
-        certificateI = request.form['certificateI']
+        certificateName = request.form['certificateName']
+        certificateProvider = request.form['certificateProvider']
+        certificateIssueDate = request.form['certificateIssueDate']
 
         error = None
 
         if not user_email:
             error = 'not logged in'
-        elif not certificateN:
+        elif not certificateName:
             error = 'invalid certificate Name'
-        elif not certificateP:
+        elif not certificateProvider:
             error = 'invalid certificate Provider'
-        elif not certificateI:
+        elif not certificateIssueDate:
             error = 'invalid certificate Issue Date'
 
         if error is None:
-            sql = "INSERT INTO `certificate` (`user_email`, `certificateN`, `certificateP`, `certificateI`) VALUES (%s, %s, %s, %s)"
-            cursor.execute(sql, (user_email, certificateN, certificateP, certificateI))
+            sql = "INSERT INTO `certificate` (`user_email`, `certificateName`, `certificateProvider`, `certificateIssueDate`) VALUES (%s, %s, %s, %s)"
+            cursor.execute(sql, (user_email, certificateName, certificateProvider, certificateIssueDate))
             db.commit()
             return jsonify(
                 status = "success",
                 result = {
                     'user_email': user_email,
-                    'certificateN': certificateN,
-                    'certificateP': certificateP,
-                    'certificateI': certificateI
+                    'certificateName': certificateName,
+                    'certificateProvider': certificateProvider,
+                    'certificateIssueDate': certificateIssueDate
                 }
             )
         else:
@@ -496,7 +496,7 @@ class Certificate(Resource):
     
     def get(self):
         args = parser_certificate.parse_args()
-        sql = "SELECT `id`, `certificateN`, `certificateP`, `certificateI` FROM `certificate` WHERE `user_email` = %s"
+        sql = "SELECT `id`, `certificateName`, `certificateProvider`, `certificateIssueDate` FROM `certificate` WHERE `user_email` = %s"
         cursor.execute(sql, (args['user_email'], ))
         result = cursor.fetchall()
         
@@ -514,32 +514,32 @@ class Certificate(Resource):
 
     def put(self):
         args = parser_certificate.parse_args()
-        certificateN = request.form['certificateN']
-        certificateP = request.form['certificateP']
-        certificateI = request.form['certificateI']
+        certificateName = request.form['certificateName']
+        certificateProvider = request.form['certificateProvider']
+        certificateIssueDate = request.form['certificateIssueDate']
 
         error = None
 
         if not args['data_id']:
             error = 'invalid data_id'
-        elif not certificateN:
+        elif not certificateName:
             error = 'invalid certificate Name'
-        elif not certificateP:
+        elif not certificateProvider:
             error = 'invalid certificate Provider'
-        elif not certificateI:
+        elif not certificateIssueDate:
             error = 'invalid certificate Issue Date'
 
         if error is None:
-            sql = "UPDATE`certificate` SET `certificateN` = %s, `certificateP` = %s, `certificateI` = %s WHERE `id` = %s"
-            cursor.execute(sql, (certificateN, certificateP, certificateI, args['data_id']))
+            sql = "UPDATE`certificate` SET `certificateName` = %s, `certificateProvider` = %s, `certificateIssueDate` = %s WHERE `id` = %s"
+            cursor.execute(sql, (certificateName, certificateProvider, certificateIssueDate, args['data_id']))
             db.commit()
             return jsonify(
                 status = "success",
                 result = {
                     'data_id': args['data_id'],
-                    'certificateN': certificateN,
-                    'certificateP': certificateP,
-                    'certificateI': certificateI
+                    'certificateName': certificateName,
+                    'certificateProvider': certificateProvider,
+                    'certificateIssueDate': certificateIssueDate
                 }
             )
         else:

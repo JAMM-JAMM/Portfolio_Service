@@ -65,9 +65,9 @@ function CertificateList(props) {
 }
 
 function EditCertificateList(props) {
-    const [certificateN, setCertificateN] = useState("");
-    const [certificateP, setCertificateP] = useState("");
-    const [certificateI, setCertificateI]=  useState(new Date());
+    const [certificateName, setcertificateName] = useState("");
+    const [certificateProvider, setcertificateProvider] = useState("");
+    const [certificateIssueDate, setcertificateIssueDate]=  useState(new Date());
 
     const dataId = props.dataId;
 
@@ -75,9 +75,9 @@ function EditCertificateList(props) {
         e.preventDefault();
         let putCertificateData = new FormData();
         putCertificateData.append('data_id', dataId);
-        putCertificateData.append('certificateN', certificateN);
-        putCertificateData.append('certificateP', certificateP);
-        putCertificateData.append('certificateI', moment(certificateI).format("YYYY-MM-DD"));
+        putCertificateData.append('certificateName', certificateName);
+        putCertificateData.append('certificateProvider', certificateProvider);
+        putCertificateData.append('certificateIssueDate', moment(certificateIssueDate).format("YYYY-MM-DD"));
         axios.put(url+'/portfolio/certificate', putCertificateData, {
             headers: {
                 Authorization: `Bearer ${access_token}`
@@ -105,25 +105,25 @@ function EditCertificateList(props) {
                     <h4>
                         <Badge variant="secondary">Certificate Modify</Badge>
                     </h4>
-                    <Form.Group as={Row} controlId = "formBasicCertificateName">
+                    <Form.Group as={Row} controlId = "formBasiccertificateNameame">
                         <Form.Label column sm={4}>Name</Form.Label>
                         <Col sm={10}>
                             <Form.Control
                                 type = "text"
                                 placeholder = "Enter certificate name"
-                                name = "certificateName"
-                                onChange = {(e) => setCertificateN(e.target.value)}
+                                name = "certificateNameame"
+                                onChange = {(e) => setcertificateName(e.target.value)}
                             />
                         </Col>
                     </Form.Group>
-                    <Form.Group as={Row} controlId = "formBasicCertificateProvider">
+                    <Form.Group as={Row} controlId = "formBasiccertificateProviderrovider">
                         <Form.Label column sm={4}>Provider</Form.Label>
                         <Col sm={10}>
                             <Form.Control
                                 type = "text"
                                 placeholder = "Enter certificate description"
                                 name = "certificateDesc"
-                                onChange = {(e) => setCertificateP(e.target.value)}
+                                onChange = {(e) => setcertificateProvider(e.target.value)}
                             />
                         </Col>
                     </Form.Group>
@@ -131,8 +131,8 @@ function EditCertificateList(props) {
                         <DatePicker 
                             locale={ko}
                             placeholderText="Issue date"
-                            selected={certificateI}
-                            onChange={date => setCertificateI(date)}
+                            selected={certificateIssueDate}
+                            onChange={date => setcertificateIssueDate(date)}
                             dateFormat="yyyy-MM-dd"
                         />
                     </Form.Group>
@@ -149,17 +149,17 @@ function EditCertificateList(props) {
 }
 
 function RegisterCertificateList(props) {
-    const [certificateN, setCertificateN] = useState("");
-    const [certificateP, setCertificateP] = useState("");
-    const [certificateI, setCertificateI]=  useState(new Date());
+    const [certificateName, setcertificateName] = useState("");
+    const [certificateProvider, setcertificateProvider] = useState("");
+    const [certificateIssueDate, setcertificateIssueDate]=  useState(new Date());
 
     const registerCertificate = (e) => {
         e.preventDefault();
         let postCertificateData = new FormData();
         postCertificateData.append('user_email', email);
-        postCertificateData.append('certificateN', certificateN);
-        postCertificateData.append('certificateP', certificateP);
-        postCertificateData.append('certificateI', moment(certificateI).format("YYYY-MM-DD"));
+        postCertificateData.append('certificateName', certificateName);
+        postCertificateData.append('certificateProvider', certificateProvider);
+        postCertificateData.append('certificateIssueDate', moment(certificateIssueDate).format("YYYY-MM-DD"));
         axios.post(url+'/portfolio/certificate', postCertificateData, {
             headers: {
                 Authorization: `Bearer ${access_token}`
@@ -194,18 +194,18 @@ function RegisterCertificateList(props) {
                                 type = "text"
                                 placeholder = "Enter certificate name"
                                 name = "certificate Name"
-                                onChange = {(e) => setCertificateN(e.target.value)}
+                                onChange = {(e) => setcertificateName(e.target.value)}
                             />
                         </Col>
                     </Form.Group>
-                    <Form.Group as={Row} controlId = "formBasicCertificateProvider">
+                    <Form.Group as={Row} controlId = "formBasiccertificateProviderrovider">
                         <Form.Label column sm={4}>Provider</Form.Label>
                         <Col sm={10}>
                             <Form.Control
                                 type = "text"
                                 placeholder = "Enter project provider"
                                 name = "certificate Provider"
-                                onChange = {(e) => setCertificateP(e.target.value)}
+                                onChange = {(e) => setcertificateProvider(e.target.value)}
                             />
                         </Col>
                     </Form.Group>
@@ -213,8 +213,8 @@ function RegisterCertificateList(props) {
                         <DatePicker 
                             locale={ko}
                             placeholderText="Issue date"
-                            selected={certificateI}
-                            onChange={date => setCertificateI(date)}
+                            selected={certificateIssueDate}
+                            onChange={date => setcertificateIssueDate(date)}
                             dateFormat="yyyy-MM-dd"
                         />
                     </Form.Group>
