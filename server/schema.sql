@@ -36,9 +36,9 @@ create table if not exists project(
 create table if not exists certificate(
     id int not null AUTO_INCREMENT,
     user_email varchar(32) not null,
-    certificateN varchar(32) not null,
-    certificateP varchar(32) not null,
-    certificateI date not null,
+    certificateName varchar(32) not null,
+    certificateProvider varchar(32) not null,
+    certificateIssueDate date not null,
     create_data timestamp default NOW(),
     primary key(id)
 );

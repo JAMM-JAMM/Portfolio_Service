@@ -1,43 +1,72 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Container, Form, Button, Row, Col, Badge, ListGroup, ButtonGroup } from 'react-bootstrap';
+import { Container, Form, Button, Row, Col, Badge, ButtonGroup } from 'react-bootstrap';
+import { Paper, Typography } from "@material-ui/core";
+import { makeStyles, MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
+
+const useStyles = makeStyles((theme) => ({
+    paper: {
+      padding: theme.spacing(2),
+    },
+  }))
+
+const theme = createMuiTheme({
+  typography: {
+    h6: {
+      fontWeight: 'bold',
+    },
+  },
+});
 
 const eduUrl = 'http://localhost:5000';
 const access_token = localStorage.getItem("access_token");
 const email = localStorage.getItem('email');
 
 function EduList(props) {
+    const classes = useStyles()
     const data = props.data;
     const data_id = data[0]
     
     const deleteEdu = () => {
-        try {
-            axios.delete(eduUrl+'/portfolio/education', {
-                headers: {
-                    Authorization: `Bearer ${access_token}`
-                },
-                params: {
-                    data_id: data_id
-                }
-            })
-            .then( response => {
-                console.log(response);
-                alert("Delete Success!");
-                })
-        } catch (error) {
+        axios.delete(eduUrl+'/portfolio/education', {
+            headers: {
+                Authorization: `Bearer ${access_token}`
+            },
+            params: {
+                data_id: data_id
+            }
+        })
+        .then( response => {
+            console.log(response);
+            alert("Delete Success!");
+        })
+        .catch( error => {
             console.log("error: ", error);
-            alert("There is no acdemic background info");
-        }
+            alert("There is no education info!")
+        })
     }
     return (
-        <>
-            <ListGroup variant="flush">
-                <ListGroup.Item>University: {data[1]}</ListGroup.Item>
-                <ListGroup.Item>Major: {data[2]}</ListGroup.Item>
-                <ListGroup.Item>Degree: {data[3]}</ListGroup.Item>
-            </ListGroup>
+        <>  
+            <br/>
+            <MuiThemeProvider theme={theme}>
+                <Paper elevation={3} className={classes.paper}>
+                    <Typography variant="h6" gutterBottom>
+                        University
+                    </Typography>
+                    <Typography variant="body1">{data[1]}</Typography>
+                    <Typography variant="h6" gutterBottom>
+                        Major
+                    </Typography>
+                    <Typography variant="body1">{data[2]}</Typography>
+                    <Typography variant="h6" gutterBottom>
+                        Degree
+                    </Typography>
+                    <Typography variant="body1">{data[3]}</Typography>
+                </Paper>
+            </MuiThemeProvider>
+            <br/>
             <Button
-                variant="outline-primary"
+                variant="outline-secondary"
                 size="sm"
                 type="button"
                 onClick={function(e) {
@@ -49,7 +78,7 @@ function EduList(props) {
                 modify
             </Button>
             <Button
-                variant="outline-primary"
+                variant="outline-secondary"
                 size="sm"
                 type="button"
                 onClick={deleteEdu}
@@ -74,23 +103,23 @@ function EditEduList(props) {
         putEduData.append('university', university);
         putEduData.append('major', major);
         putEduData.append('degree', degree);
-        try {
-            axios.put(eduUrl+'/portfolio/education', putEduData, {
-                headers: {
-                    Authorization: `Bearer ${access_token}`
-                }
-            }).then( response => {
-                if (response.data.status === "success") {
-                    console.log('response: ', JSON.stringify(response));
-                    alert("Success modification for academic background info! ")
-                    props.onChangeEdit(false);
-                } else if (response.data.status === 'failure') {
-                    alert(response.data.result.message);
-                }
-            })
-        } catch (error) {
+        axios.put(eduUrl+'/portfolio/education', putEduData, {
+            headers: {
+                Authorization: `Bearer ${access_token}`
+            }
+        })
+        .then( response => {
+            if (response.data.status === "success") {
+                console.log(response);
+                alert("Success modification for academic background info!");
+                props.onChangeEdit(false);
+            } else {
+                alert(response.data.result.message);
+            }
+        })
+        .catch( error => {
             console.log("error: ", error);
-        }
+        })
     }
     return (
         <>
@@ -98,9 +127,7 @@ function EditEduList(props) {
                 <Form
                     onSubmit = {modifyEducation}
                 >
-                    <h4>
-                        <Badge variant="secondary">Academic Background Modify</Badge>
-                    </h4>
+                    <Badge variant="secondary">Academic Background Modify</Badge>
                     <Form.Group as={Row} controlId = "formBasicUniversity">
                         <Form.Label column sm={2}>University</Form.Label>
                         <Col sm={10}>
@@ -160,8 +187,13 @@ function EditEduList(props) {
                     </fieldset>
                     <Form.Group as={Row}>
                         <Col sm={{ span: 10, offset: 2}}>
-                        <Button variant = "primary" type = "submit">
+                        <Button variant = "secondary" type = "submit">
                             Modify
+                        </Button>{'  '}
+                        <Button variant = "secondary" onClick={function(e) {
+                            props.onChangeEdit(false)
+                        }}>
+                            Cancel
                         </Button>
                         </Col>
                     </Form.Group>
@@ -183,23 +215,23 @@ function RegisterEduList(props) {
         postEduData.append('university', university);
         postEduData.append('major', major);
         postEduData.append('degree', degree);
-        try {
-            axios.post(eduUrl+'/portfolio/education', postEduData, {
-                headers: {
-                    Authorization: `Bearer ${access_token}`
-                }
-            }).then( response => {
-                if (response.data.status === "success") {
-                    console.log('response: ', JSON.stringify(response));
-                    alert("Success registeration for academic background info!");
-                    props.onChangeRegister(false)
-                } else if (response.data.status === 'failure') {
-                    alert(response.data.result.message);
-                }
-            })
-        } catch (error) {
+        axios.post(eduUrl+'/portfolio/education', postEduData, {
+            headers: {
+                Authorization: `Bearer ${access_token}`
+            }
+        })
+        .then( response => {
+            if (response.data.status === "success") {
+                console.log(response);
+                alert("Success registragion for academic background info!");
+                props.onChangeRegister(false);
+            } else {
+                alert(response.data.result.message);
+            }
+        })
+        .catch( error => {
             console.log("error: ", error);
-        }
+        })
     }
 
     return (
@@ -207,9 +239,7 @@ function RegisterEduList(props) {
                 <Form
                     onSubmit = {registerEducation}
                 >
-                    <h4>
-                        <Badge variant="secondary">Academic Background Register</Badge>
-                    </h4>
+                    <Badge variant="secondary">Academic Background Register</Badge>
                     <Form.Group as={Row} controlId = "formBasicUniversity">
                         <Form.Label column sm={2}>University</Form.Label>
                         <Col sm={10}>
@@ -269,7 +299,7 @@ function RegisterEduList(props) {
                     </fieldset>
                     <Form.Group as={Row}>
                         <Col sm={{ span: 10, offset: 2}}>
-                        <Button variant = "primary" type = "submit">
+                        <Button variant = "secondary" type = "submit">
                             Register
                         </Button>
                         </Col>
@@ -286,24 +316,25 @@ export default function Education() {
     const [dataId, setDataId] = useState();
 
     const showEdu = () => {
-            try {
-                axios.get(eduUrl+'/portfolio/education', {
-                    headers: {
-                        Authorization: `Bearer ${access_token}`
-                    },
-                    params: {
-                        user_email: localStorage.getItem('email')
-                    }
-                })
-                .then( response => {
-                    console.log(response);
-                    setEduData(response.data.result)
-                    })
-        
-            } catch (error) {
-                console.log("error: ", error);
-                alert("Register Academic Background Info!")
+        axios.get(eduUrl+'/portfolio/education', {
+            headers: {
+                Authorization: `Bearer ${access_token}`
+            },
+            params: {
+                user_email: email
             }
+        })
+        .then( response => {
+            if (response.data.status === "success") {
+                console.log(response);
+                setEduData(response.data.result);
+            }
+        })
+        .catch( error => {
+            console.log("error: ", error);  
+        })
+        setEdit(false);
+        setRegister(false);
     }
 
     return (
@@ -313,7 +344,7 @@ export default function Education() {
                 </h4>
                     <ButtonGroup variant="light">
                         <Button
-                            variant="outline-primary"
+                            variant="outline-secondary"
                             size="sm"
                             type="button"
                             onClick={showEdu}
@@ -321,28 +352,35 @@ export default function Education() {
                             show
                         </Button>
                         <Button
-                            variant="outline-primary"
+                            variant="outline-secondary"
                             size="sm"
                             type="button"
                             onClick={function(e) {
                                 e.preventDefault();
-                                setRegister(true);
+                                setRegister(!register);
                             }}
                         >
                             register
                         </Button>
                     </ButtonGroup>
+                    { register ?
+                        <RegisterEduList 
+                            onChangeRegister={function(_mode) {
+                                setRegister(_mode)
+                            }}
+                        />
+                    : null }
                     {
                         eduData.map((data) => (
                             <ol key={data.toString()}>
                                 <EduList 
-                                data = {data}
-                                onChangeEdit={function(_mode) {
-                                    setEdit(_mode);
-                                }}
-                                onChangeEditId={function(_editId) {
-                                    setDataId(_editId);
-                                }}
+                                    data = {data}
+                                    onChangeEdit={function(_mode) {
+                                        setEdit(_mode);
+                                    }}
+                                    onChangeEditId={function(_editId) {
+                                        setDataId(_editId);
+                                    }}
                                 />
                             </ol>
                         ))
@@ -352,13 +390,6 @@ export default function Education() {
                             dataId = {dataId}
                             onChangeEdit={function(_mode) {
                                 setEdit(_mode);
-                            }}
-                        />
-                    : null }
-                    { register ?
-                        <RegisterEduList 
-                            onChangeRegister={function(_mode) {
-                                setRegister(_mode)
                             }}
                         />
                     : null }
