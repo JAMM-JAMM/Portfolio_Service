@@ -2,21 +2,13 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { Container, Form, Button, Row, Col, Badge, ButtonGroup } from 'react-bootstrap';
 import { Paper, Typography } from "@material-ui/core";
-import { makeStyles, MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
     paper: {
       padding: theme.spacing(2),
     },
   }))
-
-const theme = createMuiTheme({
-  typography: {
-    h6: {
-      fontWeight: 'bold',
-    },
-  },
-});
 
 const eduUrl = 'http://localhost:5000';
 const access_token = localStorage.getItem("access_token");
@@ -48,7 +40,6 @@ function EduList(props) {
     return (
         <>  
             <br/>
-            <MuiThemeProvider theme={theme}>
                 <Paper elevation={3} className={classes.paper}>
                     <Typography variant="h6" gutterBottom>
                         University
@@ -63,7 +54,6 @@ function EduList(props) {
                     </Typography>
                     <Typography variant="body1">{data[3]}</Typography>
                 </Paper>
-            </MuiThemeProvider>
             <br/>
             <Button
                 variant="outline-secondary"
@@ -314,6 +304,8 @@ export default function Education() {
     const [edit, setEdit] = useState(false);
     const [register, setRegister] = useState(false);
     const [dataId, setDataId] = useState();
+
+
 
     const showEdu = () => {
         axios.get(eduUrl+'/portfolio/education', {

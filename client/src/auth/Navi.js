@@ -1,16 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Nav, Navbar, Badge } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 export default function Navi() {
-
-    const checkLogout = (e) => {
-        e.preventDefault();
+    const history = useHistory();
+    
+    const doLogout = () => {
         if (localStorage.getItem('access_token')) {
             alert("Logout Success!")
             localStorage.removeItem('access_token');
             localStorage.removeItem('email');
+            history.push('/')
         } else {
             alert("You're not logged in yet. Please log in first!");
         }
@@ -36,15 +37,20 @@ export default function Navi() {
                         </Nav.Item>
                         <Nav.Item>
                             <Nav.Link href="/portfolio">
-                                Portfolio
+                                MyPortfolio
+                            </Nav.Link>
+                        </Nav.Item>
+                        <Nav.Item>
+                            <Nav.Link href="/network">
+                                Network
                             </Nav.Link>
                         </Nav.Item>
                         <Nav.Item>
                             <Nav.Link
-                                onClick = {checkLogout}>
-                                Logout
-                            </Nav.Link>
-                        </Nav.Item>
+                        onClick = {doLogout}>
+                        Logout
+                    </Nav.Link>
+                </Nav.Item>
                     </Nav>
                 </Navbar>
         </div>
