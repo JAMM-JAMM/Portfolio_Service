@@ -4,7 +4,7 @@ import Awards from './Awards';
 import Project from './Project';
 import Certificate from './Certificate';
 import Login from '../auth/Login';
-import { Container, Col } from 'react-bootstrap';
+import { Container, Col, Row, Jumbotron } from 'react-bootstrap';
 import axios from 'axios';
 
 export default function Portfolio() {
@@ -30,18 +30,35 @@ export default function Portfolio() {
         <div>
         { isLogin ?
             <Container>
-                <Col md={8}>
+                <Col>
+                <Jumbotron>
+                    <h2>My Portfolio page</h2>
+                    <h6>You can register, modify, and delete your portfolio.</h6><br/>
+                    <h5>Academic Background: University, Major, Degree</h5>
+                    <h5>Award: Award Name, Award Description</h5>
+                    <h5>Project: Project Name, Project Description, Project Period</h5>
+                    <h5>Certificate: Certificate Name, Certificate Provider, Certificate Issue Date</h5>
+                </Jumbotron>
+                </Col>
+                <Row>
+                <Col>
                     <Education />
                 </Col>
-                <Col md={8}>
+                <hr />
+                <Col>
                     <Awards />
                 </Col>
-                <Col md={8}>
+                </Row>
+                <hr />
+                <Row>
+                <Col>
                     <Project />
                 </Col>
-                <Col md={8}>
+                <hr />
+                <Col>
                     <Certificate />
                 </Col>
+                </Row>
             </Container>
         : <Login/>}
         </div>

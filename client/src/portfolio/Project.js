@@ -121,6 +121,7 @@ function EditProjectList(props) {
 
     return (
             <Container>
+                <hr/>
                 <Form
                     onSubmit = {modifyProject}
                 >
@@ -223,6 +224,7 @@ function RegisterProjectList(props) {
 
     return (
         <Container>
+                <hr/>
                 <Form
                     onSubmit = {registerProject}
                 >

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Button, Badge, ButtonGroup, Row, Col, Container } from 'react-bootstrap';
+import { Button, Badge, ButtonGroup, Row, Col, Jumbotron, Container } from 'react-bootstrap';
 import { useLocation, useHistory } from 'react-router-dom';
 import { Paper, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
@@ -17,6 +17,7 @@ const access_token = localStorage.getItem("access_token");
 
 export default function User() {
     const [userEmail, setUserEmail] = useState('');
+    const [userName, setUserName] = useState('');
     const [edu, setEdu] = useState([]);
     const [award, setAward] = useState([]);
     const [project, setProject] = useState([]);
@@ -33,6 +34,7 @@ export default function User() {
         } else {
             console.log(location.state)
             setUserEmail(location.state.email)
+            setUserName(location.state.name)
         }
     }, [history, location.state])
 
@@ -123,6 +125,12 @@ export default function User() {
     return (
         <>
             <Container>
+            <Col>
+                <Jumbotron>
+                    <h2>Elice Racer {userName}'s portfolio</h2><br/>
+                    <h5>You cannot modify this portfolio.</h5>
+                </Jumbotron>
+            </Col>
             <ButtonGroup variant="light">
                 <Button
                     variant="outline-secondary"
@@ -157,7 +165,9 @@ export default function User() {
                     Certificate
                 </Button>
             </ButtonGroup>
-            <br/>
+            <hr/>
+            <Row>
+            <Col>
             <h4>
                 <Badge variant="secondary">Academic Background</Badge>
             </h4>
@@ -181,7 +191,9 @@ export default function User() {
                     </div>
                 ))
             }
+            </Col>
             <br/>
+            <Col>
             <h4>
                 <Badge variant="secondary">Awards</Badge>
             </h4>
@@ -201,7 +213,11 @@ export default function User() {
                     </div>
                 ))
             }
-            <br/>
+            </Col>
+            </Row>
+            <hr/>
+            <Row>
+            <Col>
             <h4>
                 <Badge variant="secondary">Projects</Badge>
             </h4>
@@ -225,7 +241,9 @@ export default function User() {
                     </div>
                 ))
             }
+            </Col>
             <br/>
+            <Col>
             <h4>
                 <Badge variant="secondary">Certificates</Badge>
             </h4>
@@ -249,6 +267,8 @@ export default function User() {
                     </div>
                 ))
             }
+            </Col>
+            </Row>
             </Container>
         </>
     )

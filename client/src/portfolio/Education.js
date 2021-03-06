@@ -114,6 +114,7 @@ function EditEduList(props) {
     return (
         <>
             <Container>
+                <hr/>
                 <Form
                     onSubmit = {modifyEducation}
                 >
@@ -226,6 +227,7 @@ function RegisterEduList(props) {
 
     return (
             <Container>
+                <hr/>
                 <Form
                     onSubmit = {registerEducation}
                 >

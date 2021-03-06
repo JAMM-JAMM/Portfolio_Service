@@ -14,6 +14,7 @@ export default function Navi() {
             history.push('/')
         } else {
             alert("You're not logged in yet. Please log in first!");
+            history.push('/login');
         }
     }
 

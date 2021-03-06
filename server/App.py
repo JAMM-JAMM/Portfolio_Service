@@ -157,6 +157,36 @@ def network():
     return jsonify(status = "failure", result = error)
 
 """
+Search API: 사이트에 등록된 사용자들의 포트폴리오 검색
+"""
+parser_search = reqparse.RequestParser()
+parser_search.add_argument('search')
+
+@app.route('/search')
+@jwt_required
+def search():
+    args = parser_search.parse_args()
+    searchName = '%' + args['search'] + '%'
+    sql = "SELECT `id`, `fullname`, `email` FROM `user` WHERE `fullname` LIKE %s"
+    cursor.execute(sql, (searchName, ))
+    result = cursor.fetchall()
+
+    error = None
+
+    if result is None:
+        error = "There is no search name"
+    
+    if error is None:
+        return jsonify(
+            status = "success",
+            result = result
+        )
+    
+    return jsonify(status = "failure", result = error)
+
+
+
+"""
 Portfolio APIs: 내 포트폴리오 보기, 수정, 업로드, 삭제
 
 Education API: 학교이름, 전공 정보, 학위를 입력받아 학력에 대한 정보

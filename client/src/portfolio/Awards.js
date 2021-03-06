@@ -109,6 +109,7 @@ function EditAwardList(props) {
     return (
         <>
             <Container>
+                <hr/>
                 <Form
                     onSubmit = {modifyAward}
                 >
@@ -185,6 +186,7 @@ function RegisterAwardList(props) {
     return (
         <>
             <Container>
+                <hr/>
                 <Form
                     onSubmit = {registerAward}
                 >

@@ -119,6 +119,7 @@ function EditCertificateList(props) {
 
     return (
             <Container>
+                <hr/>
                 <Form
                     onSubmit = {modifyCertificate}
                 >
@@ -207,6 +208,7 @@ function RegisterCertificateList(props) {
 
     return (
             <Container>
+                <hr/>
                 <Form
                     onSubmit = {registerCertificate}
                 >
