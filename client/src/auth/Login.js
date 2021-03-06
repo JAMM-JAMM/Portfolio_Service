@@ -36,7 +36,7 @@ export default function Login() {
         }
 
     return (
-             <div class="login">   
+             <div class="flex-container-auth">   
                 <Router>
                     <Container fluid className={"no-gutters mx-0 px-0"}>
                         <Row noGutters={true}>

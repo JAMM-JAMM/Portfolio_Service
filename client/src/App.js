@@ -1,5 +1,6 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './App.css';
 import Main from './auth/Main';
 import Login from './auth/Login';
 import Register from './auth/Register';
@@ -9,7 +10,7 @@ import Network from './portfolio/Network';
 import User from './portfolio/User';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
-function Home({ match }) {
+function Home() {
 
     return (
         <>  

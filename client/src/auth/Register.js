@@ -40,75 +40,77 @@ export default function Register() {
     }
     
     return (
-        <BrowserRouter>
-        <Container className="vh-100">
-            <Row className="h-100">
-                <Col xs={12} className="login">
-                <Row className="justify-content-center">
-                    <Col>
-                    <Col md={{ span: 4, offset: 4 }}>
-                    <h4>
-                        <Badge variant="secondary">Register</Badge>
-                    </h4>
-                    <Form 
-                        onSubmit = {submitRegister}
-                    >
-                        <Form.Group controlId="formBasicFullname">
-                            <Form.Label>Fullname</Form.Label>
-                            <Form.Control 
-                                type="fullname"
-                                placeholder="Enter fullname"
-                                name="fullname"
-                                onChange = {(e) => setFullname(e.target.value)}
-                            />
-                        </Form.Group>
-                        <Form.Group controlId="formBasicEmail">
-                            <Form.Label>Email address</Form.Label>
-                            <Form.Control
-                                type="email"
-                                placeholder="Enter email"
-                                name="email"
-                                onChange = {(e) => setEmail(e.target.value)}
-                            />
-                            <Form.Text className="text-muted">
-                                Check your email.
-                            </Form.Text>
-                        </Form.Group>
-                        <Form.Group controlId="formBasicPassword">
-                            <Form.Label>Password</Form.Label>
-                            <Form.Control
-                                type="password"
-                                placeholder="Enter password"
-                                name="password"
-                                onChange = {function(e) {
-                                    setPassword(e.target.value);
-                                }}
-                            />
-                        </Form.Group>
-                        <Form.Group controlId="formBasicConfirmPassword">
-                            <Form.Label>Confirm Password</Form.Label>
-                            <Form.Control
-                                type="password"
-                                placeholder="Enter password"
-                                name="confirm_password"
-                                onChange = {function(e) {
-                                    setConfirmPassword(e.target.value);
-                                }}
-                            />
-                            <Form.Text className="text-muted">
-                                Check your password.
-                            </Form.Text>
-                        </Form.Group>
-                        <Button variant="primary" type="submit">
-                            Register
-                        </Button>
-                    </Form>
-                    </Col>
-                    </Col>
-                </Row>
-                </Col>
-            </Row>
-        </Container>
-        </BrowserRouter>
+            <div class="flex-container-auth">
+                <BrowserRouter>
+                    <Container fluid className={"no-gutters mx-0 px-0"}>
+                        <Row className="h-100">
+                            <Col xs={12} className="login">
+                            <Row className="justify-content-center">
+                                <Col>
+                                <Col md={{ span: 4, offset: 4 }}>
+                                <h4>
+                                    <Badge variant="secondary">Register</Badge>
+                                </h4>
+                                <Form 
+                                    onSubmit = {submitRegister}
+                                >
+                                    <Form.Group controlId="formBasicFullname">
+                                        <Form.Label>Fullname</Form.Label>
+                                        <Form.Control 
+                                            type="fullname"
+                                            placeholder="Enter fullname"
+                                            name="fullname"
+                                            onChange = {(e) => setFullname(e.target.value)}
+                                        />
+                                    </Form.Group>
+                                    <Form.Group controlId="formBasicEmail">
+                                        <Form.Label>Email address</Form.Label>
+                                        <Form.Control
+                                            type="email"
+                                            placeholder="Enter email"
+                                            name="email"
+                                            onChange = {(e) => setEmail(e.target.value)}
+                                        />
+                                        <Form.Text className="text-muted">
+                                            Check your email.
+                                        </Form.Text>
+                                    </Form.Group>
+                                    <Form.Group controlId="formBasicPassword">
+                                        <Form.Label>Password</Form.Label>
+                                        <Form.Control
+                                            type="password"
+                                            placeholder="Enter password"
+                                            name="password"
+                                            onChange = {function(e) {
+                                                setPassword(e.target.value);
+                                            }}
+                                        />
+                                    </Form.Group>
+                                    <Form.Group controlId="formBasicConfirmPassword">
+                                        <Form.Label>Confirm Password</Form.Label>
+                                        <Form.Control
+                                            type="password"
+                                            placeholder="Enter password"
+                                            name="confirm_password"
+                                            onChange = {function(e) {
+                                                setConfirmPassword(e.target.value);
+                                            }}
+                                        />
+                                        <Form.Text className="text-muted">
+                                            Check your password.
+                                        </Form.Text>
+                                    </Form.Group>
+                                    <Button variant="primary" type="submit">
+                                        Register
+                                    </Button>
+                                </Form>
+                                </Col>
+                                </Col>
+                            </Row>
+                            </Col>
+                        </Row>
+                    </Container>
+                </BrowserRouter>
+            </div>
     )
 }

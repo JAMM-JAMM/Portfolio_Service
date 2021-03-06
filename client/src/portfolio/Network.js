@@ -85,39 +85,42 @@ export default function Network() {
     }
 
     return (
-        <Container>
-                { isLogin ?
-                    <h4>
-                        <Badge variant="secondary">network</Badge>
-                    </h4>
-                : <Login />}
-                <br/>
-                <ButtonGroup variant="light">
-                    <Button
-                        variant="outline-secondary"
-                        size="sm"
-                        type="button"
-                        onClick={showUsers}
-                    >
-                        show
-                    </Button>
-                    <Button
-                        variant="outline-secondary"
-                        size="sm"
-                        type="button"
-                    >
-                        search
-                    </Button>
-                </ButtonGroup>
-                {
-                    userPortfolio.map((user) => (
-                        <div className="col-sm-8" style={{ 'marginBottom' : '10px' }} key={user.toString()}>
-                            <PortfolioList 
-                                user={user}
-                            />
-                        </div>
-                    ))
-                }
-        </Container>
+            <div>
+                <Container>
+                        { isLogin ?
+                            <h4>
+                                <Badge variant="secondary">network</Badge>
+                            </h4>
+                        : <Login />}
+                        <br/>
+                        <ButtonGroup variant="light">
+                            <Button
+                                variant="outline-secondary"
+                                size="sm"
+                                type="button"
+                                onClick={showUsers}
+                            >
+                                show
+                            </Button>
+                            <Button
+                                variant="outline-secondary"
+                                size="sm"
+                                type="button"
+                            >
+                                search
+                            </Button>
+                        </ButtonGroup>
+                        <hr />
+                        {
+                            userPortfolio.map((user) => (
+                                <div className="col-sm-8" style={{ 'marginBottom' : '10px' }} key={user.toString()}>
+                                    <PortfolioList 
+                                        user={user}
+                                    />
+                                </div>
+                            ))
+                        }
+                </Container>
+            </div>
     )
 }

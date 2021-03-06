@@ -33,12 +33,15 @@ export default function Portfolio() {
                 <Col md={8}>
                     <Education />
                 </Col>
+                <hr />
                 <Col md={8}>
                     <Awards />
                 </Col>
+                <hr />
                 <Col md={8}>
                     <Project />
                 </Col>
+                <hr />
                 <Col md={8}>
                     <Certificate />
                 </Col>
