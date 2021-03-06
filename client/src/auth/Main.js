@@ -6,7 +6,7 @@ export default function Main() {
 
     return (
         <>
-            <div class="flex-container-main">
+            <div className="flex-container-main">
                 Main
             </div>
         </>

@@ -12,31 +12,36 @@ export default function Login() {
     const authUrl = "http://localhost:5000";
     const history = useHistory();
 
-    const submitLogin = async (e) => {
+    const submitLogin = (e) => {
         e.preventDefault();
-        let form = new FormData();
-        form.append('email', email);
-        form.append('password', password);
-        axios.post(authUrl+"/auth/login", form)
-            .then( response => {
-                console.log(response);
-                if (response.data.status === "success") {
+        if (!access_token) {
+            let form = new FormData();
+            form.append('email', email);
+            form.append('password', password);
+            axios.post(authUrl+"/auth/login", form)
+                .then( response => {
                     console.log(response);
-                    alert("Login Success, Welcome Racer Portfolio Service!");
-                    localStorage.setItem('access_token', response.data.result.access_token);
-                    localStorage.setItem('email', response.data.result.email);
-                    history.push('/')
-                } else {
-                    alert(response.data.result.error);
-                }
-            })
-            .catch( error => {
-                console.log("error: ", error);
-            })
+                    if (response.data.status === "success") {
+                        console.log(response);
+                        alert("Login Success, Welcome Racer Portfolio Service!");
+                        localStorage.setItem('access_token', response.data.result.access_token);
+                        localStorage.setItem('email', response.data.result.email);
+                        history.push('/')
+                    } else {
+                        alert(response.data.result.error);
+                    }
+                })
+                .catch( error => {
+                    console.log("error: ", error);
+                })
+            } else {
+                alert('You\'re already logged in!');
+                history.push('/')
+            }
         }
 
     return (
-             <div class="flex-container-auth">   
+             <div className="flex-container-auth">   
                 <Router>
                     <Container fluid className={"no-gutters mx-0 px-0"}>
                         <Row noGutters={true}>
