@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Login from '../auth/Login';
-import { Button, Badge, ButtonGroup, Row, Col, Container, Card } from 'react-bootstrap';
+import { Button, Badge, ButtonGroup, Row, Col, Form, Container, Card } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 
 // https://gongbu-ing.tistory.com/45
@@ -45,9 +45,12 @@ function PortfolioList(props) {
 }
 
 export default function Network() {
+    const [mode, setMode] = useState('');
     const [isLogin, setIsLogin] = useState(false);
     const [userEmail, setUserEmail] = useState('');
     const [userPortfolio, setUserPortfolio] = useState([]);
+    const [searchUser, setSearchUser] = useState('');
+    const [searchData, setSearchData] = useState([]);
 
     useEffect(() => {
         axios.get('http://localhost:5000/protected', {
@@ -77,6 +80,31 @@ export default function Network() {
             if (response.data.status === "success") {
                 console.log(response);
                 setUserPortfolio(response.data.result);
+                setMode("show")
+            }
+        })
+        .catch( error => {
+            console.log("error: ", error);
+        })
+    }
+
+    const searchUsers = (e) => {
+        e.preventDefault();
+        axios.get(url+'/search', {
+            headers: {
+                Authorization: `Bearer ${access_token}`
+            },
+            params: {
+                search: searchUser
+            }
+        })
+        .then( response => {
+            if (response.data.status === "success") {
+                console.log(response);
+                setSearchData(response.data.result)
+                setMode("search")
+            } else if (response.data.status === "failure") {
+                alert(response.data.result)
             }
         })
         .catch( error => {
@@ -93,26 +121,46 @@ export default function Network() {
                             </h4>
                         : <Login />}
                         <br/>
-                        <ButtonGroup variant="light">
-                            <Button
-                                variant="outline-secondary"
-                                size="sm"
-                                type="button"
-                                onClick={showUsers}
-                            >
-                                show
-                            </Button>
-                            <Button
-                                variant="outline-secondary"
-                                size="sm"
-                                type="button"
-                            >
-                                search
-                            </Button>
-                        </ButtonGroup>
+                        <Form onSubmit={searchUsers}>
+                                <Button
+                                    className = "mb-2"
+                                    variant="outline-secondary"
+                                    size="sm"
+                                    type="button"
+                                    onClick={showUsers}
+                                >
+                                    show
+                                </Button>
+                                <hr/>
+                                <Form.Group controlId="formSearch">
+                                    <Form.Control 
+                                        column sm={2}
+                                        type="search"
+                                        placeholder="Search User Name"
+                                        name="search"
+                                        onChange = {(e) => setSearchUser(e.target.value)}
+                                    />
+                                </Form.Group>{' '}
+                                <Button
+                                    variant="outline-secondary"
+                                    type="submit"
+                                    size="sm"
+                                >
+                                    search
+                                </Button>
+                        </Form>
                         <hr />
-                        {
+                        { mode === 'show' &&
                             userPortfolio.map((user) => (
+                                <div className="col-sm-8" style={{ 'marginBottom' : '10px' }} key={user.toString()}>
+                                    <PortfolioList 
+                                        user={user}
+                                    />
+                                </div>
+                            ))
+                        }
+                        { mode === 'search' &&
+                            searchData.map((user) => (
                                 <div className="col-sm-8" style={{ 'marginBottom' : '10px' }} key={user.toString()}>
                                     <PortfolioList 
                                         user={user}
