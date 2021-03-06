@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Login from '../auth/Login';
-import { Button, Badge, ButtonGroup, Row, Col, Form, Container, Card } from 'react-bootstrap';
+import { Button, Badge, CardDeck, Row, Jumbotron, Col, Form, Container, Card } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 
 // https://gongbu-ing.tistory.com/45
@@ -29,17 +29,14 @@ function PortfolioList(props) {
     return (
         <>
             <br/>
-            <Row>
-                <Col>
-                <Card>
-                    <Card.Header>Elicer</Card.Header>
-                    <Card.Body>
-                        <Card.Title>{user[1]}</Card.Title>
-                        <Card.Link onClick={gotoUserPortfolio}>User Portfolio Link</Card.Link>
-                    </Card.Body>
-                </Card>
-                </Col>
-            </Row>
+            <Card style = {{ width: '20rem'}}>
+                <Card.Img variant="top" src="image/notebook.jpg"/>
+                <Card.Header>Elicer</Card.Header>
+                <Card.Body>
+                    <Card.Title>{user[1]}</Card.Title>
+                    <Card.Link onClick={gotoUserPortfolio}>User Portfolio Link</Card.Link>
+                </Card.Body>
+            </Card>
         </>
     )
 }
@@ -115,6 +112,13 @@ export default function Network() {
     return (
             <div>
                 <Container>
+                    <Col>
+                        <Jumbotron>
+                            <h2>Network page</h2><br/>
+                            <h5>See the portfolio of users on this page.</h5>
+                            <h5>Also, search for a user's name to view their portfolio</h5>
+                        </Jumbotron>
+                    </Col>
                         { isLogin ?
                             <h4>
                                 <Badge variant="secondary">network</Badge>
@@ -153,18 +157,22 @@ export default function Network() {
                         { mode === 'show' &&
                             userPortfolio.map((user) => (
                                 <div className="col-sm-8" style={{ 'marginBottom' : '10px' }} key={user.toString()}>
-                                    <PortfolioList 
-                                        user={user}
-                                    />
+                                    <CardDeck>
+                                        <PortfolioList 
+                                            user={user}
+                                        />
+                                    </CardDeck>
                                 </div>
                             ))
                         }
                         { mode === 'search' &&
                             searchData.map((user) => (
                                 <div className="col-sm-8" style={{ 'marginBottom' : '10px' }} key={user.toString()}>
-                                    <PortfolioList 
-                                        user={user}
-                                    />
+                                    <CardDeck>
+                                        <PortfolioList 
+                                            user={user}
+                                        />
+                                    </CardDeck>
                                 </div>
                             ))
                         }

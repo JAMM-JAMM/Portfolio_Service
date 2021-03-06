@@ -43,7 +43,7 @@ export default function Login() {
     return (
              <div className="flex-container-auth">   
                 <Router>
-                    <Container fluid className={"no-gutters mx-0 px-0"}>
+                    <Container fluid >
                         <Row noGutters={true}>
                             <Col xs={12}>
                             <Row className="justify-content-center">
