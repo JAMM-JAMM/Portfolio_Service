@@ -111,47 +111,45 @@ export default function Network() {
 
     return (
             <div>
-                <Container>
-                    <Col>
-                        <Jumbotron>
-                            <h2>Network page</h2><br/>
-                            <h5>See the portfolio of users on this page.</h5>
-                            <h5>Also, search for a user's name to view their portfolio</h5>
-                        </Jumbotron>
-                    </Col>
-                        { isLogin ?
-                            <h4>
-                                <Badge variant="secondary">network</Badge>
-                            </h4>
-                        : <Login />}
-                        <br/>
+                { isLogin ?
+                    <Container>
+                        <Col>
+                            <Jumbotron>
+                                <h2>Network page</h2><br/>
+                                <h5>See the portfolio of users on this page.</h5>
+                                <h5>Also, search for a user's name to view their portfolio</h5>
+                            </Jumbotron>
+                        </Col>
+                        <h4>
+                            <Badge variant="secondary">network</Badge>
+                        </h4>
                         <Form onSubmit={searchUsers}>
-                                <Button
-                                    className = "mb-2"
-                                    variant="outline-secondary"
-                                    size="sm"
-                                    type="button"
-                                    onClick={showUsers}
-                                >
-                                    show
-                                </Button>
-                                <hr/>
-                                <Form.Group controlId="formSearch">
-                                    <Form.Control 
-                                        column sm={2}
-                                        type="search"
-                                        placeholder="Search User Name"
-                                        name="search"
-                                        onChange = {(e) => setSearchUser(e.target.value)}
-                                    />
-                                </Form.Group>{' '}
-                                <Button
-                                    variant="outline-secondary"
-                                    type="submit"
-                                    size="sm"
-                                >
-                                    search
-                                </Button>
+                            <Button
+                                className = "mb-2"
+                                variant="outline-secondary"
+                                size="sm"
+                                type="button"
+                                onClick={showUsers}
+                            >
+                                show
+                            </Button>
+                            <hr/>
+                            <Form.Group controlId="formSearch">
+                                <Form.Control 
+                                    column sm={2}
+                                    type="search"
+                                    placeholder="Search User Name"
+                                    name="search"
+                                    onChange = {(e) => setSearchUser(e.target.value)}
+                                />
+                            </Form.Group>{' '}
+                            <Button
+                                variant="outline-secondary"
+                                type="submit"
+                                size="sm"
+                            >
+                                search
+                            </Button>
                         </Form>
                         <hr />
                         { mode === 'show' &&
@@ -176,7 +174,8 @@ export default function Network() {
                                 </div>
                             ))
                         }
-                </Container>
+                    </Container>
+                : <Login />}
             </div>
     )
 }
