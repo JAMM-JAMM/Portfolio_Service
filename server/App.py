@@ -206,7 +206,8 @@ class Education(Resource):
         university = request.form['university']
         major = request.form['major']
         degree = request.form['degree']
-        
+        args = parser_edu.parse_args()
+
         error = None
 
         if not university:
@@ -222,14 +223,14 @@ class Education(Resource):
             sql = "INSERT INTO `education` (`user_email`, `university`, `major`, `degree`) VALUES (%s, %s, %s, %s)"
             cursor.execute(sql, (user_email, university, major, degree))
             db.commit()
+
+            sql = "SELECT `id`, `university`, `major`, `degree` FROM `education` WHERE `user_email` = %s"
+            cursor.execute(sql, (args['user_email'], ))
+            result = cursor.fetchall()
+
             return jsonify(
                 status = "success", 
-                result = {
-                    'user_email': user_email,
-                    'unviversity': university,
-                    'major': major,
-                    'degree': degree
-                    }
+                result = result
                 )
         else:
             return jsonify(status = "failure", result = {"message": error})
@@ -277,31 +278,34 @@ class Education(Resource):
             sql = "UPDATE `education` SET `university` = %s, `major` = %s, `degree` = %s WHERE `id` = %s"
             cursor.execute(sql, (university, major, degree, args['data_id']))
             db.commit()
+            
+            sql = "SELECT `id`, `university`, `major`, `degree` FROM `education` WHERE `user_email` = %s"
+            cursor.execute(sql, (args['user_email'], ))
+            result = cursor.fetchall()
+
             return jsonify(
-                status = "success",
-                result = {
-                    'data_id': args['data_id'],
-                    'university': university,
-                    'major': major,
-                    'degree': degree
-                }
-            )
+                status = "success", 
+                result = result
+                )
         else:
             return jsonify(status = "failure", result = {"message": error})
 
     @jwt_required
     def delete(self):
         args = parser_edu.parse_args()
-        email = get_jwt_identity()
+        
         sql = "DELETE FROM `education` WHERE `id` = %s"
         cursor.execute(sql, (args['data_id'],))
         db.commit()
+
+        sql = "SELECT `id`, `university`, `major`, `degree` FROM `education` WHERE `user_email` = %s"
+        cursor.execute(sql, (args['user_email'], ))
+        result = cursor.fetchall()
+
         return jsonify(
-            status = "success",
-            result = {
-                'deleted_id': args['data_id']
-            }
-        )
+            status = "success", 
+            result = result
+            )
 
 parser_award = reqparse.RequestParser()
 parser_award.add_argument('user_email')
@@ -327,14 +331,16 @@ class Awards(Resource):
             sql = "INSERT INTO `awards` (`user_email`,`awardName`, `awardDesc`) VALUES (%s, %s, %s)"
             cursor.execute(sql, (user_email, awardName, awardDesc))
             db.commit()
+
+            sql = "SELECT `id`, `awardName`, `awardDesc` FROM `awards` WHERE `user_email` = %s"
+            cursor.execute(sql, (user_email, ))
+            result = cursor.fetchall()
+
             return jsonify(
-                status = "success",
-                result = {
-                    'user_email': user_email,
-                    'awardName': awardName,
-                    'awardDesc': awardDesc
-                }
-            )
+                status = "success", 
+                result = result
+                )
+            
         else:
             return jsonify(status = "failure", result = {"message": error})
     
@@ -376,14 +382,16 @@ class Awards(Resource):
             sql = "UPDATE `awards` SET `awardName` = %s, `awardDesc` = %s WHERE `id` = %s"
             cursor.execute(sql, (awardName, awardDesc, args['data_id']))
             db.commit()
+            
+            sql = "SELECT `id`, `awardName`, `awardDesc` FROM `awards` WHERE `user_email` = %s"
+            cursor.execute(sql, (args['user_email'], ))
+            result = cursor.fetchall()
+
             return jsonify(
-                status = "success",
-                result = {
-                    'data_id': args['data_id'],
-                    'awardName': awardName,
-                    'awardDesc': awardDesc
-                }
-            )
+                status = "success", 
+                result = result
+                )
+
         else:
             return jsonify(status = "failure", result = {"message": error})
 
@@ -393,12 +401,15 @@ class Awards(Resource):
         sql = "DELETE FROM `awards` WHERE `id` = %s"
         cursor.execute(sql, (args['data_id'], ))
         db.commit()
+        
+        sql = "SELECT `id`, `awardName`, `awardDesc` FROM `awards` WHERE `user_email` = %s"
+        cursor.execute(sql, (args['user_email'], ))
+        result = cursor.fetchall()
+
         return jsonify(
-            status = "success",
-            result = {
-                'delete_id': args['data_id']
-            }
-        )
+            status = "success", 
+            result = result
+            )
 
 parser_project = reqparse.RequestParser()
 parser_project.add_argument('user_email')
@@ -430,16 +441,13 @@ class Project(Resource):
             sql = "INSERT INTO `project` (`user_email`, `projectName`, `projectDesc`, `projectStart`, `projectEnd`) VALUES (%s, %s, %s, %s, %s)"
             cursor.execute(sql, (user_email, projectName, projectDesc, projectStart, projectEnd))
             db.commit()
-            return jsonify(
-                status = "success",
-                result = {
-                    'user_email': user_email,
-                    'projectName': projectName,
-                    'projectDesc': projectDesc,
-                    'projectStart': projectStart,
-                    'projectEnd': projectEnd
-                    }
-                )
+            
+            sql = "SELECT `id`, `projectName`, `projectDesc`, `projectStart`, `projectEnd` FROM `project` WHERE `user_email` = %s"
+            cursor.execute(sql, (user_email, ))
+            result = cursor.fetchall()
+
+            return jsonify(status = "success", result = result)
+
         else:
             return jsonify(status = "failure", result = {"message": error})
 
@@ -487,16 +495,13 @@ class Project(Resource):
             sql = "UPDATE `project` SET `projectName` = %s, `projectDesc` = %s, `projectStart` = %s, `projectEnd` = %s WHERE `id` = %s"
             cursor.execute(sql, (projectName, projectDesc, projectStart, projectEnd, args['data_id']))
             db.commit()
-            return jsonify(
-                status = "success",
-                result = {
-                    'data_id': args['data_id'],
-                    'projectName': projectName,
-                    'projectDesc': projectDesc,
-                    'projectStart': projectStart,
-                    'projectEnd': projectEnd
-                    }
-                )
+            
+            sql = "SELECT `id`, `projectName`, `projectDesc`, `projectStart`, `projectEnd` FROM `project` WHERE `user_email` = %s"
+            cursor.execute(sql, (args['user_email'], ))
+            result = cursor.fetchall()
+
+            return jsonify(status = "success", result = result)
+
         else:
             return jsonify(status = "failure", result = {"message": error})
     
@@ -506,12 +511,12 @@ class Project(Resource):
         sql = "DELETE FROM `project` WHERE `id` = %s"
         cursor.execute(sql, (args['data_id'], ))
         db.commit()
-        return jsonify(
-            status = "success",
-            result = {
-                'data_id': args['data_id']
-            }
-        )
+        
+        sql = "SELECT `id`, `projectName`, `projectDesc`, `projectStart`, `projectEnd` FROM `project` WHERE `user_email` = %s"
+        cursor.execute(sql, (args['user_email'], ))
+        result = cursor.fetchall()
+
+        return jsonify(status = "success", result = result)
 
 parser_certificate = reqparse.RequestParser()
 parser_certificate.add_argument('user_email');
@@ -539,15 +544,13 @@ class Certificate(Resource):
             sql = "INSERT INTO `certificate` (`user_email`, `certificateName`, `certificateProvider`, `certificateIssueDate`) VALUES (%s, %s, %s, %s)"
             cursor.execute(sql, (user_email, certificateName, certificateProvider, certificateIssueDate))
             db.commit()
-            return jsonify(
-                status = "success",
-                result = {
-                    'user_email': user_email,
-                    'certificateName': certificateName,
-                    'certificateProvider': certificateProvider,
-                    'certificateIssueDate': certificateIssueDate
-                }
-            )
+            
+            sql = "SELECT `id`, `certificateName`, `certificateProvider`, `certificateIssueDate` FROM `certificate` WHERE `user_email` = %s"
+            cursor.execute(sql, (user_email, ))
+            result = cursor.fetchall()
+            
+            return jsonify(status = "success", result = result)
+
         else:
             return jsonify(status = "failure", result = {"message": error})
     
@@ -590,15 +593,13 @@ class Certificate(Resource):
             sql = "UPDATE`certificate` SET `certificateName` = %s, `certificateProvider` = %s, `certificateIssueDate` = %s WHERE `id` = %s"
             cursor.execute(sql, (certificateName, certificateProvider, certificateIssueDate, args['data_id']))
             db.commit()
-            return jsonify(
-                status = "success",
-                result = {
-                    'data_id': args['data_id'],
-                    'certificateName': certificateName,
-                    'certificateProvider': certificateProvider,
-                    'certificateIssueDate': certificateIssueDate
-                }
-            )
+            
+            sql = "SELECT `id`, `certificateName`, `certificateProvider`, `certificateIssueDate` FROM `certificate` WHERE `user_email` = %s"
+            cursor.execute(sql, (args['user_email'], ))
+            result = cursor.fetchall()
+            
+            return jsonify(status = "success", result = result)
+
         else:
             return jsonify(status = "failure", result = {"message": error})
     
@@ -607,12 +608,13 @@ class Certificate(Resource):
         sql = "DELETE FROM `certificate` WHERE `id` = %s"
         cursor.execute(sql, (args['data_id'], ))
         db.commit()
-        return jsonify(
-            status = "success",
-            result = {
-                'data_id': args['data_id']
-            }
-        )
+        
+        sql = "SELECT `id`, `certificateName`, `certificateProvider`, `certificateIssueDate` FROM `certificate` WHERE `user_email` = %s"
+        cursor.execute(sql, (args['user_email'], ))
+        result = cursor.fetchall()
+        
+        return jsonify(status = "success", result = result)
+
 
 api.add_resource(Certificate, '/portfolio/certificate')
 api.add_resource(Project, '/portfolio/project')

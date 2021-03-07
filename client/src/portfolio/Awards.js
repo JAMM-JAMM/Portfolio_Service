@@ -19,17 +19,20 @@ function AwardList(props) {
     const data = props.data;
     const data_id = data[0];
 
-    const deleteAward = () => {
+    const deleteAward = (e) => {
+        e.preventDefault();
         axios.delete(url+'/portfolio/awards', {
             headers: {
                 Authorization: `Bearer ${access_token}`
             },
             params: {
-                data_id: data_id
+                data_id: data_id,
+                user_email: email
             } 
         })
         .then( response => {
             console.log(response);
+            props.onChangeData(response.data.result)
             alert("Delete Success!");
         })
         .catch( error => {
@@ -91,11 +94,15 @@ function EditAwardList(props) {
         axios.put(url+'/portfolio/awards', putAwardData, {
             headers: {
                 Authorization: `Bearer ${access_token}`
+            },
+            params: {
+                user_email: email
             }
         })
         .then( response => {
             if (response.data.status === "success") {
                 console.log(response);
+                props.onChangeData(response.data.result)
                 alert("Success modification for awards info!");
                 props.onChangeEdit(false);
             } else {
@@ -172,6 +179,7 @@ function RegisterAwardList(props) {
         .then( response => {
             if (response.data.status === "success") {
                 console.log(response);
+                props.onChangeData(response.data.result);
                 alert("Success registragion for awards info!");
                 props.onChangeRegister(false);
             } else {
@@ -233,7 +241,8 @@ export default function Awards() {
     const [register, setRegister] = useState(false);
     const [dataId, setDataId] = useState();
 
-    const showAward = () => {
+    const showAward = (e) => {
+        e.preventDefault();
         axios.get(url+'/portfolio/awards', {
             headers: {
                 Authorization: `Bearer ${access_token}`
@@ -286,6 +295,9 @@ export default function Awards() {
                         onChangeRegister={function(_mode) {
                             setRegister(_mode);
                         }}
+                        onChangeData={function(_data) {
+                            setAwardData(_data)
+                        }}
                     />
                 : null}
                 {
@@ -299,6 +311,9 @@ export default function Awards() {
                                 onChangeEditId={function(_editId) {
                                     setDataId(_editId)
                                 }}
+                                onChangeData={function(_data) {
+                                    setAwardData(_data)
+                                }}
                             />
                         </ol>
                     ))
@@ -308,6 +323,9 @@ export default function Awards() {
                         dataId={dataId}
                         onChangeEdit={function(_mode) {
                             setEdit(_mode);
+                        }}
+                        onChangeData={function(_data) {
+                            setAwardData(_data)
                         }}
                     />
                 : null }

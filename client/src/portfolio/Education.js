@@ -19,17 +19,20 @@ function EduList(props) {
     const data = props.data;
     const data_id = data[0]
     
-    const deleteEdu = () => {
+    const deleteEdu = (e) => {
+        e.preventDefault();
         axios.delete(eduUrl+'/portfolio/education', {
             headers: {
                 Authorization: `Bearer ${access_token}`
             },
             params: {
-                data_id: data_id
+                data_id: data_id,
+                user_email: email
             }
         })
         .then( response => {
             console.log(response);
+            props.onChangeData(response.data.result)
             alert("Delete Success!");
         })
         .catch( error => {
@@ -96,11 +99,15 @@ function EditEduList(props) {
         axios.put(eduUrl+'/portfolio/education', putEduData, {
             headers: {
                 Authorization: `Bearer ${access_token}`
+            },
+            params: {
+                user_email: email
             }
         })
         .then( response => {
             if (response.data.status === "success") {
                 console.log(response);
+                props.onChangeData(response.data.result);
                 alert("Success modification for academic background info!");
                 props.onChangeEdit(false);
             } else {
@@ -208,11 +215,15 @@ function RegisterEduList(props) {
         axios.post(eduUrl+'/portfolio/education', postEduData, {
             headers: {
                 Authorization: `Bearer ${access_token}`
+            },
+            params: {
+                user_email: email
             }
         })
         .then( response => {
             if (response.data.status === "success") {
                 console.log(response);
+                props.onChangeData(response.data.result);
                 alert("Success registragion for academic background info!");
                 props.onChangeRegister(false);
             } else {
@@ -307,9 +318,8 @@ export default function Education() {
     const [register, setRegister] = useState(false);
     const [dataId, setDataId] = useState();
 
-
-
-    const showEdu = () => {
+    const showEdu = (e) => {
+        e.preventDefault();
         axios.get(eduUrl+'/portfolio/education', {
             headers: {
                 Authorization: `Bearer ${access_token}`
@@ -362,6 +372,9 @@ export default function Education() {
                             onChangeRegister={function(_mode) {
                                 setRegister(_mode)
                             }}
+                            onChangeData={function(_data) {
+                                setEduData(_data)
+                            }}
                         />
                     : null }
                     {
@@ -375,6 +388,9 @@ export default function Education() {
                                     onChangeEditId={function(_editId) {
                                         setDataId(_editId);
                                     }}
+                                    onChangeData={function(_data) {
+                                        setEduData(_data)
+                                    }}
                                 />
                             </ol>
                         ))
@@ -384,6 +400,9 @@ export default function Education() {
                             dataId = {dataId}
                             onChangeEdit={function(_mode) {
                                 setEdit(_mode);
+                            }}
+                            onChangeData={function(_data) {
+                                setEduData(_data)
                             }}
                         />
                     : null }

@@ -23,17 +23,20 @@ function ProjectList(props) {
     const data = props.data;
     const data_id = data[0]
 
-    const deleteProject = () => {
+    const deleteProject = (e) => {
+        e.preventDefault();
         axios.delete(url+'/portfolio/project', {
             headers: {
                 Authorization: `Bearer ${access_token}`
             },
             params: {
-                data_id: data_id
+                data_id: data_id,
+                user_email: email
             }
         })
         .then( response => {
             console.log(response);
+            props.onChangeData(response.data.result)
             alert("Delete Success!");
         })
         .catch( error => {
@@ -103,11 +106,14 @@ function EditProjectList(props) {
         axios.put(url+'/portfolio/project', putProjectData, {
             headers: {
                 Authorization: `Bearer ${access_token}`
+            }, params: {
+                user_email: email
             }
         })
         .then( response => {
             if (response.data.status === "success") {
                 console.log(response);
+                props.onChangeData(response.data.result);
                 alert("Success modification for academic background info!");
                 props.onChangeEdit(false);
             } else {
@@ -211,6 +217,7 @@ function RegisterProjectList(props) {
         .then( response => {
             if (response.data.status === "success") {
                 console.log(response);
+                props.onChangeData(response.data.result);
                 alert("Success registragion for project info!");
                 props.onChangeRegister(false);
             } else {
@@ -347,6 +354,9 @@ export default function Project() {
                         onChangeRegister={function(_mode) {
                             setRegister(_mode)
                         }}
+                        onChangeData={function(_data) {
+                            setProjectData(_data)
+                        }}
                     />
                 : null }
                 {
@@ -360,6 +370,9 @@ export default function Project() {
                                 onChangeEditId={function(_editId) {
                                     setDataId(_editId);
                                 }}
+                                onChangeData={function(_data) {
+                                    setProjectData(_data)
+                                }}
                             />
                         </ol>
                     ))
@@ -369,6 +382,9 @@ export default function Project() {
                         dataId={dataId}
                         onChangeEdit={function(_mode) {
                             setEdit(_mode);
+                        }}
+                        onChangeData={function(_data) {
+                            setProjectData(_data)
                         }}
                     />
                 : null }

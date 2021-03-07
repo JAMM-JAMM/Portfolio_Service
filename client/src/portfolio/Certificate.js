@@ -29,11 +29,13 @@ function CertificateList(props) {
                 Authorization: `Bearer ${access_token}`
             },
             params: {
-                data_id: data_id
+                data_id: data_id,
+                user_email: email
             }
         })
         .then( response => {
             console.log(response);
+            props.onChangeData(response.data.result)
             alert("Delete Success!");
         })
         .catch( error => {
@@ -101,11 +103,14 @@ function EditCertificateList(props) {
         axios.put(url+'/portfolio/certificate', putCertificateData, {
             headers: {
                 Authorization: `Bearer ${access_token}`
+            }, params: {
+                user_email: email
             }
         })
         .then( response => {
             if (response.data.status === "success") {
                 console.log(response);
+                props.onChangeData(response.data.result)
                 alert("Success modification for certificate info!");
                 props.onChangeEdit(false);
             } else {
@@ -195,6 +200,7 @@ function RegisterCertificateList(props) {
         .then( response => {
             if (response.data.status === "success") {
                 console.log(response);
+                props.onChangeData(response.data.result)
                 alert("Success registragion for certificate info!");
                 props.onChangeRegister(false);
             } else {
@@ -319,6 +325,9 @@ export default function Certificate() {
                         onChangeRegister={function(_mode) {
                             setRegister(_mode)
                         }}
+                        onChangeData={function(_data) {
+                            setCertificateData(_data)
+                        }}
                     />
                 : null }
                 {
@@ -332,6 +341,9 @@ export default function Certificate() {
                                 onChangeEditId={function(_editId) {
                                     setDataId(_editId);
                                 }}
+                                onChangeData={function(_data) {
+                                    setCertificateData(_data)
+                                }}
                             />
                         </ol>
                     ))
@@ -341,6 +353,9 @@ export default function Certificate() {
                         dataId={dataId}
                         onChangeEdit={function(_mode) {
                             setEdit(_mode);
+                        }}
+                        onChangeData={function(_data) {
+                            setCertificateData(_data)
                         }}
                     />
                 : null }
