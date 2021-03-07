@@ -126,6 +126,7 @@ export default function User() {
         <>
             <Container>
             <Col>
+            <br/>
                 <Jumbotron>
                     <h2>Elice Racer {userName}'s portfolio</h2><br/>
                     <h5>You cannot modify this portfolio.</h5>
@@ -188,6 +189,7 @@ export default function User() {
                             </Typography>
                             <Typography variant="body1">{data[3]}</Typography>
                         </Paper>
+                        <br/>
                     </div>
                 ))
             }
@@ -210,6 +212,7 @@ export default function User() {
                             </Typography>
                             <Typography variant="body1">{data[2]}</Typography>
                         </Paper>
+                        <br/>
                     </div>
                 ))
             }
@@ -238,6 +241,7 @@ export default function User() {
                             </Typography>
                             <Typography variant="body1">{moment(data[3]).format("YYYY-MM-DD")} ~ {moment(data[4]).format("YYYY-MM-DD")}</Typography>
                         </Paper>
+                        <br/>
                     </div>
                 ))
             }
@@ -264,10 +268,19 @@ export default function User() {
                             </Typography>
                             <Typography variant="body1">{moment(data[3]).format("YYYY-MM-DD")}</Typography>
                         </Paper>
+                        <br/>
                     </div>
                 ))
             }
             </Col>
+            </Row>
+            <hr/>
+            <Row>
+                <Col>
+                    <br/>
+                    <br/>
+                    <br/>
+                </Col>
             </Row>
             </Container>
         </>

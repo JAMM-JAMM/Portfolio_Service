@@ -114,7 +114,6 @@ function EditEduList(props) {
     return (
         <>
             <Container>
-                <hr/>
                 <Form
                     onSubmit = {modifyEducation}
                 >
@@ -232,6 +231,7 @@ function RegisterEduList(props) {
                     onSubmit = {registerEducation}
                 >
                     <Badge variant="secondary">Academic Background Register</Badge>
+                    <br/>
                     <Form.Group as={Row} controlId = "formBasicUniversity">
                         <Form.Label column sm={2}>University</Form.Label>
                         <Col sm={10}>

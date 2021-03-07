@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Form, Row, Col, Button, Container, Badge } from 'react-bootstrap';
 import { BrowserRouter as Router, useHistory } from 'react-router-dom';
@@ -11,6 +11,23 @@ export default function Login() {
 
     const authUrl = "http://localhost:5000";
     const history = useHistory();
+
+    useEffect(() => {
+        axios.get('http://localhost:5000/protected', {
+            headers: {
+                Authorization: `Bearer ${access_token}`
+            }
+        })
+        .then( response => {
+            console.log(response);
+            alert("You\'re already logged in!")
+            history.push('/');
+        })
+        .catch( error => {
+            localStorage.clear();
+            console.log(error);
+        })
+    }, [])
 
     const submitLogin = (e) => {
         e.preventDefault();

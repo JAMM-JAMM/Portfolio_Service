@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Login from '../auth/Login';
-import { Button, Badge, CardDeck, Row, Alert, Jumbotron, Col, Form, Container, Card } from 'react-bootstrap';
+import { Button, Badge, CardDeck, Row, Spinner, Alert, Jumbotron, Col, Form, Container, Card } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 
 // https://gongbu-ing.tistory.com/45
@@ -48,6 +48,7 @@ export default function Network() {
     const [userPortfolio, setUserPortfolio] = useState([]);
     const [searchUser, setSearchUser] = useState('');
     const [searchData, setSearchData] = useState([]);
+    const history = useHistory();
 
     useEffect(() => {
         axios.get('http://localhost:5000/protected', {
@@ -62,7 +63,9 @@ export default function Network() {
         })
         .catch( error => {
             alert('Login, Please!');
+            localStorage.clear();
             console.log(error);
+            history.push('/login')
         })
     }, [])
 
@@ -118,10 +121,11 @@ export default function Network() {
                 { isLogin &&
                     <Container>
                         <Col>
+                        <br/>
                             <Jumbotron>
                                 <h2>Network page</h2><br/>
                                 <h5>See the portfolio of users on this page.</h5>
-                                <h5>Also, search for a user's name to view their portfolio</h5>
+                                <h5>Also, search for user's name to view their portfolio</h5>
                             </Jumbotron>
                         </Col>
                         <h4>
@@ -155,7 +159,7 @@ export default function Network() {
                                 search
                             </Button>
                         </Form>
-                        <hr />
+                        <center>
                         { mode === 'show' &&
                             userPortfolio.map((user) => (
                                 <div className="col-sm-8" style={{ 'marginBottom' : '10px' }} key={user.toString()}>
@@ -178,22 +182,24 @@ export default function Network() {
                                 </div>
                             ))
                         }
+                        </center>
+                        <hr/>
+                        <Row>
+                            <Col>
+                                <br/>
+                                <br/>
+                                <br/>
+                            </Col>
+                        </Row>
                     </Container>   
                 }
                 { !isLogin &&
                     <Container>
                         <br/>
                         <br/>
-                        <Alert variant="danger">
-                            <Alert.Heading>You are not logged in!</Alert.Heading>
-                            <p>
-                                If you want to see the portfolio of other users on this page, please log in first.
-                            </p>
-                            <hr />
-                            <p className="mb-0">
-                                
-                            </p>
-                        </Alert>
+                        <center>
+                        <Spinner animation="border" />
+                        </center>
                     </Container>
                 }
             </div>
