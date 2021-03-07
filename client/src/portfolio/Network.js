@@ -87,26 +87,30 @@ export default function Network() {
 
     const searchUsers = (e) => {
         e.preventDefault();
-        axios.get(url+'/search', {
-            headers: {
-                Authorization: `Bearer ${access_token}`
-            },
-            params: {
-                search: searchUser
-            }
-        })
-        .then( response => {
-            if (response.data.status === "success") {
-                console.log(response);
-                setSearchData(response.data.result)
-                setMode("search")
-            } else if (response.data.status === "failure") {
-                alert(response.data.result)
-            }
-        })
-        .catch( error => {
-            console.log("error: ", error);
-        })
+        if (searchUser.length < 2) {
+            alert("Please enter at least 2 characters.")
+        } else {
+            axios.get(url+'/search', {
+                headers: {
+                    Authorization: `Bearer ${access_token}`
+                },
+                params: {
+                    search: searchUser
+                }
+            })
+            .then( response => {
+                if (response.data.result.length !== 0) {
+                    console.log(response);
+                    setSearchData(response.data.result)
+                    setMode("search")
+                } else if (response.data.result.length === 0) {
+                    alert("There is no search data")
+                }
+            })
+            .catch( error => {
+                console.log("error: ", error);
+            })
+        }
     }
 
     return (
