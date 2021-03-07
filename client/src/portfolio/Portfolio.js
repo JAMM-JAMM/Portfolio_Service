@@ -4,7 +4,7 @@ import Awards from './Awards';
 import Project from './Project';
 import Certificate from './Certificate';
 import Login from '../auth/Login';
-import { Container, Col, Row, Jumbotron } from 'react-bootstrap';
+import { Container, Col, Row, Jumbotron, Alert } from 'react-bootstrap';
 import axios from 'axios';
 
 export default function Portfolio() {
@@ -22,7 +22,7 @@ export default function Portfolio() {
             setUserEmail(response.logged_in_as);
             setIsLogin(true);
         }).catch((error) => {
-            alert('Login, Please!');
+            console.log("error: ", error);
         })
     },[])
 
@@ -60,7 +60,22 @@ export default function Portfolio() {
                 </Col>
                 </Row>
             </Container>
-        : <Login/>}
+        : 
+            <Container>
+                <br/>
+                <br/>
+                <Alert variant="danger">
+                    <Alert.Heading>You are not logged in!</Alert.Heading>
+                    <p>
+                    If you want to modify, register, and delete your portfolio, please log in first.
+                    </p>
+                    <hr />
+                    <p className="mb-0">
+                        
+                    </p>
+                </Alert>
+            </Container>
+        }
         </div>
     )
 }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Login from '../auth/Login';
-import { Button, Badge, CardDeck, Row, Jumbotron, Col, Form, Container, Card } from 'react-bootstrap';
+import { Button, Badge, CardDeck, Row, Alert, Jumbotron, Col, Form, Container, Card } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 
 // https://gongbu-ing.tistory.com/45
@@ -111,7 +111,7 @@ export default function Network() {
 
     return (
             <div>
-                { isLogin ?
+                { isLogin &&
                     <Container>
                         <Col>
                             <Jumbotron>
@@ -174,8 +174,24 @@ export default function Network() {
                                 </div>
                             ))
                         }
+                    </Container>   
+                }
+                { !isLogin &&
+                    <Container>
+                        <br/>
+                        <br/>
+                        <Alert variant="danger">
+                            <Alert.Heading>You are not logged in!</Alert.Heading>
+                            <p>
+                                If you want to see the portfolio of other users on this page, please log in first.
+                            </p>
+                            <hr />
+                            <p className="mb-0">
+                                
+                            </p>
+                        </Alert>
                     </Container>
-                : <Login />}
+                }
             </div>
     )
 }
