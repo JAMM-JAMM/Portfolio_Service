@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Login from '../auth/Login';
-import { Button, Badge, CardDeck, Row, Jumbotron, Col, Form, Container, Card } from 'react-bootstrap';
+import { Button, Badge, CardDeck, Row, Spinner, Alert, Jumbotron, Col, Form, Container, Card } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 
 // https://gongbu-ing.tistory.com/45
@@ -48,6 +48,7 @@ export default function Network() {
     const [userPortfolio, setUserPortfolio] = useState([]);
     const [searchUser, setSearchUser] = useState('');
     const [searchData, setSearchData] = useState([]);
+    const history = useHistory();
 
     useEffect(() => {
         axios.get('http://localhost:5000/protected', {
@@ -62,7 +63,9 @@ export default function Network() {
         })
         .catch( error => {
             alert('Login, Please!');
+            localStorage.clear();
             console.log(error);
+            history.push('/login')
         })
     }, [])
 
@@ -87,73 +90,76 @@ export default function Network() {
 
     const searchUsers = (e) => {
         e.preventDefault();
-        axios.get(url+'/search', {
-            headers: {
-                Authorization: `Bearer ${access_token}`
-            },
-            params: {
-                search: searchUser
-            }
-        })
-        .then( response => {
-            if (response.data.status === "success") {
-                console.log(response);
-                setSearchData(response.data.result)
-                setMode("search")
-            } else if (response.data.status === "failure") {
-                alert(response.data.result)
-            }
-        })
-        .catch( error => {
-            console.log("error: ", error);
-        })
+        if (searchUser.length < 2) {
+            alert("Please enter at least 2 characters.")
+        } else {
+            axios.get(url+'/search', {
+                headers: {
+                    Authorization: `Bearer ${access_token}`
+                },
+                params: {
+                    search: searchUser
+                }
+            })
+            .then( response => {
+                if (response.data.result.length !== 0) {
+                    console.log(response);
+                    setSearchData(response.data.result)
+                    setMode("search")
+                } else if (response.data.result.length === 0) {
+                    alert("There is no search data")
+                }
+            })
+            .catch( error => {
+                console.log("error: ", error);
+            })
+        }
     }
 
     return (
             <div>
-                <Container>
-                    <Col>
-                        <Jumbotron>
-                            <h2>Network page</h2><br/>
-                            <h5>See the portfolio of users on this page.</h5>
-                            <h5>Also, search for a user's name to view their portfolio</h5>
-                        </Jumbotron>
-                    </Col>
-                        { isLogin ?
-                            <h4>
-                                <Badge variant="secondary">network</Badge>
-                            </h4>
-                        : <Login />}
+                { isLogin &&
+                    <Container>
+                        <Col>
                         <br/>
+                            <Jumbotron>
+                                <h2>Network page</h2><br/>
+                                <h5>See the portfolio of users on this page.</h5>
+                                <h5>Also, search for user's name to view their portfolio</h5>
+                            </Jumbotron>
+                        </Col>
+                        <h4>
+                            <Badge variant="secondary">network</Badge>
+                        </h4>
                         <Form onSubmit={searchUsers}>
-                                <Button
-                                    className = "mb-2"
-                                    variant="outline-secondary"
-                                    size="sm"
-                                    type="button"
-                                    onClick={showUsers}
-                                >
-                                    show
-                                </Button>
-                                <hr/>
-                                <Form.Group controlId="formSearch">
-                                    <Form.Control 
-                                        column sm={2}
-                                        type="search"
-                                        placeholder="Search User Name"
-                                        name="search"
-                                        onChange = {(e) => setSearchUser(e.target.value)}
-                                    />
-                                </Form.Group>{' '}
-                                <Button
-                                    variant="outline-secondary"
-                                    type="submit"
-                                    size="sm"
-                                >
-                                    search
-                                </Button>
+                            <Button
+                                className = "mb-2"
+                                variant="outline-secondary"
+                                size="sm"
+                                type="button"
+                                onClick={showUsers}
+                            >
+                                show
+                            </Button>
+                            <hr/>
+                            <Form.Group controlId="formSearch">
+                                <Form.Control 
+                                    column sm={2}
+                                    type="search"
+                                    placeholder="Search User Name"
+                                    name="search"
+                                    onChange = {(e) => setSearchUser(e.target.value)}
+                                />
+                            </Form.Group>{' '}
+                            <Button
+                                variant="outline-secondary"
+                                type="submit"
+                                size="sm"
+                            >
+                                search
+                            </Button>
                         </Form>
-                        <hr />
+                        <center>
                         { mode === 'show' &&
                             userPortfolio.map((user) => (
                                 <div className="col-sm-8" style={{ 'marginBottom' : '10px' }} key={user.toString()}>
@@ -176,7 +182,26 @@ export default function Network() {
                                 </div>
                             ))
                         }
-                </Container>
+                        </center>
+                        <hr/>
+                        <Row>
+                            <Col>
+                                <br/>
+                                <br/>
+                                <br/>
+                            </Col>
+                        </Row>
+                    </Container>   
+                }
+                { !isLogin &&
+                    <Container>
+                        <br/>
+                        <br/>
+                        <center>
+                        <Spinner animation="border" />
+                        </center>
+                    </Container>
+                }
             </div>
     )
 }

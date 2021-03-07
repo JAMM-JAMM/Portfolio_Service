@@ -65,6 +65,13 @@
   width: 100%;
 }
 
+.bottom-nav{
+    margin-bottom: 5px;
+    font-size: 11px;
+    color: #949497;
+
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
