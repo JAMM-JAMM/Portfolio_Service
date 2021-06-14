@@ -1,4 +1,4 @@
-python-env/
-
-
-
+venv/
+.vscode/
+config.py
+__pycache__/
