@@ -18,16 +18,19 @@ from werkzeug.security import generate_password_hash
 
 from flask_cors import CORS
 
+from config import USER, HOST, PORT, DB, PASSWORD, JWT_SECRET_KEY
+
 app = Flask(__name__)
 CORS(app)
 api = Api(app)
 
 
 db = pymysql.connect(
-    user = 'root',
-    host = '127.0.0.1',
-    port = 3306,
-    db = 'web_project',
+    user = USER,
+    host = HOST,
+    port = PORT,
+    db = DB,
+    password = PASSWORD,
     charset = 'utf8',
     autocommit = True
 )
@@ -44,7 +47,7 @@ Logout API : 현재 로그인 된 유저를 로그아웃합니다.
 """
 
 # flask_jwt_extended를 위한 secret_key 설정
-app.config["JWT_SECRET_KEY"] = "super-secret"
+app.config["JWT_SECRET_KEY"] = JWT_SECRET_KEY
 jwt = JWTManager(app)
 
 # 회원가입
