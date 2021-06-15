@@ -44,5 +44,5 @@ create table if not exists certificate(
     certificateIssueDate date not null,
     create_data timestamp default NOW(),
     primary key(id),
-    foreign key (user_email) references `user` (`email`)s
+    foreign key (user_email) references `user` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
