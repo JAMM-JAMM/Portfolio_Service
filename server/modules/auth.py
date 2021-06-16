@@ -71,21 +71,21 @@ def login():
 
         error = None
 
-        sql = 'SELECT email, password FROM user WHERE email = %s'
+        sql = 'SELECT id, email, password FROM user WHERE email = %s'
         cursor.execute(sql, (email,))
         user = cursor.fetchone()
 
         if user is None:
             error = "This email({}) is not registered".format(email)
         
-        elif not (user == None or check_password_hash(user[1], password)):
+        elif not (user == None or check_password_hash(user[2], password)):
             error = 'Incorrect password'
         
         if error is None:
-            access_token = create_access_token(identity=email)
+            access_token = create_access_token(identity=user[0])
             return jsonify(
                 status = "success", 
-                result = {"email": email, "access_token": access_token}
+                result = {"user_id": user[0], "access_token": access_token}
                 )
 
         return jsonify(
