@@ -15,7 +15,7 @@ export default function Portfolio() {
    
     useEffect(() => {
         const access_token = localStorage.getItem("access_token");
-        axios.get('http://localhost:5000/protected', {
+        axios.get('http://localhost:5000/auth/protected', {
             headers: {
                 Authorization: `Bearer ${access_token}`
             }

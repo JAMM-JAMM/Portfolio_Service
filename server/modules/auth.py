@@ -83,7 +83,19 @@ def login():
         
         if error is None:
             access_token = create_access_token(identity=email)
-            return jsonify(status = "success", result = {"email": email, "access_token": access_token})
+            return jsonify(
+                status = "success", 
+                result = {"email": email, "access_token": access_token}
+                )
 
-        return jsonify(status = "failure", result = {'error': error})
+        return jsonify(
+            status = "failure", result = {'error': error}
+            )
 
+@auth_blueprint.route('/protected')
+@jwt_required
+def protected():
+    current_user = get_jwt_identity()
+    return jsonify(
+        logged_in_as=current_user
+    )

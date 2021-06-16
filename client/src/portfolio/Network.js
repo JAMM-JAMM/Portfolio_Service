@@ -51,7 +51,7 @@ export default function Network() {
     const history = useHistory();
 
     useEffect(() => {
-        axios.get('http://localhost:5000/protected', {
+        axios.get('http://localhost:5000/auth/protected', {
             headers: {
                 Authorization: `Bearer ${access_token}`
             }
