@@ -9,7 +9,6 @@ create table if not exists user(
 create table if not exists education(
     id int not null AUTO_INCREMENT,
     user_id int not null,
-    user_email varchar(32) not null,
     university varchar(32) not null,
     major varchar(32) not null,
     degree varchar(32) not null,

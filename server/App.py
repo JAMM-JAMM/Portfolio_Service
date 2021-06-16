@@ -312,7 +312,7 @@ class Education(Resource):
 
 parser_award = reqparse.RequestParser()
 parser_award.add_argument('user_email')
-parser_award.add_argument('data_id');
+parser_award.add_argument('data_id')
 
 class Awards(Resource):
     @jwt_required
