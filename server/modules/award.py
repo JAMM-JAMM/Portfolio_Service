@@ -60,7 +60,6 @@ class Awards(Resource):
     @jwt_required
     def get(self):
         user_id = get_jwt_identity()
-        args = parser_award.parse_args()
 
         sql = "SELECT `id`, `awardName`, `awardDesc` FROM `awards` WHERE `user_id` = %s"
         cursor.execute(sql, (user_id, ))

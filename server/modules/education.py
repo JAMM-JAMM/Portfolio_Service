@@ -75,6 +75,7 @@ class Education(Resource):
     @jwt_required
     def get(self):
         user_id = get_jwt_identity()
+        
         sql = "SELECT `id`, `university`, `major`, `degree` FROM `education` WHERE `user_id` = %s"
         cursor.execute(sql, (user_id, ))
         result = cursor.fetchall()

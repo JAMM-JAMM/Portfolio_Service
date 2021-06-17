@@ -68,8 +68,6 @@ class Project(Resource):
     @jwt_required
     def get(self):
         user_id = get_jwt_identity()
-        args = parser_project.parse_args()
-        data_id = args['data_id']
 
         sql = "SELECT `id`, `projectName`, `projectDesc`, `projectStart`, `projectEnd` FROM `project` WHERE `user_id` = %s"
         cursor.execute(sql, (user_id, ))
