@@ -1,21 +1,15 @@
 import os
 import sys
 from database import db
-from demo import demo
 from flask import Blueprint, jsonify
 from flask_restx import reqparse, Api, Resource
 from flask_jwt_extended import get_jwt_identity, jwt_required
-
-current_dir = os.path.dirname(os.path.abspath(__file__))
-parent_dir = os.path.dirname(current_dir)
-sys.path.append(parent_dir)
 
 cursor = db.cursor()
 
 award_blueprint = Blueprint('award_blueprint', __name__)
 
 award_api = Api(award_blueprint)
-api = Api(demo)
 
 parser_award = reqparse.RequestParser()
 parser_award.add_argument('data_id')
@@ -139,4 +133,4 @@ class Awards(Resource):
             result = result
         )
 
-api.add_resource(Awards, '/award')
+award_api.add_resource(Awards, '/award')

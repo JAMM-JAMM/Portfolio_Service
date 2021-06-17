@@ -1,25 +1,15 @@
 import os
 import sys
 from database import db
-from demo import demo
 from flask import Blueprint, jsonify
 from flask_restx import reqparse, Api, Resource
 from flask_jwt_extended import get_jwt_identity, jwt_required
 
-# 상위 디렉토리 import를 위한 경로 설정
-current_dir = os.path.dirname(os.path.abspath(__file__))
-parent_dir = os.path.dirname(current_dir)
-sys.patn.append(parent_dir)
-
-# mysql db cursor
 cursor = db.cursor()
 
-# Blueprint
 education_blueprint = Blueprint('education_blueprint', __name__)
 
-# Restful API
 education_api = Api(education_blueprint)
-api = Api(demo)
 
 """
 Portfolio APIs: 내 포트폴리오 보기, 수정, 업로드, 삭제
@@ -75,7 +65,7 @@ class Education(Resource):
     @jwt_required
     def get(self):
         user_id = get_jwt_identity()
-        
+
         sql = "SELECT `id`, `university`, `major`, `degree` FROM `education` WHERE `user_id` = %s"
         cursor.execute(sql, (user_id, ))
         result = cursor.fetchall()
@@ -155,4 +145,4 @@ class Education(Resource):
             result = result
             )
 
-api.add_resource(Education, '/education')
+education_api.add_resource(Education, '/education')

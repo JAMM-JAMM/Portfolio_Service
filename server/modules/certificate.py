@@ -1,21 +1,15 @@
 import os
 import sys
-from ..database import db
-from ..demo import demo
+from database import db
 from flask import Blueprint, jsonify
 from flask_restx import reqparse, Api, Resource
 from flask_jwt_extended import get_jwt_identity, jwt_required
-
-current_dir = os.path.dirname(os.path.abspath(__file__))
-parent_dir = os.path.dirname(current_dir)
-sys.path.append(parent_dir)
 
 cursor = db.cursor()
 
 certificate_blueprint = Blueprint('certificate_blueprint', __name__)
 
 certificate_api = Api(certificate_blueprint)
-api = Api(demo)
 
 parser_certificate = reqparse.RequestParser()
 parser_certificate.add_argument('data_id')
@@ -147,4 +141,4 @@ class Certificate(Resource):
             result = result
             )
 
-api.add_resource(Certificate, '/certificate')
+certificate_api.add_resource(Certificate, '/certificate')

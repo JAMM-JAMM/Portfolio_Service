@@ -1,21 +1,15 @@
 import os
 import sys
-from ..database import db
-from ..demo import demo
+from database import db
 from flask import Blueprint, jsonify
 from flask_restx import reqparse, Api, Resource
 from flask_jwt_extended import get_jwt_identity, jwt_required
-
-current_dir = os.path.dirname(os.path.abspath(__file__))
-parent_dir = os.path.dirname(current_dir)
-sys.path.append(parent_dir)
 
 cursor = db.cursor()
 
 project_blueprint = Blueprint('project_blueprint', __name__)
 
 project_api = Api(project_blueprint)
-api = Api(demo)
 
 parser_project = reqparse.RequestParser()
 parser_project.add_argument('data_id')
@@ -152,4 +146,4 @@ class Project(Resource):
             result = result
             )
 
-api.add_resource(Project, '/project')
+project_api.add_resource(Project, '/project')
