@@ -357,6 +357,7 @@ class Awards(Resource):
         error = None
 
         # 입력한 유저의 정보가 없을 때
+        
         if result is None:
             error = "This email({}) is not registered".format(args['user_email'])
 

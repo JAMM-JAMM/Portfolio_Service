@@ -1,13 +1,10 @@
 import os
 import sys
-
-import jwt
-from ..database import db
-from ..App import demo
-from flask import Blueprint, jsonify, request
+from database import db
+from demo import demo
+from flask import Blueprint, jsonify
 from flask_restx import reqparse, Api, Resource
-from werkzeug.security import check_password_hash, generate_password_hash
-from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
+from flask_jwt_extended import get_jwt_identity, jwt_required
 
 # 상위 디렉토리 import를 위한 경로 설정
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -85,7 +82,7 @@ class Education(Resource):
         error = None
 
         if result is None:
-            error = "This email({}) is not registered".format(user_id)
+            error = "This user is not registered"
 
         if error is None:
             return jsonify(
