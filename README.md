@@ -83,3 +83,14 @@ Front-end, Back-end
 - 이름을 입력하여 검색하며 최소 2글자 이상을 입력해야합니다.
 - 검색 결과가 없을 시, 화면에 "검색 결과가 없습니다." 라는 메세지를 출력합니다.
 - 2글자 미만의 이름을 입력하고 검색 시 alert 창과 함께 "검색어는 최소 2글자 이상 입력해야 합니다." 메세지 출력합니다.
+
+## 유지 보수 내용 및 일정
+
+**Back-end**
+
+- [ ]  Blueprint를 이용하여 기능 별 module 분리하기
+- [ ]  DB 변경 (MySQL → MongoDB, mongoengine ORM)
+- [ ]  Marshmallow 라이브러리 사용하여 Serialization, Deserialization, Validation 추가 구현
+- [ ]  Flask-rests 라이브러리 사용하여 swagger documentation 추가 구현
+    - 추후 Front-end refactoring을 위한 API 문서화 작업
+- [ ]  Oauth 2.0 (Google or Kakao) 추가 구현
