@@ -88,7 +88,7 @@ Front-end, Back-end
 
 **Back-end**
 
-- [ ]  Blueprint를 이용하여 기능 별 module 분리하기
+- [x]  Blueprint를 이용하여 기능 별 module 분리하기
 - [ ]  DB 변경 (MySQL → MongoDB, mongoengine ORM)
 - [ ]  Marshmallow 라이브러리 사용하여 Serialization, Deserialization, Validation 추가 구현
 - [ ]  Flask-rests 라이브러리 사용하여 swagger documentation 추가 구현
